@@ -1,0 +1,41 @@
+/* ============================================================
+   RESPONSIVE — breakpoints (tablet, mobile)
+   ============================================================ */
+
+@media (max-width:960px){
+  .main-nav,.header-cta{display:none}
+  .main-nav.open{
+    display:flex;flex-direction:column;position:absolute;top:74px;left:0;right:0;
+    background:var(--surface);padding:1.5rem 20px;gap:1.2rem;
+    border-bottom:1px solid var(--line);box-shadow:var(--shadow);margin:0
+  }
+  .burger{display:flex;margin-left:auto}
+  .hero-grid,.about-grid,.faq-grid,.contacts-grid,.diag-head{grid-template-columns:1fr}
+  .diag-grid{grid-template-columns:1fr}
+  .services-layout{grid-template-columns:1fr}
+  .services-feature{position:static;grid-column:auto;grid-row:auto}
+  .services-layout .cards{grid-column:auto}
+  .feat-img{aspect-ratio:16/10}
+  .services-cta{grid-template-columns:1fr}
+  .services-cta-media{min-height:200px}
+  .services-cta-media::after{background:linear-gradient(to bottom, var(--brand) 0%, rgba(79,107,87,0) 38%)}
+  .hero-card{max-width:380px;margin-inline:auto}
+  .float-rating{left:8px;top:8px}
+  .trust-grid,.cards,.steps,.reviews-grid,.posts-grid{grid-template-columns:1fr 1fr}
+  .dynasty-note{right:10%;left:auto;width:auto}
+  .faq-intro{position:static}
+  .fab{display:inline-flex}
+}
+
+@media (max-width:560px){
+  .trust-grid,.cards,.steps,.reviews-grid{grid-template-columns:1fr}
+  .hero-trust{gap:1.2rem}
+  .hero-actions{width:100%}
+  .hero-actions .btn-xl{width:100%}
+  .services-cta{flex-direction:column;align-items:flex-start;text-align:left}
+
+  /* Modal becomes a bottom sheet on phones */
+  .modal{align-items:flex-end;padding:0}
+  .modal-card{max-width:none;border-radius:22px 22px 0 0;padding:1.6rem;animation:modal-slide .35s var(--ease)}
+}
+@keyframes modal-slide{from{transform:translateY(100%)}}

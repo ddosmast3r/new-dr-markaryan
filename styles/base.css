@@ -1,0 +1,85 @@
+/* ============================================================
+   BASE — design tokens, reset, typography, buttons, utilities
+   ============================================================ */
+
+:root{
+  --bg:#f4f1ec;          /* warm beige */
+  --surface:#ffffff;
+  --ink:#20241f;         /* dark graphite */
+  --ink-soft:#6c7168;    /* muted warm grey */
+  --line:#e6e0d5;
+
+  --brand:#4f6b57;       /* muted sage green */
+  --brand-600:#3e5645;
+  --brand-100:#e0e7df;   /* soft sage tint */
+  --accent:#b07a4f;      /* terracotta — humanises the palette */
+  --accent-soft:#f0e4d6;
+
+  --wa:#25d366;
+  --tg:#28a8e9;
+  --max:#2787f5;
+
+  --radius:18px;
+  --radius-sm:12px;
+  --shadow:0 18px 50px -24px rgba(40,34,24,.32);
+  --shadow-sm:0 6px 24px -14px rgba(40,34,24,.36);
+  --maxw:1140px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans),system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.container{width:min(100% - 40px,var(--maxw));margin-inline:auto}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+svg{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* Typography */
+h1,h2,h3{font-family:var(--font-serif),Georgia,serif;font-weight:500;line-height:1.1;letter-spacing:-.01em}
+h1{font-size:clamp(2.4rem,6vw,4.3rem)}
+h2{font-size:clamp(1.8rem,4vw,2.9rem)}
+h1 em,h1 i{font-style:italic;color:var(--brand)}
+
+.eyebrow{font-family:var(--font-sans);text-transform:uppercase;letter-spacing:.18em;font-size:.78rem;font-weight:700;color:var(--accent);margin-bottom:.8rem}
+.eyebrow.light{color:var(--accent-soft)}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  font-family:inherit;font-weight:700;font-size:.98rem;
+  padding:.85rem 1.5rem;border-radius:100px;border:1.5px solid transparent;
+  cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s;
+  white-space:nowrap;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-lg{padding:1.05rem 1.9rem;font-size:1.02rem}
+.btn-xl{padding:1.35rem 2.8rem;font-size:1.18rem;gap:.7rem}
+.btn-xl svg{transition:transform .25s var(--ease)}
+.btn-xl:hover svg{transform:translateX(4px)}
+.btn-primary{background:var(--brand);color:#fff;box-shadow:var(--shadow-sm)}
+.btn-primary:hover{background:var(--brand-600)}
+.btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--brand);color:var(--brand)}
+.btn-light{background:#fff;color:var(--brand)}
+.btn-wa{background:var(--wa);color:#063b1a}
+.btn-tg{background:var(--tg);color:#04293d}
+.btn-max{background:var(--max);color:#fff}
+
+/* Scroll-reveal animation.
+   The hidden initial state only applies once JS marks the page ready
+   (body.reveal-ready), so the content stays visible if scripts don't run. */
+.reveal-ready .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal-ready .reveal.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  .reveal{opacity:1;transform:none}
+}

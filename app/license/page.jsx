@@ -1,3 +1,6 @@
+import Link from 'next/link';
+import Image from 'next/image';
+
 export const metadata = {
   title: 'Сведения о лицензии — Доктор Маркарян',
   description: 'Сведения о медицинской организации и лицензии на осуществление медицинской деятельности ООО «ЛПУ-Гармония».',
@@ -39,14 +42,14 @@ export default function LicensePage() {
     <div className="legal-page">
       <header className="legal-header">
         <div className="container legal-header-inner">
-          <a href="/" className="brand">
-            <img src="/img/logo.png" className="brand-mark" alt="Логотип Эдуарда Маркаряна" width="52" height="38" />
+          <Link href="/" className="brand">
+            <Image src="/img/logo.png" className="brand-mark" alt="Логотип Эдуарда Маркаряна" width={52} height={38} />
             <span className="brand-text">
               <strong>Эдуард Маркарян</strong>
               <small>хирург-колопроктолог</small>
             </span>
-          </a>
-          <a href="/" className="btn btn-ghost">На главную</a>
+          </Link>
+          <Link href="/" className="btn btn-ghost">На главную</Link>
         </div>
       </header>
 
@@ -112,7 +115,7 @@ export default function LicensePage() {
       <footer className="legal-foot">
         <div className="container">
           <small>© 2026 Все права защищены. Сайт носит исключительно информационный характер.</small>
-          <a href="/">На главную</a>
+          <Link href="/">На главную</Link>
         </div>
       </footer>
     </div>

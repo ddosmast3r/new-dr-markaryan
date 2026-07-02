@@ -48,7 +48,7 @@ export default function Hero() {
               <strong>Эдуард Жорикович</strong>
               <small>Сеченовский университет · колопроктология</small>
             </div>
-            <img src="/img/logo.png" className="hero-card-logo" alt="Логотип" width="48" height="35" />
+            <Image src="/img/logo.png" className="hero-card-logo" alt="Логотип" width="48" height="35" />
           </div>
 
           <div className="hero-float float-rating">

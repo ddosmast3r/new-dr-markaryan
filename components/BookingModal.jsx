@@ -3,12 +3,13 @@
 import { useEffect, useRef } from 'react';
 import Icon from './Icon';
 import { MAX, TELEGRAM, WHATSAPP, PHONE, PHONE_HREF } from '@/lib/content';
+import { reachGoal, GOALS } from '@/lib/metrika';
 
 const messengers = [
-  { key: 'max', cls: 'msg-max', icon: 'max', href: MAX, name: 'MAX', note: 'Российский мессенджер', badge: 'Работает без VPN' },
-  { key: 'tg', cls: 'msg-tg', icon: 'telegram', href: TELEGRAM, name: 'Telegram', note: 'Быстрый ответ в чате' },
-  { key: 'wa', cls: 'msg-wa', icon: 'whatsapp', href: WHATSAPP, name: 'WhatsApp', note: 'Если удобнее здесь' },
-  { key: 'call', cls: 'msg-call', icon: 'phone', href: PHONE_HREF, name: 'Позвонить', note: PHONE, internal: true },
+  { key: 'max', cls: 'msg-max', icon: 'max', href: MAX, name: 'MAX', note: 'Российский мессенджер', badge: 'Работает без VPN', goal: GOALS.MAX },
+  { key: 'tg', cls: 'msg-tg', icon: 'telegram', href: TELEGRAM, name: 'Telegram', note: 'Быстрый ответ в чате', goal: GOALS.TELEGRAM },
+  { key: 'wa', cls: 'msg-wa', icon: 'whatsapp', href: WHATSAPP, name: 'WhatsApp', note: 'Если удобнее здесь', goal: GOALS.WHATSAPP },
+  { key: 'call', cls: 'msg-call', icon: 'phone', href: PHONE_HREF, name: 'Позвонить', note: PHONE, internal: true, goal: GOALS.PHONE },
 ];
 
 export default function BookingModal({ isOpen, onClose }) {
@@ -38,6 +39,7 @@ export default function BookingModal({ isOpen, onClose }) {
               ref={i === 0 ? firstLinkRef : null}
               href={m.href}
               className={`msg ${m.cls}`}
+              onClick={() => reachGoal(m.goal)}
               {...(m.internal ? {} : { target: '_blank', rel: 'noopener' })}
             >
               <span className="msg-ico"><Icon name={m.icon} /></span>

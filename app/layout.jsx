@@ -1,5 +1,6 @@
 import { Manrope, Lora } from 'next/font/google';
 import { BookingProvider } from '@/components/BookingProvider';
+import CookieConsent from '@/components/CookieConsent';
 
 import '@/styles/base.css';
 import '@/styles/layout.css';
@@ -53,6 +54,7 @@ export default function RootLayout({ children }) {
     <html lang="ru" className={`${manrope.variable} ${lora.variable}`}>
       <body>
         <BookingProvider>{children}</BookingProvider>
+        <CookieConsent />
       </body>
     </html>
   );

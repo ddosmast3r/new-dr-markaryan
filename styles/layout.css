@@ -110,7 +110,7 @@
 .footer-disclaimer .fd-lg{font-size:7.2px}
 .footer-disclaimer .fd-sm{font-size:4.3px;fill:#76837b;font-weight:700}
 .footer-disclaimer .fd-xl{font-size:8.6px}
-.copyright{color:#8ea29d;font-size:.82rem;max-width:60ch;line-height:1.5}
+.copyright{color:#8ea29d;font-size:.82rem;line-height:1.5}
 .footer-links{display:flex;gap:1.8rem;justify-content:center;flex-wrap:wrap}
 .footer-links a{color:#8ea29d;font-size:.85rem;transition:color .2s}
 .footer-links a:hover{color:#fff}

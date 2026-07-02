@@ -71,7 +71,7 @@ h1 em,h1 i{font-style:italic;color:var(--brand)}
 .btn-light{background:#fff;color:var(--brand)}
 .btn-wa{background:var(--wa);color:#063b1a}
 .btn-tg{background:var(--tg);color:#04293d}
-.btn-max{background:var(--max);color:#fff}
+.btn-max{background:linear-gradient(135deg,#28b6f6 0%,#5b4ee6 55%,#8a3fe0 100%);color:#fff}
 
 /* Scroll-reveal animation.
    The hidden initial state only applies once JS marks the page ready

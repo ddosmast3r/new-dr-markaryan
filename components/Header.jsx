@@ -1,18 +1,19 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import BookButton from './BookButton';
 import { nav } from '@/lib/content';
 
 function Brand({ light = false }) {
   return (
     <a href="#top" className="brand">
-      <img
+      <Image
         src={light ? '/img/logo-white.png' : '/img/logo.png'}
         className="brand-mark"
         alt="Логотип Эдуарда Маркаряна"
-        width="52"
-        height="38"
+        width={52}
+        height={38}
       />
       <span className="brand-text">
         <strong>Эдуард Маркарян</strong>

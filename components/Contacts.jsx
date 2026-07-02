@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import Reveal from './Reveal';
 import Icon from './Icon';
+import TrackedLink from './TrackedLink';
 import { WHATSAPP, TELEGRAM, MAX, PHONE, PHONE_HREF, PRODOCTOROV } from '@/lib/content';
+import { GOALS } from '@/lib/metrika';
 
 export default function Contacts() {
   return (
@@ -15,20 +17,20 @@ export default function Contacts() {
           </p>
 
           <div className="contacts-actions">
-            <a href={PRODOCTOROV} className="btn btn-pdr-cta" target="_blank" rel="noopener">
+            <TrackedLink goal={GOALS.PRODOCTOROV} href={PRODOCTOROV} className="btn btn-pdr-cta" target="_blank" rel="noopener">
               <Icon name="calendar" width="20" height="20" />
               Запись через ПроДокторов
-            </a>
+            </TrackedLink>
             <div className="contacts-row">
-              <a href={MAX} className="btn btn-max" target="_blank" rel="noopener">
+              <TrackedLink goal={GOALS.MAX} href={MAX} className="btn btn-max" target="_blank" rel="noopener">
                 <Icon name="max" width="18" height="18" />MAX
-              </a>
-              <a href={WHATSAPP} className="btn btn-wa" target="_blank" rel="noopener">
+              </TrackedLink>
+              <TrackedLink goal={GOALS.WHATSAPP} href={WHATSAPP} className="btn btn-wa" target="_blank" rel="noopener">
                 <Icon name="whatsapp" width="18" height="18" />WhatsApp
-              </a>
-              <a href={TELEGRAM} className="btn btn-tg" target="_blank" rel="noopener">
+              </TrackedLink>
+              <TrackedLink goal={GOALS.TELEGRAM} href={TELEGRAM} className="btn btn-tg" target="_blank" rel="noopener">
                 <Icon name="telegram" width="18" height="18" />Telegram
-              </a>
+              </TrackedLink>
             </div>
           </div>
         </Reveal>
@@ -44,7 +46,7 @@ export default function Contacts() {
             />
           </div>
           <ul className="contacts-list">
-            <li><span>Телефон</span><a href={PHONE_HREF}>{PHONE}</a></li>
+            <li><span>Телефон</span><TrackedLink goal={GOALS.PHONE} href={PHONE_HREF}>{PHONE}</TrackedLink></li>
             <li><span>Email</span><a href="mailto:doc.edmarkaryan@yandex.ru">doc.edmarkaryan@yandex.ru</a></li>
             <li><span>Регион приёма</span><strong>КМВ · Кавказские Минеральные Воды</strong></li>
             <li><span>Приём</span><strong>Взрослые пациенты</strong></li>

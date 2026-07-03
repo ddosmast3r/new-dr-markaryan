@@ -293,12 +293,14 @@ body.modal-open{overflow:hidden}
 }
 @keyframes cookie-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .cookie-text{font-size:.9rem;line-height:1.55;color:var(--ink-soft);margin:0;flex:1;min-width:260px}
-.cookie-text a{color:var(--brand);font-weight:600;text-decoration:underline}
+/* Каждое предложение с новой строки; название политики не рвётся посередине */
+.cookie-text span{display:block}
+.cookie-text a{color:var(--brand);font-weight:600;text-decoration:underline;white-space:nowrap}
 .cookie-actions{display:flex;gap:.6rem}
 .cookie-btn{padding:.6rem 1.2rem;font-size:.88rem}
 @media (max-width:560px){
   .cookie-banner{left:12px;right:12px;bottom:12px}
-  .cookie-text{min-width:100%}
+  .cookie-text{min-width:100%;font-size:clamp(.68rem,3.4vw,.86rem)}
   .cookie-actions{width:100%}
   .cookie-btn{flex:1}
 }

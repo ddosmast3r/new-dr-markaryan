@@ -73,8 +73,10 @@ export default function CookieConsent() {
   return (
     <div ref={bannerRef} className="cookie-banner" role="dialog" aria-live="polite" aria-label="Согласие на использование cookie">
       <p className="cookie-text">
-        Мы используем cookie и Яндекс Метрику для анализа посещаемости. Подробнее — в{' '}
-        <a href="/privacy">политике конфиденциальности</a>.
+        <span>Мы используем cookie и Яндекс Метрику для анализа посещаемости.</span>{' '}
+        <span>
+          Подробнее — в <a href="/privacy">политике конфиденциальности</a>.
+        </span>
       </p>
       <div className="cookie-actions">
         <button type="button" className="btn btn-primary cookie-btn" onClick={() => choose('accepted')}>

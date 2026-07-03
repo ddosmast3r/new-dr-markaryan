@@ -141,6 +141,12 @@
 .stars{color:var(--accent);letter-spacing:.15em}
 .review blockquote{font-size:1.02rem;line-height:1.55}
 .review figcaption{color:var(--ink-soft);font-size:.9rem;font-weight:600;margin-top:auto}
+.review-top{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap}
+/* Знак «Отзыв проверен» — в стилистике ПроДокторов (зелёный щит с галочкой) */
+.review-verified{display:inline-flex;align-items:center;gap:.35rem;color:#23a04e;font-size:.78rem;font-weight:700;white-space:nowrap}
+.review-verified svg{flex:none}
+.review-date{display:block;font-weight:400;font-size:.8rem;color:var(--ink-soft);margin-top:.25rem}
+.reviews-more{display:flex;justify-content:center;margin-top:2rem}
 .awards{display:flex;flex-wrap:wrap;gap:1.5rem 2.2rem;justify-content:center;margin-top:3rem}
 .medal{display:flex;flex-direction:column;align-items:center;gap:.5rem;width:118px;text-align:center}
 .medal-emblem{position:relative;width:100%}
@@ -240,6 +246,7 @@ body.modal-open{overflow:hidden}
 .msg-tg .msg-ico{background:var(--tg)}
 .msg-wa .msg-ico{background:var(--wa)}
 .msg-call .msg-ico{background:var(--brand)}
+.msg-pdr .msg-ico{background:#fff;border:1.5px solid var(--line);color:var(--brand)}
 .msg-body{display:flex;flex-direction:column;line-height:1.25}
 .msg-body strong{font-size:1.05rem}
 .msg-body small{color:var(--ink-soft);font-size:.82rem}

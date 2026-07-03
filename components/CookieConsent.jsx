@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const STORAGE_KEY = 'cookie-consent';
 const YM_ID = process.env.NEXT_PUBLIC_YM_ID;
@@ -19,10 +19,12 @@ function loadMetrika() {
   s.src = 'https://mc.yandex.ru/metrika/tag.js';
   document.head.appendChild(s);
   window.ym(Number(YM_ID), 'init', {
+    ssr: true,
     clickmap: true,
     trackLinks: true,
     accurateTrackBounce: true,
-    webvisor: false,
+    webvisor: true,
+    ecommerce: 'dataLayer',
   });
 }
 
@@ -30,6 +32,22 @@ function loadMetrika() {
 // Выбор хранится в localStorage; Метрика подключается только после «Принять».
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
+  const bannerRef = useRef(null);
+
+  // Пока баннер виден, публикуем его высоту в --cookie-offset,
+  // чтобы плавающая кнопка «Записаться» поднималась выше баннера.
+  useEffect(() => {
+    if (!visible || !bannerRef.current) return;
+    const root = document.documentElement;
+    const ro = new ResizeObserver(([entry]) => {
+      root.style.setProperty('--cookie-offset', `${Math.ceil(entry.contentRect.height) + 12}px`);
+    });
+    ro.observe(bannerRef.current);
+    return () => {
+      ro.disconnect();
+      root.style.removeProperty('--cookie-offset');
+    };
+  }, [visible]);
 
   useEffect(() => {
     let stored = null;
@@ -53,7 +71,7 @@ export default function CookieConsent() {
   if (!visible) return null;
 
   return (
-    <div className="cookie-banner" role="dialog" aria-live="polite" aria-label="Согласие на использование cookie">
+    <div ref={bannerRef} className="cookie-banner" role="dialog" aria-live="polite" aria-label="Согласие на использование cookie">
       <p className="cookie-text">
         Мы используем cookie и Яндекс Метрику для анализа посещаемости. Подробнее — в{' '}
         <a href="/privacy">политике конфиденциальности</a>.

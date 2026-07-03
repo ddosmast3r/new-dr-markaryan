@@ -22,7 +22,7 @@ export default function Services() {
                 alt="Доктор Маркарян в операционной"
                 fill
                 sizes="(max-width: 960px) 100vw, 380px"
-                style={{ objectFit: 'cover', objectPosition: 'center' }}
+                style={{ objectFit: 'cover', objectPosition: 'center 18%' }}
               />
               <span className="feat-chip"><span className="dot" />Оперирую лично</span>
               <div className="feat-cap">

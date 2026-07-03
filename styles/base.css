@@ -4,6 +4,7 @@
 
 :root{
   --bg:#f4f1ec;          /* warm beige */
+  --head-bg:#f7f5f1;     /* цвет шапки — для верхней зоны отскока */
   --surface:#ffffff;
   --ink:#20241f;         /* dark graphite */
   --ink-soft:#6c7168;    /* muted warm grey */
@@ -28,7 +29,11 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+/* scroll-padding-top: при переходе по якорям цель останавливается
+   сразу под прилипшей шапкой (74px) */
+/* У html фона нет: тогда «канвас» браузера (зоны отскока и на десктопе,
+   и на мобильном) берёт фон body, в том числе анимированный по прокрутке */
+html{scroll-behavior:smooth;scroll-padding-top:60px}
 body{
   font-family:var(--font-sans),system-ui,-apple-system,sans-serif;
   background:var(--bg);
@@ -36,6 +41,35 @@ body{
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+}
+/* Контент лежит на собственном непрозрачном фоне, чтобы фон body
+   можно было использовать только для зон отскока (rubber-band). */
+main{background:var(--bg)}
+
+/* ---------- iOS rubber-band: цвет зон отскока ----------
+   Старые iOS двигают fixed-элементы вместе с отскоком: полосы,
+   висящие вплотную над и под страницей, въезжают в кадр и закрывают дыру. */
+body::before,
+body:has(.site-footer)::after{
+  content:"";position:fixed;left:0;width:100%;height:100vh;
+  /* отрицательный слой: полосы рисуются под всем контентом,
+     поверх только «канваса» браузера в зонах отскока */
+  pointer-events:none;z-index:-1;
+}
+body::before{top:-100vh;background:var(--head-bg)}            /* сверху — цвет шапки */
+body:has(.site-footer)::after{top:100%;background:var(--ink)} /* снизу — цвет футера */
+
+/* iOS 26+ и Chrome: fixed при отскоке остаётся на месте, зато фон body
+   можно менять по мере прокрутки — вверху светлый, к низу тёмный. */
+@supports (animation-timeline: scroll()){
+  @keyframes bounce-bg{
+    from{background-color:var(--head-bg)}
+    to{background-color:var(--ink)}
+  }
+  body:has(.site-footer){
+    animation:bounce-bg linear both;
+    animation-timeline:scroll();
+  }
 }
 .container{width:min(100% - 40px,var(--maxw));margin-inline:auto}
 img{max-width:100%;display:block}
@@ -71,7 +105,7 @@ h1 em,h1 i{font-style:italic;color:var(--brand)}
 .btn-light{background:#fff;color:var(--brand)}
 .btn-wa{background:var(--wa);color:#063b1a}
 .btn-tg{background:var(--tg);color:#04293d}
-.btn-max{background:linear-gradient(135deg,#28b6f6 0%,#5b4ee6 55%,#8a3fe0 100%);color:#fff}
+.btn-max{background:linear-gradient(135deg,#28b6f6 0%,#5b4ee6 55%,#8a3fe0 100%);background-origin:border-box;color:#fff}
 
 /* Scroll-reveal animation.
    The hidden initial state only applies once JS marks the page ready

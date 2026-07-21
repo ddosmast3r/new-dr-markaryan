@@ -14,10 +14,15 @@ function loadMetrika() {
       (window.ym.a = window.ym.a || []).push(arguments);
     };
   window.ym.l = Date.now();
-  const s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://mc.yandex.ru/metrika/tag.js';
-  document.head.appendChild(s);
+  // Новый загрузчик Метрики требует ?id=<счётчик> в адресе tag.js,
+  // иначе счётчик не инициализируется и хиты не отправляются.
+  const src = `https://mc.yandex.ru/metrika/tag.js?id=${YM_ID}`;
+  if (![...document.scripts].some((el) => el.src === src)) {
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = src;
+    document.head.appendChild(s);
+  }
   window.ym(Number(YM_ID), 'init', {
     ssr: true,
     clickmap: true,

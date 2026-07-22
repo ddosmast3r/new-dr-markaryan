@@ -1,37 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-
-const STORAGE_KEY = 'cookie-consent';
-const YM_ID = process.env.NEXT_PUBLIC_YM_ID;
-
-// Загружает счетчик Яндекс Метрики. Вызывается только после согласия посетителя.
-function loadMetrika() {
-  if (!YM_ID || typeof window === 'undefined' || window.ym) return;
-  window.ym =
-    window.ym ||
-    function () {
-      (window.ym.a = window.ym.a || []).push(arguments);
-    };
-  window.ym.l = Date.now();
-  // Новый загрузчик Метрики требует ?id=<счётчик> в адресе tag.js,
-  // иначе счётчик не инициализируется и хиты не отправляются.
-  const src = `https://mc.yandex.ru/metrika/tag.js?id=${YM_ID}`;
-  if (![...document.scripts].some((el) => el.src === src)) {
-    const s = document.createElement('script');
-    s.async = true;
-    s.src = src;
-    document.head.appendChild(s);
-  }
-  window.ym(Number(YM_ID), 'init', {
-    ssr: true,
-    clickmap: true,
-    trackLinks: true,
-    accurateTrackBounce: true,
-    webvisor: true,
-    ecommerce: 'dataLayer',
-  });
-}
+import { COOKIE_CONSENT_KEY, initMetrika } from '@/lib/metrika';
 
 // Баннер согласия на аналитические cookie (п. 4 политики конфиденциальности).
 // Выбор хранится в localStorage; Метрика подключается только после «Принять».
@@ -57,20 +27,20 @@ export default function CookieConsent() {
   useEffect(() => {
     let stored = null;
     try {
-      stored = localStorage.getItem(STORAGE_KEY);
+      stored = localStorage.getItem(COOKIE_CONSENT_KEY);
     } catch {
       return;
     }
-    if (stored === 'accepted') loadMetrika();
+    if (stored === 'accepted') initMetrika();
     else if (stored !== 'declined') setVisible(true);
   }, []);
 
   const choose = (value) => {
     try {
-      localStorage.setItem(STORAGE_KEY, value);
+      localStorage.setItem(COOKIE_CONSENT_KEY, value);
     } catch {}
     setVisible(false);
-    if (value === 'accepted') loadMetrika();
+    if (value === 'accepted') initMetrika();
   };
 
   if (!visible) return null;

@@ -1,50 +1,33 @@
 import Reveal from './Reveal';
-import Medal from './Medal';
 import Icon from './Icon';
-import { reviews, awards, PRODOCTOROV_REVIEWS } from '@/lib/content';
+import { awards, PRODOCTOROV_REVIEWS } from '@/lib/content';
 
 export default function Reviews() {
   return (
     <section className="section" id="reviews">
       <div className="container">
-        <Reveal className="section-head">
-          <p className="eyebrow">Отзывы</p>
-          <h2>Рейтинг 4.9 из 5.0</h2>
-          <p className="section-sub">По данным независимых площадок: ПроДокторов, Яндекс.Здоровье, НаПоправку.</p>
-        </Reveal>
+        <Reveal className="reviews-panel">
+          <div className="reviews-copy">
+            <p className="eyebrow">Независимая площадка</p>
+            <h2>Отзывы на ПроДокторов</h2>
+            <p>
+              Актуальные оценки и отзывы пациентов собраны в профиле врача
+              на независимой площадке.
+            </p>
+            <a href={PRODOCTOROV_REVIEWS} className="btn btn-primary" target="_blank" rel="noopener">
+              Открыть отзывы
+              <Icon name="arrowRight" width="18" height="18" />
+            </a>
+          </div>
 
-        <div className="reviews-grid">
-          {reviews.map((r, i) => (
-            <Reveal as="figure" className="review" key={i} style={{ transitionDelay: `${(i % 3) * 70}ms` }}>
-              <div className="review-top">
-                <div className="stars">★★★★★</div>
-                {r.verified && (
-                  <span className="review-verified">
-                    <Icon name="shield" width="15" height="15" />
-                    Отзыв проверен
-                  </span>
-                )}
-              </div>
-              <blockquote>{r.text}</blockquote>
-              <figcaption>
-                {r.author}
-                {r.date && <time className="review-date">{r.date}</time>}
-              </figcaption>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal className="reviews-more">
-          <a href={PRODOCTOROV_REVIEWS} className="btn btn-ghost" target="_blank" rel="noopener">
-            Посмотреть больше отзывов
-            <Icon name="arrowRight" width="18" height="18" />
-          </a>
-        </Reveal>
-
-        <Reveal className="awards">
-          {awards.map((a) => (
-            <Medal key={a.year} year={a.year} title={a.title} />
-          ))}
+          <div className="reviews-awards" aria-label="Награды ПроДокторов">
+            <span>Премия ПроДокторов</span>
+            <div>
+              {awards.map((award) => (
+                <strong key={award.year}>{award.year}</strong>
+              ))}
+            </div>
+          </div>
         </Reveal>
       </div>
     </section>

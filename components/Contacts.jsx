@@ -11,7 +11,7 @@ export default function Contacts() {
       <div className="container contacts-grid">
         <Reveal className="contacts-copy">
           <p className="eyebrow light">Контакты</p>
-          <h2>Запишитесь, это проще, чем кажется</h2>
+          <h2>Приём проктолога в Пятигорске</h2>
           <p>
             Напишите в мессенджер, отвечу сам. Или выберите время на ПроДокторов.
           </p>
@@ -48,7 +48,8 @@ export default function Contacts() {
           <ul className="contacts-list">
             <li><span>Телефон</span><TrackedLink goal={GOALS.PHONE} href={PHONE_HREF}>{PHONE}</TrackedLink></li>
             <li><span>Email</span><a href="mailto:doc.edmarkaryan@yandex.ru">doc.edmarkaryan@yandex.ru</a></li>
-            <li><span>Регион приёма</span><strong>КМВ · Кавказские Минеральные Воды</strong></li>
+            <li><span>Город приёма</span><strong>Пятигорск · КМВ</strong></li>
+            <li><span>Адрес клиники</span><strong>пр-кт Калинина, зд. 90А</strong></li>
             <li><span>Приём</span><strong>Взрослые пациенты</strong></li>
             <li><span>Часы приёма</span><strong>Пн–Пт, 9:00–18:00</strong></li>
           </ul>

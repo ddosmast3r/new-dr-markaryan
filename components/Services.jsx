@@ -46,8 +46,8 @@ export default function Services() {
         <Reveal className="services-cta">
           <div className="services-cta-body">
             <strong>Не знаете, к кому идти?</strong>
-            <span>Опишите проблему в мессенджере, скажу, нужен ли очный приём.</span>
-            <BookButton className="btn btn-light">Спросить в мессенджере</BookButton>
+            <span>Напишите, чтобы уточнить, с какими жалобами ведётся приём, и записаться.</span>
+            <BookButton className="btn btn-light">Уточнить и записаться</BookButton>
           </div>
           <div className="services-cta-media">
             <Image

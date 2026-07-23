@@ -24,6 +24,7 @@
   .trust-grid,.cards,.steps,.reviews-grid,.posts-grid{grid-template-columns:1fr 1fr}
   .dynasty-note{right:10%;left:auto;width:auto}
   .faq-intro{position:static}
+  .reviews-panel{grid-template-columns:1fr}
   .fab{display:inline-flex}
 }
 
@@ -33,6 +34,11 @@
   .hero-actions{width:100%}
   .hero-actions .btn-xl{width:100%}
   .services-cta{flex-direction:column;align-items:flex-start;text-align:left}
+  .reviews-panel{padding:1.5rem}
+  .reviews-copy h2{font-size:clamp(1.8rem,9vw,2.35rem)}
+  .reviews-copy .btn{width:100%}
+  .reviews-awards{padding:1rem}
+  .reviews-awards strong{min-height:48px;font-size:1.1rem}
 
   /* Modal becomes a bottom sheet on phones */
   .modal{align-items:flex-end;padding:0}

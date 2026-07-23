@@ -136,33 +136,29 @@
 .faq-list p{padding:0 1.4rem 1.3rem;color:var(--ink-soft)}
 
 /* ---------- Reviews ---------- */
-.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
-.review{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1.8rem;display:flex;flex-direction:column;gap:1rem}
-.stars{color:var(--accent);letter-spacing:.15em}
-.review blockquote{font-size:1.02rem;line-height:1.55}
-.review figcaption{color:var(--ink-soft);font-size:.9rem;font-weight:600;margin-top:auto}
-.review-top{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap}
-/* Знак «Отзыв проверен» — в стилистике ПроДокторов (зелёный щит с галочкой) */
-.review-verified{display:inline-flex;align-items:center;gap:.35rem;color:#23a04e;font-size:.78rem;font-weight:700;white-space:nowrap}
-.review-verified svg{flex:none}
-.review-date{display:block;font-weight:400;font-size:.8rem;color:var(--ink-soft);margin-top:.25rem}
-.reviews-more{display:flex;justify-content:center;margin-top:2rem}
-.awards{display:flex;flex-wrap:wrap;gap:1.5rem 2.2rem;justify-content:center;margin-top:3rem}
-.medal{display:flex;flex-direction:column;align-items:center;gap:.5rem;width:118px;text-align:center}
-.medal-emblem{position:relative;width:100%}
-.medal-emblem svg{width:100%;height:auto;display:block;filter:drop-shadow(0 8px 14px rgba(40,34,24,.16))}
-.medal-petals ellipse{fill:var(--accent);stroke:none}
-.medal-ribbon{fill:var(--brand);stroke:none}
-.medal-disc{fill:#fff;stroke:var(--accent);stroke-width:2}
-.medal-ring{fill:none;stroke:var(--accent);stroke-width:1;opacity:.45}
-.medal-dot{fill:#fff;stroke:none}
-.medal-year{
-  position:absolute;left:0;right:0;top:40%;transform:translateY(-50%);
-  font-family:var(--font-serif);font-size:1.35rem;font-weight:600;color:var(--brand-600)
+.reviews-panel{
+  display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);
+  align-items:center;gap:clamp(2rem,6vw,5rem);
+  padding:clamp(2rem,5vw,4rem);border-radius:var(--radius);
+  background:var(--brand);color:#fff;overflow:hidden
 }
-.medal-label{font-size:.78rem;font-weight:600;color:var(--ink-soft);line-height:1.25;max-width:11ch}
-.medal{transition:transform .3s var(--ease)}
-.medal:hover{transform:translateY(-4px)}
+.reviews-copy{max-width:620px}
+.reviews-copy .eyebrow{color:var(--brand-100)}
+.reviews-copy h2{color:#fff;margin:.45rem 0 1rem}
+.reviews-copy>p:not(.eyebrow){color:rgba(255,255,255,.78);max-width:52ch;margin-bottom:1.5rem}
+.reviews-copy .btn{background:#fff;color:var(--brand);border-color:#fff}
+.reviews-copy .btn:hover{background:#f4f6f3;border-color:#f4f6f3}
+.reviews-awards{
+  padding:1.5rem;border:1px solid rgba(255,255,255,.22);
+  border-radius:var(--radius-sm);background:rgba(255,255,255,.08)
+}
+.reviews-awards>span{display:block;font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-100);margin-bottom:1rem}
+.reviews-awards>div{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem}
+.reviews-awards strong{
+  display:grid;place-items:center;min-height:54px;border-radius:12px;
+  background:rgba(255,255,255,.12);font-family:var(--font-serif);
+  font-size:1.25rem;color:#fff
+}
 
 /* ---------- Instagram feed preview ---------- */
 .posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}

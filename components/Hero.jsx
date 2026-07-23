@@ -9,13 +9,14 @@ export default function Hero() {
       <div className="container hero-grid">
         <div className="hero-copy">
           <div className="badge-row">
-            <span className="pill"><span className="dot" />Ведёт приём на КМВ</span>
+            <span className="pill"><span className="dot" />Приём проктолога в Пятигорске</span>
           </div>
-          <h1>Деликатные проблемы можно<br />решить <em>спокойно</em></h1>
+          <h1>Проктолог в Пятигорске —<br />деликатно и <em>спокойно</em></h1>
           <p className="lead">
-            Без стыда и без лишней боли. Я&nbsp;хирург&#8209;колопроктолог. Принимаю
-            пациентов с геморроем, трещинами, свищами и другими проблемами этой
-            области. Стараюсь делать так, чтобы человек не уходил с приёма в стрессе.
+            Я&nbsp;врач&#8209;проктолог, хирург&#8209;колопроктолог. Веду приём взрослых
+            пациентов в Пятигорске с геморроем, анальными трещинами, свищами и
+            другими заболеваниями этой области — без стыда и с вниманием к
+            вашему комфорту.
           </p>
 
           <div className="hero-actions">
@@ -25,18 +26,13 @@ export default function Hero() {
             </BookButton>
           </div>
 
-          <ul className="hero-trust">
-            <li><strong>4.9</strong><span>★ рейтинг<br />ПроДокторов</span></li>
-            <li><strong>10+</strong><span>лет<br />опыта</span></li>
-            <li><strong>500+</strong><span>успешных<br />операций</span></li>
-          </ul>
         </div>
 
         <div className="hero-card">
           <div className="hero-photo">
             <Image
               src="/img/doctor.png"
-              alt="Эдуард Жорикович Маркарян, хирург-колопроктолог"
+              alt="Проктолог в Пятигорске Эдуард Жорикович Маркарян"
               fill
               priority
               sizes="(max-width: 960px) 380px, 460px"
@@ -51,10 +47,6 @@ export default function Hero() {
             <Image src="/img/logo.png" className="hero-card-logo" alt="Логотип" width="48" height="35" />
           </div>
 
-          <div className="hero-float float-rating">
-            <span className="fr-num">4.9</span>
-            <span className="fr-stars">★★★★★<small>ПроДокторов</small></span>
-          </div>
         </div>
       </div>
 

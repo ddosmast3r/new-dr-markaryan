@@ -1,6 +1,7 @@
 import Reveal from './Reveal';
 import Reels from './Reels';
-import { reels } from '@/lib/content';
+import Procedures from './Procedures';
+import { reels, procedures } from '@/lib/content';
 
 export default function Works() {
   return (
@@ -15,6 +16,16 @@ export default function Works() {
         </Reveal>
 
         <Reels items={reels} />
+
+        <Reveal className="section-head works-subhead">
+          <h3>Как проходит процедура</h3>
+          <p className="section-sub">
+            Что происходит до, во время и после вмешательства. Ролики можно
+            посмотреть прямо здесь, они не запускаются сами.
+          </p>
+        </Reveal>
+
+        <Procedures items={procedures} />
       </div>
     </section>
   );

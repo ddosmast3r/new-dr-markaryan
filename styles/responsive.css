@@ -10,7 +10,7 @@
     border-bottom:1px solid var(--line);box-shadow:var(--shadow);margin:0
   }
   .burger{display:flex;margin-left:auto}
-  .hero-grid,.about-grid,.faq-grid,.contacts-grid,.diag-head{grid-template-columns:1fr}
+  .hero-grid,.about-grid,.contacts-grid,.diag-head{grid-template-columns:1fr}
   .diag-grid{grid-template-columns:1fr}
   .services-layout{grid-template-columns:1fr}
   .services-feature{position:static;grid-column:auto;grid-row:auto}
@@ -20,17 +20,16 @@
   .services-cta-media{min-height:200px}
   .services-cta-media::after{background:linear-gradient(to bottom, var(--brand) 0%, rgba(79,107,87,0) 38%)}
   .hero-card{max-width:380px;margin-inline:auto}
-  .float-rating{left:8px;top:8px}
-  .trust-grid,.cards,.steps,.reviews-grid,.posts-grid,
+  .float-rating,.float-award{left:8px;top:8px}
+  .trust-grid,.cards,.steps,.posts-grid,
   .proc-grid,.proc-grid--2{grid-template-columns:1fr 1fr}
   .dynasty-note{right:10%;left:auto;width:auto}
-  .faq-intro{position:static}
   .reviews-panel{grid-template-columns:1fr}
   .fab{display:inline-flex}
 }
 
 @media (max-width:560px){
-  .trust-grid,.cards,.steps,.reviews-grid,
+  .trust-grid,.cards,.steps,
   .proc-grid,.proc-grid--1,.proc-grid--2{grid-template-columns:1fr;max-width:none}
   /* На телефоне одна колонка, поэтому плитка не должна занимать весь экран. */
   .proc-media{aspect-ratio:4/5;max-height:70vh}
@@ -42,7 +41,6 @@
   .reviews-copy h2{font-size:clamp(1.8rem,9vw,2.35rem)}
   .reviews-copy .btn{width:100%}
   .reviews-awards{padding:1rem}
-  .reviews-awards strong{min-height:48px;font-size:1.1rem}
 
   /* Modal becomes a bottom sheet on phones */
   .modal{align-items:flex-end;padding:0}

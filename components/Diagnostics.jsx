@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import Reveal from './Reveal';
 import Icon from './Icon';
 import BookButton from './BookButton';
@@ -11,12 +12,23 @@ export default function Diagnostics() {
         <div className="diag-head">
           <Reveal className="diag-intro">
             <p className="eyebrow">Диагностика</p>
-            <h2>Сначала точный диагноз,<br />потом лечение</h2>
+            <h2>Сначала точный диагноз,{' '}<br />потом лечение</h2>
             <p className="diag-lead">
               Сначала разбираюсь, в чём дело, потом лечу. Операцию вслепую не
               назначаю. Все исследования делаю аккуратно, при необходимости с
               обезболиванием.
             </p>
+
+            {/* Те же исследования, что в карточках ниже: короткий список
+                держит левую колонку вровень с фотографией. */}
+            <ul className="diag-checklist">
+              {diagnostics.map((d) => (
+                <li key={d.title}>
+                  <span className="check"><Icon name="check" /></span>
+                  {d.title}
+                </li>
+              ))}
+            </ul>
           </Reveal>
 
           <Reveal className="diag-photo">
@@ -33,11 +45,22 @@ export default function Diagnostics() {
 
         <div className="diag-grid">
           {diagnostics.map((d, i) => (
-            <Reveal as="article" className="diag" key={d.title} style={{ transitionDelay: `${(i % 2) * 70}ms` }}>
+            <Reveal
+              as="article"
+              className={`diag${d.href ? ' card-linked' : ''}`}
+              key={d.title}
+              style={{ transitionDelay: `${(i % 2) * 70}ms` }}
+            >
               <span className="diag-ico"><Icon name={d.icon} /></span>
               <div>
                 <h3>{d.title}</h3>
                 <p>{d.text}</p>
+                {d.href && (
+                  <Link className="card-link" href={d.href}>
+                    {d.anchor}
+                    <Icon name="arrowRight" width="16" height="16" />
+                  </Link>
+                )}
               </div>
             </Reveal>
           ))}

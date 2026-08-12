@@ -31,6 +31,7 @@ const paths = {
   calendar: <><rect x="3" y="4.5" width="18" height="16.5" rx="2.5" /><path d="M3 9.5h18M8 2.5v4M16 2.5v4" /><path d="M11.5 14l1.4 1.4 2.6-2.8" /></>,
   info: <><circle cx="12" cy="12" r="9" /><path d="M12 11v5" /><path d="M12 7.6v.2" /></>,
   play: <path d="M9 7.5v9l8-4.5z" />,
+  check: <path d="M5 12.5l4.4 4.4L19 7" />,
 };
 
 export default function Icon({ name, className, ...props }) {

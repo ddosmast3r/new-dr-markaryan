@@ -1,10 +1,12 @@
 import { Manrope, Lora } from 'next/font/google';
 import { BookingProvider } from '@/components/BookingProvider';
 import CookieConsent from '@/components/CookieConsent';
+import { SITE, OG_IMAGE, OG_IMAGE_ALT } from '@/lib/content';
 
 import '@/styles/base.css';
 import '@/styles/layout.css';
 import '@/styles/components.css';
+import '@/styles/service.css';
 import '@/styles/responsive.css';
 
 const manrope = Manrope({
@@ -21,10 +23,9 @@ const lora = Lora({
   display: 'swap',
 });
 
-const SITE = 'https://dr-markaryan.ru';
-const TITLE = 'Проктолог в Пятигорске — доктор Эдуард Маркарян';
+const TITLE = 'Проктолог и колопроктолог в Пятигорске — Эдуард Маркарян';
 const DESCRIPTION =
-  'Проктолог в Пятигорске Эдуард Маркарян. Приём взрослых пациентов, диагностика и лечение геморроя, анальных трещин и свищей на КМВ.';
+  'Приём проктолога и хирурга-колопроктолога Эдуарда Маркаряна в Пятигорске. Диагностика и лечение заболеваний прямой кишки и анального канала. Запись на приём.';
 
 export const metadata = {
   metadataBase: new URL(SITE),
@@ -39,8 +40,14 @@ export const metadata = {
     siteName: 'Доктор Маркарян',
     locale: 'ru_RU',
     type: 'website',
+    images: [{ url: OG_IMAGE, width: 1024, height: 1536, alt: OG_IMAGE_ALT }],
   },
-  twitter: { card: 'summary_large_image', title: TITLE, description: DESCRIPTION },
+  twitter: {
+    card: 'summary_large_image',
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [OG_IMAGE],
+  },
   robots: { index: true, follow: true },
 };
 

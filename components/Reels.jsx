@@ -22,7 +22,9 @@ export default function Reels({ items }) {
 
   return (
     <>
-      <div className="posts-grid">
+      {/* Модификатор по количеству плиток: одиночный ролик не должен
+          прижиматься к левому краю, ряд просто центрируется. */}
+      <div className={`posts-grid posts-grid--${Math.min(items.length, 3)}`}>
         {items.map((it, i) => (
           <Reveal
             as="button"
@@ -34,7 +36,7 @@ export default function Reels({ items }) {
             style={{ transitionDelay: `${(i % 3) * 70}ms` }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={it.poster} alt={it.alt} loading="lazy" />
+            <img src={it.poster} alt={it.alt} width={it.width} height={it.height} loading="lazy" decoding="async" />
             <span className="post-play"><Icon name="play" /></span>
           </Reveal>
         ))}

@@ -1,15 +1,11 @@
-'use client';
-
-import { useState } from 'react';
 import Reveal from './Reveal';
 import BookButton from './BookButton';
+import FaqList from './FaqList';
 import { faq } from '@/lib/content';
 
 export default function Faq() {
-  const [openIndex, setOpenIndex] = useState(null);
-
   return (
-    <section className="section section-tint" id="faq">
+    <section className="section" id="faq">
       <div className="container faq-grid">
         <Reveal className="faq-intro">
           <p className="eyebrow">Вопросы</p>
@@ -18,21 +14,8 @@ export default function Faq() {
           <BookButton className="btn btn-ghost">Задать свой вопрос</BookButton>
         </Reveal>
 
-        <Reveal className="faq-list">
-          {faq.map((item, i) => (
-            <details key={i} open={openIndex === i}>
-              <summary
-                onClick={(e) => {
-                  e.preventDefault();
-                  setOpenIndex(openIndex === i ? null : i);
-                }}
-              >
-                {item.q}
-                <span className="chev" />
-              </summary>
-              <p>{item.a}</p>
-            </details>
-          ))}
+        <Reveal>
+          <FaqList items={faq} />
         </Reveal>
       </div>
     </section>

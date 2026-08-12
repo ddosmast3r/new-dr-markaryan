@@ -1,4 +1,4 @@
-const SITE = 'https://dr-markaryan.ru';
+import { SITE } from '@/lib/content';
 
 export default function robots() {
   return {

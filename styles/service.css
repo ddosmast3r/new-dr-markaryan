@@ -1,0 +1,155 @@
+/* ============================================================
+   SERVICE PAGES — хлебные крошки, шапка страницы услуги,
+   блок врача, связанные направления. Токены и типографика —
+   те же, что на главной, новых визуальных решений нет.
+   ============================================================ */
+
+/* ---------- Хлебные крошки ---------- */
+.crumbs{margin-bottom:1.4rem}
+.crumbs ol{list-style:none;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.85rem}
+.crumbs li{display:flex;align-items:center;gap:.5rem;color:var(--ink-soft)}
+.crumbs li + li::before{content:'/';color:var(--line);font-weight:700}
+.crumbs a{color:var(--brand);font-weight:600}
+.crumbs a:hover{color:var(--brand-600);text-decoration:underline}
+.crumbs [aria-current]{color:var(--ink-soft)}
+
+/* ---------- Шапка страницы услуги ---------- */
+.svc-hero{position:relative;padding:clamp(1.8rem,4vw,3rem) 0 clamp(2.5rem,5vw,3.5rem);overflow:hidden}
+.svc-hero::before{
+  content:'';position:absolute;top:-40%;right:-18%;width:55vw;height:55vw;
+  background:radial-gradient(circle,var(--brand-100),transparent 65%);z-index:-1;
+}
+.svc-hero h1{font-size:clamp(1.85rem,4.6vw,3.1rem);max-width:20ch;text-wrap:balance}
+.svc-hero .lead{margin:1.2rem 0 0;max-width:58ch}
+.svc-note{margin-top:.9rem;color:var(--ink-soft);max-width:58ch;font-size:.98rem}
+
+/* Первый экран страницы услуги: текст слева, кадр справа. */
+.svc-hero-grid{
+  display:grid;grid-template-columns:1.08fr .92fr;
+  gap:clamp(1.5rem,4vw,3.5rem);align-items:center;margin-bottom:2.2rem
+}
+.svc-hero-media{
+  position:relative;aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--line);box-shadow:var(--shadow);
+  background:linear-gradient(155deg,#708b77 0%,#4f6b57 55%,#3b5242 100%)
+}
+.svc-hero-media img{width:100%;height:100%;object-fit:cover}
+.svc-hero-media::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(22,30,24,.55),transparent 42%)
+}
+.svc-hero-chip{
+  position:absolute;left:14px;top:14px;z-index:2;display:inline-flex;align-items:center;gap:.45rem;
+  background:rgba(255,255,255,.92);color:var(--brand-600);font-size:.74rem;font-weight:700;
+  padding:.34rem .7rem;border-radius:100px;backdrop-filter:blur(4px)
+}
+.svc-hero-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--wa)}
+.svc-hero-cap{
+  position:absolute;left:18px;right:18px;bottom:16px;z-index:2;color:#fff;
+  font-family:var(--font-serif),Georgia,serif;font-size:1.25rem;line-height:1.2
+}
+
+.svc-actions{display:flex;flex-wrap:wrap;gap:.8rem;margin:1.8rem 0 0}
+.svc-actions .btn-ghost{background:var(--surface)}
+
+.svc-facts{
+  list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:1.4rem 1.6rem;box-shadow:var(--shadow-sm);
+}
+.svc-facts li{display:flex;flex-direction:column;gap:.25rem;min-width:0}
+.svc-facts span{font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-soft);font-weight:700}
+.svc-facts strong,.svc-facts a{font-size:1rem;line-height:1.35;font-weight:700}
+.svc-facts a{color:var(--brand);text-decoration:underline;text-underline-offset:3px}
+.svc-facts a:hover{color:var(--brand-600)}
+
+/* Блоки страницы услуги короче секций главной — заголовок и карточки
+   не должны разъезжаться на пол-экрана. */
+.svc-block{padding:clamp(2.6rem,5vw,4.2rem) 0}
+.svc-block .section-head{margin-bottom:1.8rem}
+
+/* ---------- Ссылка «читать про услугу» в карточках ---------- */
+.card-linked{position:relative}
+.card-link{
+  display:inline-flex;align-items:center;gap:.4rem;margin-top:.9rem;
+  color:var(--brand);font-weight:700;font-size:.9rem;
+}
+.card-link svg{transition:transform .25s var(--ease)}
+.card-linked:hover .card-link{color:var(--brand-600)}
+.card-linked:hover .card-link svg{transform:translateX(3px)}
+/* Кликабельна вся карточка, но в разметке это по-прежнему одна обычная ссылка */
+.card-link::after{content:'';position:absolute;inset:0;border-radius:var(--radius)}
+.card .card-link{grid-column:1 / -1}
+
+/* ---------- Одиночная видеоплитка на странице услуги ---------- */
+/* Двойной класс — чтобы правило пережило общий брейкпоинт в responsive.css */
+.posts-grid.posts-grid--1{max-width:calc((var(--maxw) - 2rem) / 3);grid-template-columns:1fr;margin-inline:auto}
+.posts-grid.posts-grid--2{max-width:calc((var(--maxw) - 2rem) / 3 * 2 + 1rem);grid-template-columns:repeat(2,1fr);margin-inline:auto}
+.proc-grid + .posts-grid{margin-top:1.25rem}
+@media (max-width:560px){
+  .posts-grid.posts-grid--1,.posts-grid.posts-grid--2{max-width:none;grid-template-columns:1fr}
+}
+
+/* ---------- Блок врача ---------- */
+.doctor-card{display:grid;grid-template-columns:.75fr 1.25fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:center}
+.doctor-body h2{font-size:clamp(1.6rem,3.2vw,2.3rem)}
+.doctor-role{color:var(--brand);font-weight:700;margin:.6rem 0 1rem}
+.doctor-body > p{color:var(--ink-soft);max-width:52ch}
+.doctor-body .timeline{margin-top:1.6rem}
+.doctor-actions{display:flex;flex-wrap:wrap;gap:.8rem}
+
+/* ---------- Связанные направления ---------- */
+.svc-related .section-head{margin-bottom:1.6rem}
+.related-list{list-style:none;display:flex;flex-wrap:wrap;gap:.8rem}
+.related-list a{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--surface);border:1px solid var(--line);border-radius:100px;
+  padding:.75rem 1.3rem;font-weight:700;font-size:.95rem;color:var(--ink);
+  transition:border-color .25s,color .25s,transform .25s var(--ease);
+}
+.related-list a:hover{border-color:var(--brand);color:var(--brand);transform:translateY(-2px)}
+.related-list svg{width:16px;height:16px}
+
+.svc-disclaimer{
+  margin-top:2rem;padding:1.1rem 1.4rem;
+  background:var(--accent-soft);border:1px solid #e7d4bf;border-radius:var(--radius-sm);
+  color:var(--ink);font-size:.88rem;line-height:1.6;max-width:80ch;
+}
+
+/* ---------- Ссылки на направления в футере ---------- */
+.footer-services{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem 1rem;padding:1.4rem 0 0}
+.footer-services > span{font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;color:#8ea29d;font-weight:700}
+.footer-services ul{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem 1.2rem}
+.footer-services a{color:#cdd6d3;font-size:.85rem;transition:color .2s}
+.footer-services a:hover{color:#fff}
+
+/* ---------- Подсказка под адресом в блоке контактов ---------- */
+.contacts-hint{font-size:.75rem;color:var(--brand-100);opacity:.8;margin-top:.15rem}
+.contacts-list a[target]{text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- Первый экран главной ---------- */
+/* H1 стал длиннее, поэтому кегль чуть меньше глобального — иначе
+   «хирург-колопроктолог» не помещается в колонку первого экрана. */
+.hero h1{font-size:clamp(1.9rem,4.4vw,3.4rem);overflow-wrap:break-word}
+.hero-tagline{
+  font-family:var(--font-serif),Georgia,serif;
+  font-size:clamp(1.25rem,2.6vw,1.9rem);line-height:1.2;
+  color:var(--ink-soft);margin-top:.7rem;
+  /* Слоган длиннее строки: делим на две ровные части, а не оставляем
+     висеть одно слово (и не роняем союз в конец строки). */
+  text-wrap:balance;max-width:24ch;
+}
+.hero-tagline em{font-style:italic;color:var(--brand)}
+
+@media (max-width:960px){
+  .doctor-card{grid-template-columns:1fr}
+  .doctor-photo{max-width:380px;margin-inline:auto}
+  .svc-hero-grid{grid-template-columns:1fr}
+  /* justify-self вместо margin:auto — авто-поля в grid отключают растяжение,
+     а внутри только absolute-картинка, и блок схлопывался в ноль. */
+  .svc-hero-media{width:100%;max-width:420px;justify-self:center;aspect-ratio:16/11}
+}
+@media (max-width:640px){
+  .svc-facts{grid-template-columns:1fr;gap:1.1rem}
+  .svc-actions .btn{flex:1 1 100%;justify-content:center}
+}

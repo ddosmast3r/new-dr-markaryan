@@ -7,9 +7,11 @@
 .trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
 .trust-grid > div{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem;transition:transform .3s var(--ease),box-shadow .3s}
 .trust-grid > div:hover{transform:translateY(-4px);box-shadow:var(--shadow-sm)}
-.trust-grid .ico{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:12px;background:var(--brand-100);color:var(--brand)}
-.trust-grid .ico svg{width:24px;height:24px}
-.trust-grid h3{font-size:1.15rem;margin:.7rem 0 .4rem}
+/* Иконки — визуальные якоря секций, поэтому крупнее и контрастнее:
+   на светлом фоне тонкий штрих 24px в бледной плашке почти растворялся. */
+.trust-grid .ico{display:inline-grid;place-items:center;width:52px;height:52px;border-radius:14px;background:var(--brand-150);color:var(--brand-600)}
+.trust-grid .ico svg{width:28px;height:28px;stroke-width:1.8}
+.trust-grid h2{font-size:1.15rem;margin:.7rem 0 .4rem}
 .trust-grid p{color:var(--ink-soft);font-size:.92rem}
 
 /* ---------- About ---------- */
@@ -58,11 +60,11 @@
 }
 .card:hover{transform:translateY(-5px);box-shadow:var(--shadow);border-color:transparent}
 .card-ico{
-  display:inline-grid;place-items:center;width:50px;height:50px;border-radius:14px;
-  background:var(--surface);border:1px solid var(--line);color:var(--brand);
+  display:inline-grid;place-items:center;width:54px;height:54px;border-radius:14px;
+  background:var(--brand-150);border:1px solid transparent;color:var(--brand-600);
   transition:background .3s,color .3s,border-color .3s
 }
-.card-ico svg{width:25px;height:25px}
+.card-ico svg{width:29px;height:29px;stroke-width:1.8}
 .card:hover .card-ico{background:var(--brand);color:#fff;border-color:var(--brand)}
 .card h3{font-size:1.22rem;line-height:1.2;margin:0}
 .card p{grid-column:1 / -1;margin-top:1.05rem;color:var(--ink-soft);font-size:.94rem;line-height:1.55}
@@ -83,9 +85,22 @@
 .services-cta-body .btn{margin-top:auto}
 
 /* ---------- Diagnostics ---------- */
-.diag-head{display:grid;grid-template-columns:1.12fr .88fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:center;margin-bottom:2.6rem}
+/* stretch + фото без собственной пропорции: высоту ряда задаёт текст,
+   кадр подстраивается под неё и пустого поля под колонкой не остаётся. */
+.diag-head{display:grid;grid-template-columns:1.12fr .88fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:stretch;margin-bottom:2.6rem}
 .diag-lead{color:var(--ink-soft);font-size:1.05rem;line-height:1.7;margin-top:1.2rem}
-.diag-photo{position:relative;aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+/* Список исследований в левой колонке: раньше текст заканчивался на трети
+   высоты фотографии и под ним оставалось ~300px пустого фона. */
+.diag-checklist{list-style:none;margin-top:1.6rem;display:grid;gap:.75rem}
+.diag-checklist li{display:flex;align-items:flex-start;gap:.7rem;font-weight:600;line-height:1.4}
+.diag-checklist .check{
+  flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;
+  background:var(--brand-150);color:var(--brand-600);margin-top:.1rem
+}
+.diag-checklist .check svg{width:15px;height:15px;stroke-width:2.4}
+.diag-checklist small{display:block;font-weight:500;color:var(--ink-soft);font-size:.86rem}
+.diag-photo{position:relative;min-height:340px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+@media (max-width:960px){.diag-photo{aspect-ratio:16/11;min-height:0}}
 .diag-photo img{width:100%;height:100%;object-fit:cover}
 .diag-photo-chip{
   position:absolute;left:14px;bottom:14px;z-index:2;display:inline-flex;align-items:center;gap:.45rem;
@@ -94,6 +109,9 @@
 }
 .diag-photo-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--wa)}
 .diag-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+/* Нечётное число карточек: последняя занимает ряд целиком, а не оставляет
+   пустую ячейку справа. */
+.diag-grid > :last-child:nth-child(odd){grid-column:span 2}
 .diag{
   display:flex;gap:1.1rem;align-items:flex-start;
   background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
@@ -115,15 +133,37 @@
 .diag-cta p{font-family:var(--font-serif);font-size:1.2rem;color:var(--ink);max-width:46ch;margin:0}
 
 /* ---------- Steps ---------- */
-.steps{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem}
-.steps li{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1.8rem 1.5rem;position:relative;overflow:hidden}
-.step-num{font-family:var(--font-serif);font-size:2.6rem;color:var(--accent);opacity:.5;display:block;margin-bottom:.5rem}
+.steps{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;position:relative}
+/* Пунктир идёт через всю сетку на высоте иконок; карточки непрозрачные,
+   поэтому линия читается только в промежутках между шагами. */
+.steps::before{
+  content:'';position:absolute;z-index:0;left:1.5rem;right:1.5rem;
+  top:calc(1.8rem + 25px);border-top:2px dashed var(--line);
+}
+.steps li{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1.8rem 1.5rem;position:relative;z-index:1;overflow:hidden}
+.step-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.step-ico{
+  flex:none;display:grid;place-items:center;width:50px;height:50px;border-radius:14px;
+  background:var(--brand-150);color:var(--brand-600)
+}
+.step-ico svg{width:28px;height:28px;stroke-width:1.8}
+.step-num{font-family:var(--font-serif);font-size:2.2rem;color:var(--accent);opacity:.55;line-height:1;margin-left:auto}
 .steps h3{font-size:1.2rem;margin-bottom:.4rem}
 .steps p{color:var(--ink-soft);font-size:.92rem}
+/* На одной колонке линия между шагами не нужна */
+@media (max-width:560px){.steps::before{display:none}}
 
 /* ---------- FAQ ---------- */
-.faq-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(2rem,5vw,4rem);align-items:start}
-.faq-intro{position:sticky;top:100px}
+/* Одна колонка на всю ширину: в двухколоночной раскладке интро занимало
+   ~250px, а под ним до конца секции оставалось пустое поле — липкость
+   на такой короткой секции всё равно не срабатывала. */
+.faq-grid{display:grid;grid-template-columns:1fr;gap:2.4rem}
+.faq-intro{display:flex;flex-wrap:wrap;align-items:flex-end;gap:.9rem 2.5rem}
+.faq-intro .eyebrow{flex:1 0 100%;margin-bottom:0}
+.faq-intro h2{flex:0 1 auto;max-width:22ch}
+.faq-intro .section-sub{flex:1 1 24ch;margin-top:0;padding-bottom:.35rem}
+.faq-intro .btn{margin-left:auto}
+@media (max-width:760px){.faq-intro .btn{margin-left:0;width:100%}}
 .faq-list details{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius-sm);margin-bottom:.8rem;overflow:hidden;transition:border-color .3s}
 .faq-list details[open]{border-color:var(--brand)}
 .faq-list summary{
@@ -133,7 +173,7 @@
 .faq-list summary::-webkit-details-marker{display:none}
 .faq-list .chev{width:12px;height:12px;border-right:2px solid var(--brand);border-bottom:2px solid var(--brand);transform:rotate(45deg);transition:transform .3s var(--ease);flex:none}
 .faq-list details[open] .chev{transform:rotate(-135deg)}
-.faq-list p{padding:0 1.4rem 1.3rem;color:var(--ink-soft)}
+.faq-list p{padding:0 1.4rem 1.3rem;color:var(--ink-soft);max-width:82ch}
 
 /* ---------- Reviews ---------- */
 .reviews-panel{
@@ -152,13 +192,57 @@
   padding:1.5rem;border:1px solid rgba(255,255,255,.22);
   border-radius:var(--radius-sm);background:rgba(255,255,255,.08)
 }
-.reviews-awards>span{display:block;font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-100);margin-bottom:1rem}
-.reviews-awards>div{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem}
-.reviews-awards strong{
-  display:grid;place-items:center;min-height:54px;border-radius:12px;
-  background:rgba(255,255,255,.12);font-family:var(--font-serif);
-  font-size:1.25rem;color:#fff
+.reviews-awards>span{display:block;font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-100);margin-bottom:.15rem}
+.awards-note{color:rgba(255,255,255,.7);font-size:.84rem;margin-bottom:1.2rem}
+.awards-medals{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem .8rem}
+
+/* Медаль-розетка (components/Medal.jsx): эмблема с лентой и годом внутри.
+   Терракота из палитры — на зелёном читается как награда, а не как плитка. */
+.medal{display:flex;flex-direction:column;align-items:center;gap:.35rem;margin:0}
+.medal-emblem{position:relative;width:100%;max-width:104px;aspect-ratio:120/150}
+.medal-emblem svg{width:100%;height:100%;stroke:none}
+.medal-ribbon{fill:#9d5a39}
+.medal-petals ellipse{fill:var(--accent)}
+.medal-disc{fill:var(--accent-soft)}
+.medal-ring{fill:none;stroke:#c8996f;stroke-width:1.6}
+.medal-dot{fill:#c8996f}
+.medal-year{
+  position:absolute;top:40%;left:0;right:0;transform:translateY(-50%);
+  text-align:center;font-family:var(--font-serif);font-size:1.2rem;
+  font-weight:600;color:var(--brand-600);letter-spacing:-.01em
 }
+.medal-label{font-size:.7rem;color:var(--brand-100);text-align:center;line-height:1.2}
+/* При наличии оценки премии подчиняются ей: медали мельче */
+.reviews-awards--compact .awards-medals{gap:.35rem}
+.reviews-awards--compact .medal-emblem{max-width:52px}
+.reviews-awards--compact .medal-year{font-size:.72rem}
+/* Крупная оценка — главный визуальный объект секции, когда она заполнена */
+.rating-block{display:flex;align-items:center;gap:1rem;margin:0 0 1.6rem}
+.rating-num{font-family:var(--font-serif);font-size:clamp(3rem,7vw,4.2rem);line-height:.9;color:#fff}
+.rating-meta{display:flex;flex-direction:column;gap:.25rem}
+.rating-stars{color:var(--accent-soft);font-size:1.15rem;letter-spacing:.12em;line-height:1}
+.rating-meta small{color:var(--brand-100);font-size:.85rem}
+/* При наличии оценки премии подчиняются ей: строка вместо сетки плиток */
+.reviews-awards--compact{padding:1rem 1.2rem}
+.reviews-awards--compact>span{margin-bottom:.6rem}
+.reviews-awards--compact>div{display:flex;flex-wrap:wrap;gap:.4rem}
+.reviews-awards--compact strong{min-height:0;padding:.3rem .7rem;font-size:.95rem}
+
+/* Цитаты пациентов */
+.reviews-quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+.quote{
+  display:flex;flex-direction:column;gap:1rem;margin:0;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:1.6rem 1.7rem
+}
+.quote blockquote{margin:0;color:var(--ink);line-height:1.6;font-size:.96rem}
+.quote blockquote::before{content:'«'}
+.quote blockquote::after{content:'»'}
+.quote figcaption{display:flex;align-items:baseline;gap:.6rem;margin-top:auto;color:var(--ink-soft)}
+.quote figcaption strong{color:var(--ink);font-size:.95rem}
+.quote figcaption small{font-size:.82rem}
+@media (max-width:960px){.reviews-quotes{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.reviews-quotes{grid-template-columns:1fr}}
 
 /* ---------- Instagram feed preview ---------- */
 .posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
@@ -169,8 +253,6 @@
 }
 .post img{width:100%;height:100%;object-fit:cover;transition:transform .4s var(--ease)}
 .post:hover img{transform:scale(1.04)}
-.post-ph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.45)}
-.post-ph svg{width:40px;height:40px}
 .post-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;width:54px;height:54px;border-radius:50%;background:rgba(0,0,0,.42);display:grid;place-items:center;backdrop-filter:blur(2px);transition:background .25s,transform .25s var(--ease)}
 .post:hover .post-play{background:rgba(0,0,0,.6);transform:translate(-50%,-50%) scale(1.08)}
 .post-play svg{width:24px;height:24px;fill:#fff;stroke:#fff;margin-left:2px}
@@ -277,10 +359,23 @@
 .btn-pdr-cta{background:#fff;color:var(--brand-600);font-size:1.05rem;padding:1.1rem 1.9rem;box-shadow:var(--shadow-sm)}
 .btn-pdr-cta:hover{background:#fff;color:var(--brand);transform:translateY(-2px)}
 .contacts-row{display:flex;gap:.8rem;flex-wrap:wrap}
-.contacts-row .btn{flex:1 1 120px}
+/* Контурные на зелёном: единственная цветная кнопка секции — ПроДокторов,
+   это основной сценарий записи. Узнаваемость держит иконка. */
+.contacts-row .btn{
+  flex:1 1 120px;background:rgba(255,255,255,.06);
+  border-color:rgba(255,255,255,.42);color:#fff
+}
+.contacts-row .btn:hover{background:rgba(255,255,255,.16);border-color:#fff}
 .contacts-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:var(--radius);padding:2rem;backdrop-filter:blur(6px)}
 .contacts-photo{position:relative;aspect-ratio:16/11;border-radius:var(--radius-sm);overflow:hidden;margin-bottom:1.6rem;border:1px solid rgba(255,255,255,.18)}
-.contacts-photo img{width:100%;height:100%;object-fit:cover}
+/* Кадр снят у сине-зелёной кафельной стены и был единственным холодным
+   пятном в зелёной секции: лёгкий тёплый грейдинг и шалфейная вуаль
+   возвращают его в палитру (тот же приём, что у .hero-photo::after). */
+.contacts-photo img{width:100%;height:100%;object-fit:cover;filter:saturate(.82) sepia(.14)}
+.contacts-photo::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(35,48,38,.34),rgba(79,107,87,.2));
+}
 .contacts-list{list-style:none;display:flex;flex-direction:column;gap:1.1rem}
 .contacts-list li{display:flex;flex-direction:column;gap:.15rem;padding-bottom:1.1rem;border-bottom:1px solid rgba(255,255,255,.14)}
 .contacts-list li:last-child{border:none;padding-bottom:0}

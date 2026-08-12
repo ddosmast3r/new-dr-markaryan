@@ -13,6 +13,7 @@
   --brand:#4f6b57;       /* muted sage green */
   --brand-600:#3e5645;
   --brand-100:#e0e7df;   /* soft sage tint */
+  --brand-150:#d2ded0;   /* на пару шагов темнее: подложка иконок */
   --accent:#b07a4f;      /* terracotta — humanises the palette */
   --accent-soft:#f0e4d6;
 
@@ -103,9 +104,12 @@ h1 em,h1 i{font-style:italic;color:var(--brand)}
 .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
 .btn-ghost:hover{border-color:var(--brand);color:var(--brand)}
 .btn-light{background:#fff;color:var(--brand)}
-.btn-wa{background:var(--wa);color:#063b1a}
-.btn-tg{background:var(--tg);color:#04293d}
-.btn-max{background:linear-gradient(135deg,#28b6f6 0%,#5b4ee6 55%,#8a3fe0 100%);background-origin:border-box;color:#fff}
+/* Мессенджеры: фирменный цвет остаётся только в иконке — три насыщенные
+   чужие заливки подряд ломали шалфейно-терракотовую палитру.
+   Заливка и рамка самих кнопок задаются по месту (.contacts-row). */
+.btn-wa svg{color:var(--wa)}
+.btn-tg svg{color:var(--tg)}
+.btn-max svg{color:var(--max)}
 
 /* Scroll-reveal animation.
    The hidden initial state only applies once JS marks the page ready

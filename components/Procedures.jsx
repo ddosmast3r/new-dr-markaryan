@@ -65,6 +65,8 @@ function ProcedureCard({ item, index }) {
               className="proc-poster"
               src={item.poster}
               alt=""
+              width={item.width}
+              height={item.height}
               loading="lazy"
               decoding="async"
             />

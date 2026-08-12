@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import BookButton from './BookButton';
 import { nav } from '@/lib/content';
 
 function Brand({ light = false }) {
   return (
-    <a href="#top" className="brand">
+    <Link href="/" className="brand">
       <Image
         src={light ? '/img/logo-white.png' : '/img/logo.png'}
         className="brand-mark"
@@ -19,7 +20,7 @@ function Brand({ light = false }) {
         <strong>Эдуард Маркарян</strong>
         <small>хирург-колопроктолог</small>
       </span>
-    </a>
+    </Link>
   );
 }
 
@@ -33,9 +34,9 @@ export default function Header() {
 
         <nav className={`main-nav${open ? ' open' : ''}`} aria-label="Основная навигация">
           {nav.map((item) => (
-            <a key={item.href} href={item.href} onClick={() => setOpen(false)}>
+            <Link key={item.href} href={item.href} onClick={() => setOpen(false)}>
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 

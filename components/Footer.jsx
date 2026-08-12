@@ -1,7 +1,11 @@
+import Link from 'next/link';
 import { Brand } from './Header';
-import { nav } from '@/lib/content';
+import { nav, ADDRESS, CLINIC } from '@/lib/content';
+import { servicePages } from '@/lib/pages';
 
-const footerNav = nav.filter((n) => ['#about', '#services', '#diagnostics', '#faq', '#contacts'].includes(n.href));
+const footerNav = nav.filter((n) =>
+  ['/#about', '/#services', '/#diagnostics', '/#faq', '/#contacts'].includes(n.href)
+);
 
 export default function Footer() {
   return (
@@ -11,14 +15,26 @@ export default function Footer() {
           <Brand light />
           <nav className="footer-nav">
             {footerNav.map((item) => (
-              <a key={item.href} href={item.href}>{item.label}</a>
+              <Link key={item.href} href={item.href}>{item.label}</Link>
             ))}
           </nav>
         </div>
 
+        {/* Отдельные страницы направлений доступны обычными ссылками с любой страницы */}
+        <nav className="footer-services" aria-label="Направления приёма">
+          <span>Направления</span>
+          <ul>
+            {servicePages.map((page) => (
+              <li key={page.slug}>
+                <Link href={`/${page.slug}`}>{page.crumb}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
         <div className="footer-legal">
-          <p>Медицинские услуги оказываются в ООО «ЛПУ-Гармония»</p>
-          <p className="footer-address">357502, Ставропольский край, г. Пятигорск, пр-кт Калинина, зд. 90А</p>
+          <p>Медицинские услуги оказываются в {CLINIC.name}</p>
+          <p className="footer-address">{ADDRESS.full}</p>
           <p>
             Лицензия на осуществление медицинской деятельности
             № Л041-01197-26/01072904 от 27.02.2024, выдана Министерством
@@ -45,8 +61,8 @@ export default function Footer() {
           </div>
 
           <div className="footer-links">
-            <a href="/license">Сведения о лицензии</a>
-            <a href="/privacy">Политика конфиденциальности</a>
+            <Link href="/license">Сведения о лицензии</Link>
+            <Link href="/privacy">Политика конфиденциальности</Link>
           </div>
         </div>
       </div>

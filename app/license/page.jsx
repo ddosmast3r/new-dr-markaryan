@@ -1,10 +1,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { SITE, OG_IMAGE, OG_IMAGE_ALT } from '@/lib/content';
+
+const TITLE = 'Сведения о лицензии — Доктор Маркарян';
+const DESCRIPTION = 'Сведения о медицинской организации и лицензии на осуществление медицинской деятельности ООО «ЛПУ-Гармония».';
 
 export const metadata = {
-  title: 'Сведения о лицензии — Доктор Маркарян',
-  description: 'Сведения о медицинской организации и лицензии на осуществление медицинской деятельности ООО «ЛПУ-Гармония».',
+  title: TITLE,
+  description: DESCRIPTION,
+  // Без своего canonical страница наследовала бы canonical главной.
+  alternates: { canonical: '/license' },
   robots: { index: true, follow: true },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: `${SITE}/license`, siteName: 'Доктор Маркарян', locale: 'ru_RU', type: 'article', images: [{ url: OG_IMAGE, width: 1024, height: 1536, alt: OG_IMAGE_ALT }] },
 };
 
 const org = [

@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { COOKIE_CONSENT_KEY, initMetrika } from '@/lib/metrika';
+import { COOKIE_CONSENT_KEY, initMetrika, clearMetrikaCookies } from '@/lib/metrika';
 
-// Баннер согласия на аналитические cookie (п. 4 политики конфиденциальности).
-// Выбор хранится в localStorage; Метрика подключается только после «Принять».
+// Баннер об аналитических cookie (п. 4 политики конфиденциальности).
+// Модель — opt-out: Метрика подключается сразу, «Отклонить» её выключает.
+// Выбор хранится в localStorage и переживает перезагрузку.
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
   const bannerRef = useRef(null);
@@ -31,8 +32,8 @@ export default function CookieConsent() {
     } catch {
       return;
     }
-    if (stored === 'accepted') initMetrika();
-    else if (stored !== 'declined') setVisible(true);
+    if (stored !== 'declined') initMetrika();
+    if (stored !== 'accepted' && stored !== 'declined') setVisible(true);
   }, []);
 
   const choose = (value) => {
@@ -40,7 +41,12 @@ export default function CookieConsent() {
       localStorage.setItem(COOKIE_CONSENT_KEY, value);
     } catch {}
     setVisible(false);
-    if (value === 'accepted') initMetrika();
+    // Выгрузить уже подключённый tag.js нельзя, поэтому при отказе чистим
+    // его cookie и перезагружаем страницу — после неё счётчик не стартует.
+    if (value === 'declined') {
+      clearMetrikaCookies();
+      window.location.reload();
+    }
   };
 
   if (!visible) return null;

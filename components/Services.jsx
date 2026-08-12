@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import Reveal from './Reveal';
 import Icon from './Icon';
 import BookButton from './BookButton';
@@ -34,10 +35,21 @@ export default function Services() {
 
           <div className="cards">
             {services.map((s, i) => (
-              <Reveal as="article" className="card" key={s.title} style={{ transitionDelay: `${(i % 2) * 70}ms` }}>
+              <Reveal
+                as="article"
+                className={`card${s.href ? ' card-linked' : ''}`}
+                key={s.title}
+                style={{ transitionDelay: `${(i % 2) * 70}ms` }}
+              >
                 <span className="card-ico"><Icon name={s.icon} /></span>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
+                {s.href && (
+                  <Link className="card-link" href={s.href}>
+                    {s.anchor}
+                    <Icon name="arrowRight" width="16" height="16" />
+                  </Link>
+                )}
               </Reveal>
             ))}
           </div>
@@ -50,12 +62,14 @@ export default function Services() {
             <BookButton className="btn btn-light">Уточнить и записаться</BookButton>
           </div>
           <div className="services-cta-media">
+            {/* Кадр самого врача, а не стоковая бригада: рядом на фото стоит
+                плашка «Оперирую лично», и тексты — про одного доктора. */}
             <Image
-              src="/img/uslugi.png"
-              alt="Операционная бригада за работой"
+              src="/inst/reel1.jpg"
+              alt="Эдуард Маркарян во время операции"
               fill
               sizes="(max-width: 960px) 100vw, 480px"
-              style={{ objectFit: 'cover' }}
+              style={{ objectFit: 'cover', objectPosition: 'center 22%' }}
             />
           </div>
         </Reveal>

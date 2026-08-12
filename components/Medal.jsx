@@ -22,7 +22,7 @@ export default function Medal({ year, title }) {
         </svg>
         <span className="medal-year">{year}</span>
       </div>
-      <figcaption className="medal-label">{title}</figcaption>
+      {title && <figcaption className="medal-label">{title}</figcaption>}
     </figure>
   );
 }

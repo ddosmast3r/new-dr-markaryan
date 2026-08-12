@@ -144,10 +144,12 @@
    и контрастом не выше копирайта. Требование закона выполняется и так. */
 .footer-bottom{display:flex;flex-direction:row;align-items:flex-end;justify-content:space-between;text-align:left;gap:1.5rem;flex-wrap:wrap;padding-top:2.2rem}
 .footer-final{display:flex;flex-direction:column;align-items:flex-start;gap:.7rem}
-.footer-disclaimer{display:block;width:100%;max-width:270px;height:auto;margin:0}
-.footer-disclaimer .fd-line{fill:#8ea29d;stroke:none;font-family:var(--font-sans),sans-serif;font-weight:700}
+/* Размер и контраст трогать нельзя: для медицинской рекламы закон задаёт
+   минимальную долю предупреждения в площади (см. COMPLIANCE_AUDIT_RU.md, п. 5). */
+.footer-disclaimer{display:block;width:100%;max-width:520px;height:auto;margin:0}
+.footer-disclaimer .fd-line{fill:#9aa69f;stroke:none;font-family:var(--font-sans),sans-serif;font-weight:800}
 .footer-disclaimer .fd-lg{font-size:7.2px}
-.footer-disclaimer .fd-sm{font-size:4.3px;fill:#76837b;font-weight:600}
+.footer-disclaimer .fd-sm{font-size:4.3px;fill:#76837b;font-weight:700}
 .footer-disclaimer .fd-xl{font-size:8.6px}
 .copyright{color:#8ea29d;font-size:.82rem;line-height:1.5}
 /* На узких экранах копирайт — две аккуратные строки без случайных переносов */

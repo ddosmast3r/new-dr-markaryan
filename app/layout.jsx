@@ -1,6 +1,7 @@
 import { Manrope, Lora } from 'next/font/google';
 import { BookingProvider } from '@/components/BookingProvider';
 import CookieConsent from '@/components/CookieConsent';
+import VkAdsPixel from '@/components/VkAdsPixel';
 import { SITE, OG_IMAGE, OG_IMAGE_ALT } from '@/lib/content';
 
 import '@/styles/base.css';
@@ -63,6 +64,7 @@ export default function RootLayout({ children }) {
       <body>
         <BookingProvider>{children}</BookingProvider>
         <CookieConsent />
+        <VkAdsPixel />
       </body>
     </html>
   );

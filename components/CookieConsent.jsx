@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { COOKIE_CONSENT_KEY, initMetrika, clearMetrikaCookies } from '@/lib/metrika';
+import { initVkAds } from '@/lib/vk-ads';
 
 // Баннер об аналитических cookie (п. 4 политики конфиденциальности).
-// Модель — opt-out: Метрика подключается сразу, «Отклонить» её выключает.
+// Метрика — opt-out: подключается сразу, «Отклонить» её выключает.
+// Пиксель VK Рекламы — opt-in: стартует только после «Принять».
 // Выбор хранится в localStorage и переживает перезагрузку.
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -41,6 +43,9 @@ export default function CookieConsent() {
       localStorage.setItem(COOKIE_CONSENT_KEY, value);
     } catch {}
     setVisible(false);
+    // VkAdsPixel уже смонтирован и сам не перезапустится: путь не меняется,
+    // поэтому пиксель запускаем здесь — сразу после согласия.
+    if (value === 'accepted') initVkAds();
     // Выгрузить уже подключённый tag.js нельзя, поэтому при отказе чистим
     // его cookie и перезагружаем страницу — после неё счётчик не стартует.
     if (value === 'declined') {
@@ -54,7 +59,10 @@ export default function CookieConsent() {
   return (
     <div ref={bannerRef} className="cookie-banner" role="dialog" aria-live="polite" aria-label="Согласие на использование cookie">
       <p className="cookie-text">
-        <span>Мы используем cookie и Яндекс Метрику для анализа посещаемости.</span>{' '}
+        <span>
+          Мы используем cookie и сервисы аналитики Яндекс Метрика и VK Реклама, чтобы оценивать посещаемость сайта и
+          эффективность рекламы.
+        </span>{' '}
         <span>
           Подробнее — в <a href="/privacy">политике конфиденциальности</a>.
         </span>

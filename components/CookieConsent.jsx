@@ -5,9 +5,8 @@ import { COOKIE_CONSENT_KEY, initMetrika, clearMetrikaCookies } from '@/lib/metr
 import { initVkAds } from '@/lib/vk-ads';
 
 // Баннер об аналитических cookie (п. 4 политики конфиденциальности).
-// Метрика — opt-out: подключается сразу, «Отклонить» её выключает.
-// Пиксель VK Рекламы — opt-in: стартует только после «Принять».
-// Выбор хранится в localStorage и переживает перезагрузку.
+// Модель — opt-in: Яндекс Метрика и пиксель VK Рекламы стартуют только
+// после «Принять». Выбор хранится в localStorage и переживает перезагрузку.
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
   const bannerRef = useRef(null);
@@ -34,7 +33,9 @@ export default function CookieConsent() {
     } catch {
       return;
     }
-    if (stored !== 'declined') initMetrika();
+    // Согласие из прошлого визита: поднимаем Метрику, VK-пиксель стартует
+    // сам в VkAdsPixel. Оба модуля повторно скрипты не грузят.
+    if (stored === 'accepted') initMetrika();
     if (stored !== 'accepted' && stored !== 'declined') setVisible(true);
   }, []);
 
@@ -43,15 +44,15 @@ export default function CookieConsent() {
       localStorage.setItem(COOKIE_CONSENT_KEY, value);
     } catch {}
     setVisible(false);
-    // VkAdsPixel уже смонтирован и сам не перезапустится: путь не меняется,
-    // поэтому пиксель запускаем здесь — сразу после согласия.
-    if (value === 'accepted') initVkAds();
-    // Выгрузить уже подключённый tag.js нельзя, поэтому при отказе чистим
-    // его cookie и перезагружаем страницу — после неё счётчик не стартует.
-    if (value === 'declined') {
-      clearMetrikaCookies();
-      window.location.reload();
+    // Оба сервиса уже смонтированы и сами не перезапустятся (путь не меняется),
+    // поэтому запускаем их здесь — сразу после согласия, по одному разу.
+    if (value === 'accepted') {
+      initMetrika();
+      initVkAds();
     }
+    // До согласия счётчики не стартуют, но cookie могли остаться
+    // от прошлого визита с очищенным localStorage — убираем их.
+    if (value === 'declined') clearMetrikaCookies();
   };
 
   if (!visible) return null;

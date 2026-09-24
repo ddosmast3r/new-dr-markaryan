@@ -1,99 +1,122 @@
-import Image from 'next/image';
-import BookButton from './BookButton';
-import Icon from './Icon';
-import { conditions, heroStats, awards, RATING } from '@/lib/content';
+import Image from "next/image";
+import HeroMedia from "./HeroMedia";
+import BookButton from "./BookButton";
+import Icon from "./Icon";
+import { conditions, heroStats } from "@/lib/content";
 
 export default function Hero() {
   return (
     <section className="hero">
-      <div className="container hero-grid">
-        <div className="hero-copy">
-          <div className="badge-row">
-            <span className="pill"><span className="dot" />Приём проктолога в Пятигорске</span>
-          </div>
-          {/* Обычный дефис намеренно: на узком экране строка может перенестись
-              после него, слово не вылезет за пределы контейнера. */}
-          {/* Пробел перед <br /> обязателен: без него в textContent слова
-              склеиваются («колопроктологв»), и это видят парсеры и соцсети. */}
-          <h1>Проктолог и хирург-колопроктолог{' '}<br />в Пятигорске</h1>
-          <p className="hero-tagline">Без лишних операций и <em>лишних анализов</em></p>
-          <p className="lead">
-            Меня зовут Эдуард Жорикович Маркарян, я&nbsp;врач&#8209;проктолог,
-            хирург&#8209;колопроктолог. Веду приём взрослых пациентов в Пятигорске
-            с геморроем, анальными трещинами, свищами и другими заболеваниями
-            этой области. Без стыда и с вниманием к вашему комфорту.
-          </p>
+      <div className="hero-stage">
+        <svg className="liquid-glass-filters" width="0" height="0" aria-hidden="true" focusable="false">
+          <defs>
+            <filter
+              id="liquid-glass-distortion"
+              x="-20%"
+              y="-60%"
+              width="140%"
+              height="220%"
+              colorInterpolationFilters="sRGB"
+            >
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.009 0.045"
+                numOctaves="2"
+                seed="8"
+                result="noise"
+              />
+              <feGaussianBlur in="noise" stdDeviation="1.4" result="softNoise" />
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="softNoise"
+                scale="16"
+                xChannelSelector="R"
+                yChannelSelector="G"
+              />
+            </filter>
+          </defs>
+        </svg>
 
-          <div className="hero-actions">
-            <BookButton className="btn btn-primary btn-xl">
-              Записаться на приём
-              <Icon name="arrowRight" width="22" height="22" />
-            </BookButton>
-          </div>
+        {/* Фон на всю ширину — размытое видео, см. components/HeroMedia.jsx.
+            Декоративный слой: alt пустой, из дерева доступности исключён. */}
+        <div className="hero-bg">
+          <HeroMedia />
+        </div>
 
-          {/* Цифры под кнопкой: только подтверждённые данные, см. heroStats */}
-          <ul className="hero-trust">
-            {heroStats.map((stat) => (
-              <li key={stat.value}>
-                <strong>{stat.value}</strong>
-                <span>
-                  {stat.label.split('\n').map((line, i) => (
-                    <span key={i} className="ht-line">{line}</span>
-                  ))}
+        <div className="hero-content">
+          <div className="hero-text">
+            {/* Обычный дефис намеренно: на узком экране строка может перенестись
+                после него, слово не вылезет за пределы контейнера. */}
+            {/* {' '} перед span обязателен: JSX съедает перевод строки перед
+                вложенным элементом, и в textContent слова склеились бы
+                («колопроктологв») — это видят парсеры и соцсети. */}
+            <h1>
+              Хирург-колопроктолог{' '}
+              <span className="hero-where">в Пятигорске и Ессентуках</span>
+            </h1>
+            <p className="hero-tagline">
+              Без лишних операций и <em>лишних анализов</em>
+            </p>
+
+            <div className="hero-actions">
+              <BookButton className="btn btn-light btn-xl btn-glow hero-cta">
+                <span>Записаться на приём</span>
+                <span className="hero-cta-icon" aria-hidden="true">
+                  <Icon name="arrowRight" width="22" height="22" />
                 </span>
-              </li>
+              </BookButton>
+            </div>
+          </div>
+
+          <div className="hero-doctor">
+            <div className="hero-portrait">
+              <Image
+                src="/img/doctor.png"
+                alt="Эдуард Маркарян, хирург-колопроктолог"
+                fill
+                priority
+                sizes="(max-width: 960px) 88vw, 34vw"
+                style={{ objectFit: "cover", objectPosition: "center 18%" }}
+              />
+              <div className="hero-method">
+                <span className="hero-method-dot" aria-hidden="true" />
+                <span>
+                  <strong>Лазерные методики</strong>
+                  <small>по показаниям</small>
+                </span>
+              </div>
+            </div>
+
+            {/* Цифры: только подтверждённые данные, см. heroStats */}
+            <ul className="hero-stats">
+              {heroStats.map((stat) => (
+                <li key={stat.value}>
+                  <strong>{stat.value}</strong>
+                  <span>
+                    {stat.label.split("\n").map((line, i) => (
+                      <span key={i} className="ht-line">
+                        {line}
+                      </span>
+                    ))}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="marquee" id="conditions" aria-hidden="true">
+          <div className="marquee-track">
+            {/* Две идентичные группы дают точный бесшовный цикл. Вторая группа
+                скрыта от дерева доступности вместе со всей декоративной строкой. */}
+            {[0, 1].map((copy) => (
+              <div className="marquee-group" key={copy}>
+                {conditions.map((condition) => (
+                  <span key={`${copy}-${condition}`}>{condition}</span>
+                ))}
+              </div>
             ))}
-          </ul>
-        </div>
-
-        <div className="hero-card">
-          {/* Плашка на фотокарточке. Пока с ПроДокторов не взята оценка
-              (RATING === null), показываем премию — её годы у нас есть. */}
-          {RATING ? (
-            <div className="hero-float float-rating">
-              <span className="fr-num">{RATING.value}</span>
-              <span className="fr-stars">
-                ★★★★★
-                <small>{RATING.count} отзывов</small>
-              </span>
-            </div>
-          ) : (
-            <div className="hero-float float-award">
-              <span className="fa-ico"><Icon name="trophy" width="20" height="20" /></span>
-              <span className="fa-text">
-                Премия ПроДокторов
-                <small>{awards[0].year}–{awards[awards.length - 1].year}</small>
-              </span>
-            </div>
-          )}
-
-          <div className="hero-photo">
-            <Image
-              src="/img/doctor.png"
-              alt="Эдуард Жорикович Маркарян, врач-проктолог и хирург-колопроктолог"
-              fill
-              priority
-              sizes="(max-width: 960px) 380px, 460px"
-              style={{ objectFit: 'cover', objectPosition: 'center top' }}
-            />
           </div>
-          <div className="hero-card-meta">
-            <div>
-              <strong>Эдуард Жорикович</strong>
-              <small>Сеченовский университет · колопроктология</small>
-            </div>
-            <Image src="/img/logo.png" className="hero-card-logo" alt="Логотип Эдуарда Маркаряна" width="48" height="35" />
-          </div>
-
-        </div>
-      </div>
-
-      <div className="marquee" aria-hidden="true">
-        <div className="marquee-track">
-          {/* 6 копий = две одинаковые половины по 3, для бесшовного цикла на любой ширине */}
-          {Array.from({ length: 6 }).flatMap(() => conditions).map((c, i) => (
-            <span key={i}>{c}</span>
-          ))}
         </div>
       </div>
     </section>

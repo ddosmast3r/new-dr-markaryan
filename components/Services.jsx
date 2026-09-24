@@ -5,13 +5,17 @@ import Icon from './Icon';
 import BookButton from './BookButton';
 import { services } from '@/lib/content';
 
-export default function Services() {
+// level=1 — секция открывает отдельную страницу и её заголовок
+// должен быть H1; по умолчанию это обычная секция главной.
+export default function Services({ level = 2, heading = 'С чем обращаются' }) {
+  const H = level === 1 ? 'h1' : 'h2';
+
   return (
     <section className="section section-tint" id="services">
       <div className="container">
         <Reveal className="section-head">
           <p className="eyebrow">Лечение</p>
-          <h2>С чем обращаются</h2>
+          <H>{heading}</H>
           <p className="section-sub">Если что-то из этого про вас, не тяните. На ранней стадии почти всё решается проще.</p>
         </Reveal>
 

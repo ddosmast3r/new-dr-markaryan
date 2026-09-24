@@ -2,13 +2,17 @@ import Reveal from './Reveal';
 import Icon from './Icon';
 import { steps } from '@/lib/content';
 
-export default function Steps() {
+// level=1 — секция открывает отдельную страницу и её заголовок
+// должен быть H1; по умолчанию это обычная секция главной.
+export default function Steps({ level = 2, heading = 'Всего четыре шага' }) {
+  const H = level === 1 ? 'h1' : 'h2';
+
   return (
     <section className="section" id="how">
       <div className="container">
         <Reveal className="section-head">
           <p className="eyebrow">Как проходит</p>
-          <h2>Всего четыре шага</h2>
+          <H>{heading}</H>
           <p className="section-sub">Без сюрпризов. Заранее понятно, что будет на каждом.</p>
         </Reveal>
 

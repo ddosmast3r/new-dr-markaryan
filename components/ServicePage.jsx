@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from './Header';
+import PageHero from './PageHero';
 import Footer from './Footer';
 import Fab from './Fab';
 import Reveal from './Reveal';
@@ -45,54 +46,32 @@ export default function ServicePage({ slug }) {
   return (
     <>
       <JsonLd data={jsonLd} />
-      <Header />
+      <Header transparent />
 
       <main>
-        <section className="svc-hero">
+        <PageHero
+          crumbs={crumbs}
+          title={page.h1}
+          lead={page.intro}
+          media={page.media}
+        >
+          {page.note && <p className="svc-note">{page.note}</p>}
+
+          <div className="svc-actions">
+            <BookButton className="btn btn-light btn-lg">
+              Записаться на приём
+              <Icon name="arrowRight" width="20" height="20" />
+            </BookButton>
+            <TrackedLink goal={GOALS.PHONE} href={PHONE_HREF} className="btn btn-ghost btn-on-dark">
+              <Icon name="phone" width="18" height="18" />
+              {PHONE}
+            </TrackedLink>
+          </div>
+        </PageHero>
+
+        {/* Реквизиты приёма — уже на светлой части страницы */}
+        <section className="section svc-block svc-facts-block">
           <div className="container">
-            <Breadcrumbs items={crumbs} />
-
-            <div className="svc-hero-grid">
-              <div className="svc-hero-copy">
-                <p className="eyebrow">{page.eyebrow}</p>
-                <h1>{page.h1}</h1>
-                <p className="lead">{page.intro}</p>
-                {page.note && <p className="svc-note">{page.note}</p>}
-
-                <div className="svc-actions">
-                  <BookButton className="btn btn-primary btn-lg">
-                    Записаться на приём
-                    <Icon name="arrowRight" width="20" height="20" />
-                  </BookButton>
-                  <TrackedLink goal={GOALS.PHONE} href={PHONE_HREF} className="btn btn-ghost">
-                    <Icon name="phone" width="18" height="18" />
-                    {PHONE}
-                  </TrackedLink>
-                </div>
-              </div>
-
-              {/* Кадр справа: страница услуги — точка входа из поиска,
-                  и до этого первый экран был текстом на пустом поле. */}
-              {page.media && (
-                <div className="svc-hero-media">
-                  <Image
-                    src={page.media.src}
-                    alt={page.media.alt}
-                    fill
-                    priority
-                    sizes="(max-width: 960px) 100vw, 460px"
-                    style={{ objectFit: 'cover', objectPosition: page.media.position }}
-                  />
-                  {page.media.chip && (
-                    <span className="svc-hero-chip"><span className="dot" />{page.media.chip}</span>
-                  )}
-                  {page.media.caption && (
-                    <span className="svc-hero-cap">{page.media.caption}</span>
-                  )}
-                </div>
-              )}
-            </div>
-
             <ul className="svc-facts">
               <li><span>Врач</span><strong>{DOCTOR_NAME}</strong></li>
               <li>

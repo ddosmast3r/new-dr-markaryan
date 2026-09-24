@@ -5,63 +5,56 @@ import Icon from './Icon';
 import BookButton from './BookButton';
 import { diagnostics } from '@/lib/content';
 
-export default function Diagnostics() {
+// level=1 — секция открывает отдельную страницу и её заголовок
+// должен быть H1; по умолчанию это обычная секция главной.
+export default function Diagnostics({ level = 2, heading = 'Сначала точный диагноз, потом лечение' }) {
+  const H = level === 1 ? 'h1' : 'h2';
+
   return (
     <section className="section" id="diagnostics">
       <div className="container">
-        <div className="diag-head">
-          <Reveal className="diag-intro">
-            <p className="eyebrow">Диагностика</p>
-            <h2>Сначала точный диагноз,{' '}<br />потом лечение</h2>
-            <p className="diag-lead">
-              Сначала разбираюсь, в чём дело, потом лечу. Операцию вслепую не
-              назначаю. Все исследования делаю аккуратно, при необходимости с
-              обезболиванием.
-            </p>
+        <Reveal className="section-head section-head--center">
+          <p className="eyebrow">Диагностика</p>
+          <H>{heading}</H>
+          <p className="section-sub">
+            Сначала разбираюсь, в чём дело, потом лечу. Операцию вслепую не
+            назначаю. Все исследования делаю аккуратно, при необходимости с
+            обезболиванием.
+          </p>
+        </Reveal>
 
-            {/* Те же исследования, что в карточках ниже: короткий список
-                держит левую колонку вровень с фотографией. */}
-            <ul className="diag-checklist">
-              {diagnostics.map((d) => (
-                <li key={d.title}>
-                  <span className="check"><Icon name="check" /></span>
-                  {d.title}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+        <Reveal className="diag-banner">
+          <Image
+            src="/img/diagnoses.png"
+            alt="Доктор Маркарян проводит эндоскопическое исследование"
+            fill
+            sizes="(max-width: 1240px) 100vw, 1200px"
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+          />
+          <span className="diag-photo-chip"><span className="dot" />Эндоскопия в HD</span>
+        </Reveal>
 
-          <Reveal className="diag-photo">
-            <Image
-              src="/img/diagnoses.png"
-              alt="Доктор Маркарян проводит эндоскопическое исследование"
-              fill
-              sizes="(max-width: 960px) 100vw, 420px"
-              style={{ objectFit: 'cover', objectPosition: 'center' }}
-            />
-            <span className="diag-photo-chip"><span className="dot" />Эндоскопия в HD</span>
-          </Reveal>
-        </div>
-
-        <div className="diag-grid">
+        <div className="probe-grid">
           {diagnostics.map((d, i) => (
             <Reveal
               as="article"
-              className={`diag${d.href ? ' card-linked' : ''}`}
+              className={`probe${d.href ? ' card-linked' : ''}`}
               key={d.title}
-              style={{ transitionDelay: `${(i % 2) * 70}ms` }}
+              style={{ transitionDelay: `${(i % 4) * 70}ms` }}
             >
-              <span className="diag-ico"><Icon name={d.icon} /></span>
-              <div>
-                <h3>{d.title}</h3>
-                <p>{d.text}</p>
-                {d.href && (
-                  <Link className="card-link" href={d.href}>
-                    {d.anchor}
-                    <Icon name="arrowRight" width="16" height="16" />
-                  </Link>
-                )}
+              <div className="probe-frame">
+                <span className="probe-glow" aria-hidden="true" />
+                <span className="probe-ico"><Icon name={d.icon} /></span>
               </div>
+              <p className="probe-label">{d.title}</p>
+              <span className="probe-rule" aria-hidden="true" />
+              <p className="probe-text">{d.text}</p>
+              {d.href && (
+                <Link className="card-link" href={d.href}>
+                  {d.anchor}
+                  <Icon name="arrowRight" width="16" height="16" />
+                </Link>
+              )}
             </Reveal>
           ))}
         </div>

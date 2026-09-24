@@ -5,23 +5,36 @@
 @media (max-width:960px){
   .main-nav,.header-cta{display:none}
   .main-nav.open{
-    display:flex;flex-direction:column;position:absolute;top:74px;left:0;right:0;
-    background:var(--surface);padding:1.5rem 20px;gap:1.2rem;
-    border-bottom:1px solid var(--line);box-shadow:var(--shadow);margin:0
+    display:flex;flex-direction:column;position:absolute;
+    top:calc(100% + .6rem);left:0;right:0;
+    background:var(--surface);padding:1.4rem 1.5rem;gap:1.2rem;
+    border:1px solid var(--line);border-radius:var(--radius-sm);
+    box-shadow:var(--shadow);margin:0
   }
   .burger{display:flex;margin-left:auto}
-  .hero-grid,.about-grid,.contacts-grid,.diag-head{grid-template-columns:1fr}
-  .diag-grid{grid-template-columns:1fr}
+  /* В бургер-меню подменю не прячем: наведения на телефоне нет,
+     а список из трёх ссылок помещается целиком. */
+  .nav-item{display:block}
+  .nav-chev{display:none}
+  .nav-sub{
+    position:static;opacity:1;visibility:visible;transform:none;
+    min-width:0;margin:.5rem 0 0 .9rem;padding:0;
+    /* Сбрасываем панель целиком: на телефоне это вложенный список,
+       а не всплывающее окно. */
+    background:none;border:none;border-left:1px solid var(--line);
+    border-radius:0;box-shadow:none;
+  }
+  .nav-sub::before{display:none}
+  .nav-sub a{padding:.35rem 0 .35rem .9rem;white-space:normal;font-size:.92rem}
+  .about-grid,.contacts-grid{grid-template-columns:1fr}
   .services-layout{grid-template-columns:1fr}
   .services-feature{position:static;grid-column:auto;grid-row:auto}
   .services-layout .cards{grid-column:auto}
   .feat-img{aspect-ratio:16/10}
   .services-cta{grid-template-columns:1fr}
   .services-cta-media{min-height:200px}
-  .services-cta-media::after{background:linear-gradient(to bottom, var(--brand) 0%, rgba(79,107,87,0) 38%)}
-  .hero-card{max-width:380px;margin-inline:auto}
-  .float-rating,.float-award{left:8px;top:8px}
-  .trust-grid,.cards,.steps,.posts-grid,
+  .services-cta-media::after{background:linear-gradient(to bottom, var(--brand) 0%, rgba(var(--brand-rgb),0) 38%)}
+  .trust-grid,.cards,.steps,.posts-grid,.probe-grid,
   .proc-grid,.proc-grid--2{grid-template-columns:1fr 1fr}
   .dynasty-note{right:10%;left:auto;width:auto}
   .reviews-panel{grid-template-columns:1fr}
@@ -29,11 +42,10 @@
 }
 
 @media (max-width:560px){
-  .trust-grid,.cards,.steps,
+  .trust-grid,.cards,.steps,.probe-grid,
   .proc-grid,.proc-grid--1,.proc-grid--2{grid-template-columns:1fr;max-width:none}
   /* На телефоне одна колонка, поэтому плитка не должна занимать весь экран. */
   .proc-media{aspect-ratio:4/5;max-height:70vh}
-  .hero-trust{gap:1.2rem}
   .hero-actions{width:100%}
   .hero-actions .btn-xl{width:100%}
   .services-cta{flex-direction:column;align-items:flex-start;text-align:left}
@@ -44,6 +56,6 @@
 
   /* Modal becomes a bottom sheet on phones */
   .modal{align-items:flex-end;padding:0}
-  .modal-card{max-width:none;border-radius:22px 22px 0 0;padding:1.6rem;animation:modal-slide .35s var(--ease)}
+  .modal-card{max-width:none;border-radius:var(--radius-xl) var(--radius-xl) 0 0;padding:1.6rem;animation:modal-slide .35s var(--ease)}
 }
 @keyframes modal-slide{from{transform:translateY(100%)}}

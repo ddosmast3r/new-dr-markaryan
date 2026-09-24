@@ -1,9 +1,10 @@
-import ServicePage, { serviceMetadata } from '@/components/ServicePage';
+import ColonoscopyPage from '@/components/ColonoscopyPage';
+import { serviceMetadata } from '@/components/ServicePage';
 
 const SLUG = 'kolonoskopiya';
 
 export const metadata = serviceMetadata(SLUG);
 
 export default function Page() {
-  return <ServicePage slug={SLUG} />;
+  return <ColonoscopyPage />;
 }

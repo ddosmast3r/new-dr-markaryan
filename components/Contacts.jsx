@@ -13,13 +13,16 @@ import { GOALS } from '@/lib/metrika';
 export default function Contacts({
   heading = 'Приём проктолога в Пятигорске',
   intro = 'Напишите в мессенджер, отвечу сам. Или выберите время на ПроДокторов.',
+  level = 2,
 }) {
+  const H = level === 1 ? 'h1' : 'h2';
+
   return (
     <section className="section contacts" id="contacts">
       <div className="container contacts-grid">
         <Reveal className="contacts-copy">
           <p className="eyebrow light">Контакты</p>
-          <h2>{heading}</h2>
+          <H>{heading}</H>
           <p>{intro}</p>
 
           <div className="contacts-actions">

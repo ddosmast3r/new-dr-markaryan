@@ -9,11 +9,16 @@ import BookButton from './BookButton';
 const ANCHORS = '.hero-actions, .svc-actions, #contacts, .diag-cta';
 
 export default function Fab() {
-  const [hidden, setHidden] = useState(false);
+  // На первом кадре скрываем сразу, без вспышки дублирующей кнопки до того,
+  // как IntersectionObserver успеет определить видимость основного CTA.
+  const [hidden, setHidden] = useState(true);
 
   useEffect(() => {
     const targets = document.querySelectorAll(ANCHORS);
-    if (!targets.length) return undefined;
+    if (!targets.length) {
+      setHidden(false);
+      return undefined;
+    }
 
     const visible = new Set();
     const observer = new IntersectionObserver(

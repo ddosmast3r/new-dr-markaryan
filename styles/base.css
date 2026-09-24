@@ -1,32 +1,89 @@
 /* ============================================================
    BASE — design tokens, reset, typography, buttons, utilities
+
+   Палитра и типографика следуют редакционному стилю
+   functionhealth.com: тёплый бежевый холст, кремовые поверхности,
+   один терракотовый акцент, «миднайт» для тёмных блоков.
+   Сериф — лёгкий, высококонтрастный; надзаголовки — моноширинные.
    ============================================================ */
 
 :root{
-  --bg:#f4f1ec;          /* warm beige */
-  --head-bg:#f7f5f1;     /* цвет шапки — для верхней зоны отскока */
-  --surface:#ffffff;
-  --ink:#20241f;         /* dark graphite */
-  --ink-soft:#6c7168;    /* muted warm grey */
-  --line:#e6e0d5;
+  /* Палитра заказчика:
+     Porcelain #fcfffc, Forest Green #248232, Medium Jungle #2ba84a,
+     Jet Black #2d3a3a, Ink Black #040f0f.
+     Холст — лунно-серый, карточки светлее его (на сером это работает
+     лучше, чем подложка темнее фона). Тёмными остаются только кадр
+     первого экрана, «Контакты» и подвал — они держат ритм страницы.
+     Зелёный взят темнее палитрового Forest Green: на сером холсте
+     #248232 давал контраст 3.9, а ссылкам нужно 4.5. */
+  --bg:#e4e7e2;          /* Porcelain — холст */
+  --head-bg:#e4e7e2;
+  /* В палитре нет второго светлого тона, а карточкам нужна подложка,
+     отличимая от холста. Прежние значения давали контраст 1.10 и 1.28 —
+     карточек и границ на почти белом фоне просто не было видно.
+     Эти дают 1.18 и 1.55: заметно, но всё ещё спокойно. */
+  --surface:#fbfcfa;
+  --line:#ccd2ca;
 
-  --brand:#4f6b57;       /* muted sage green */
-  --brand-600:#3e5645;
-  --brand-100:#e0e7df;   /* soft sage tint */
-  --brand-150:#d2ded0;   /* на пару шагов темнее: подложка иконок */
-  --accent:#b07a4f;      /* terracotta — humanises the palette */
-  --accent-soft:#f0e4d6;
+  --ink:#1d2320;         /* цвет ТЕКСТА */
+  /* --dark и --on-dark разведены намеренно. Раньше --ink значил
+     одновременно текст и заливку тёмных блоков, а --bg — и холст, и
+     светлый цвет поверх тёмного. В светлой теме это совпадало, а при
+     перевороте в тёмную ломалось: подвал становился белым, надписи
+     на кнопках — невидимыми. */
+  --dark:#040f0f;        /* заливка тёмных блоков: подвал, контакты, кадр */
+  --on-dark:#fcfffc;     /* светлое поверх тёмного: текст, светлые кнопки */
+  --ink-soft:#4e5751;    /* Jet Black — вторичный текст */
+
+  --brand:#1e6e2a;       /* Forest Green — кнопки, ссылки, иконки */
+  --brand-600:#14501d;   /* тот же зелёный темнее: ховер */
+  --brand-100:#dcebe0;   /* светлый тинт Forest Green: подложки */
+  --brand-150:#c9e1d0;   /* плитки иконок */
+  --brand-on-dark:#2ba84a; /* Medium Jungle — акцент поверх тёмного кадра,
+                              Forest Green там провалился бы по контрасту */
+  --accent:#1e6e2a;      /* надзаголовки и номера шагов: терракоты в этой
+                            палитре нет, акцент уходит в зелёный */
+  --accent-soft:#dcebe0;
+  --ok:#2ba84a;          /* Medium Jungle — статус-точки */
+
+  /* Те же цвета в компонентах rgb: нужны там, где цвет идёт с прозрачностью
+     (тексты на фото, свечения, тени). Без этого значения пришлось бы
+     дублировать литералами по всем файлам. */
+  --bg-rgb:228,231,226;      /* холст в rgb */
+  --on-dark-rgb:252,255,252; /* светлое поверх тёмного в rgb */
+  --dark-rgb:4,15,15;        /* тёмные вуали поверх фотографий */
+  --brand-rgb:30,110,42;
+  --accent-rgb:30,110,42;
+  --glow-rgb:43,168,74;
 
   --wa:#25d366;
   --tg:#28a8e9;
   --max:#2787f5;
 
-  --radius:18px;
-  --radius-sm:12px;
-  --shadow:0 18px 50px -24px rgba(40,34,24,.32);
-  --shadow-sm:0 6px 24px -14px rgba(40,34,24,.36);
-  --maxw:1140px;
+  --radius:clamp(1rem,.75vw + .82rem,1.5rem);
+  --radius-sm:.75rem;
+  --radius-xl:clamp(1.5rem,1.5vw + 1.15rem,2.5rem);
+  /* Оформление почти плоское: тени едва намечают отрыв от фона */
+  --shadow:0 24px 60px -34px rgba(var(--dark-rgb),.3);
+  --shadow-sm:0 6px 20px -14px rgba(var(--dark-rgb),.32);
+  /* Насыщенность заголовков. 600 — «жирно, но не чёрно»: у Rubik
+     700+ уже давит, особенно на длинных русских словах. */
+  --display-weight:600;
+
+  --maxw:1200px;
   --ease:cubic-bezier(.22,.61,.36,1);
+
+  --nav-h:74px;
+  --s4:clamp(.75rem,.38vw + .66rem,1rem);
+  --gutter:20px;
+}
+
+/* Первый экран главной тёмный — значит и зона отскока над страницей
+   должна быть тёмной, иначе сверху вылезает бежевая полоса. */
+:root:has(.hero-stage){--head-bg:var(--ink)}
+
+@media (max-width:760px){
+  :root{--nav-h:60px}
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -34,12 +91,12 @@
    сразу под прилипшей шапкой (74px) */
 /* У html фона нет: тогда «канвас» браузера (зоны отскока и на десктопе,
    и на мобильном) берёт фон body, в том числе анимированный по прокрутке */
-html{scroll-behavior:smooth;scroll-padding-top:60px}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + var(--s4) * 2 + 8px)}
 body{
   font-family:var(--font-sans),system-ui,-apple-system,sans-serif;
   background:var(--bg);
   color:var(--ink);
-  line-height:1.6;
+  line-height:1.5;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
 }
@@ -58,58 +115,120 @@ body:has(.site-footer)::after{
   pointer-events:none;z-index:-1;
 }
 body::before{top:-100vh;background:var(--head-bg)}            /* сверху — цвет шапки */
-body:has(.site-footer)::after{top:100%;background:var(--ink)} /* снизу — цвет футера */
+body:has(.site-footer)::after{top:100%;background:var(--dark)} /* снизу — цвет футера */
 
 /* iOS 26+ и Chrome: fixed при отскоке остаётся на месте, зато фон body
    можно менять по мере прокрутки — вверху светлый, к низу тёмный. */
 @supports (animation-timeline: scroll()){
   @keyframes bounce-bg{
     from{background-color:var(--head-bg)}
-    to{background-color:var(--ink)}
+    to{background-color:var(--dark)}
   }
   body:has(.site-footer){
     animation:bounce-bg linear both;
     animation-timeline:scroll();
   }
 }
-.container{width:min(100% - 40px,var(--maxw));margin-inline:auto}
+.container{width:min(100% - var(--gutter) * 2,var(--maxw));margin-inline:auto}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 svg{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 
-/* Typography */
-h1,h2,h3{font-family:var(--font-serif),Georgia,serif;font-weight:500;line-height:1.1;letter-spacing:-.01em}
-h1{font-size:clamp(2.4rem,6vw,4.3rem)}
-h2{font-size:clamp(1.8rem,4vw,2.9rem)}
-h1 em,h1 i{font-style:italic;color:var(--brand)}
+/* Typography.
+   Заголовки — лёгкий сериф крупным кеглем и почти без интерлиньяжа:
+   главный приём оригинала. Насыщенность 400 (самая тонкая у Playfair). */
+h1,h2,h3{font-family:var(--font-display),system-ui,sans-serif;line-height:1.04;letter-spacing:-.022em}
+h1,h2{font-weight:var(--display-weight)}
+/* Заголовки карточек на ступень легче h1/h2 — иначе вся страница
+   выглядит одинаково жирной и иерархия пропадает */
+h3{font-weight:500}
+h1{font-size:clamp(2.3rem,4.6vw,4rem)}
+h2{font-size:clamp(1.9rem,3.9vw,3.1rem)}
+h3{line-height:1.15}
+/* Интерлиньяж заголовков плотный (1.05), поэтому абзац сразу под ними
+   нужно отбить явно — иначе строки слипаются. */
+h1 + p,h2 + p,h3 + p{margin-top:1rem}
+/* Акцент держим цветом, а не наклоном: курсив у жирного гротеска
+   смотрится инородно. font-style:normal явно, чтобы <em> не наклонялся. */
+h1 em,h1 i{font-style:normal;color:var(--brand)}
 
-.eyebrow{font-family:var(--font-sans);text-transform:uppercase;letter-spacing:.18em;font-size:.78rem;font-weight:700;color:var(--accent);margin-bottom:.8rem}
+/* Надзаголовок — моноширинный капслок, как теглайны оригинала */
+.eyebrow{
+  font-family:var(--font-mono),ui-monospace,monospace;
+  text-transform:uppercase;letter-spacing:.1em;
+  font-size:.78rem;font-weight:400;color:var(--accent);margin-bottom:1rem;
+}
 .eyebrow.light{color:var(--accent-soft)}
 
-/* Buttons */
+/* Buttons — таблетка, без подъёма: состояние меняется только цветом */
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
-  font-family:inherit;font-weight:700;font-size:.98rem;
-  padding:.85rem 1.5rem;border-radius:100px;border:1.5px solid transparent;
-  cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .25s;
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+  font-family:var(--font-sans),system-ui,sans-serif;font-weight:600;font-size:1rem;
+  padding:.8rem 1.6rem;border-radius:999px;border:1px solid transparent;
+  line-height:1.5;cursor:pointer;
+  transition:background-color .2s ease,color .2s ease,border-color .2s ease;
   white-space:nowrap;
 }
-.btn:hover{transform:translateY(-2px)}
-.btn-lg{padding:1.05rem 1.9rem;font-size:1.02rem}
-.btn-xl{padding:1.35rem 2.8rem;font-size:1.18rem;gap:.7rem}
+.btn-lg{padding:.95rem 1.9rem}
+.btn-xl{
+  padding:1.35rem 3rem;font-size:1.18rem;gap:.9rem;
+  transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .25s var(--ease);
+}
+/* Главная кнопка — единственная, у которой остался подъём на наведении:
+   остальные по оформлению плоские и меняются только цветом. */
+.btn-xl:hover{transform:translateY(-2px)}
 .btn-xl svg{transition:transform .25s var(--ease)}
-.btn-xl:hover svg{transform:translateX(4px)}
-.btn-primary{background:var(--brand);color:#fff;box-shadow:var(--shadow-sm)}
-.btn-primary:hover{background:var(--brand-600)}
-.btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
-.btn-ghost:hover{border-color:var(--brand);color:var(--brand)}
-.btn-light{background:#fff;color:var(--brand)}
+.btn-xl:hover svg{transform:translateX(5px)}
+
+/* Мягкое свечение вокруг главной кнопки.
+   Свет даёт размытый слой под кнопкой, а не тень на ней самой: анимируется
+   только opacity, его браузер считает на видеокарте. Размытие
+   рассчитывается один раз и на каждом кадре не пересчитывается.
+   --glow задаётся в rgb-компонентах: цвет подбирается под фон, на котором
+   стоит кнопка (на первом экране это светлый бежевый поверх тёмного кадра). */
+.btn-glow{position:relative;isolation:isolate;--glow:var(--on-dark-rgb)}
+.btn-glow::after{
+  /* inset отрицательный: сам ореол должен выходить за кнопку, иначе
+     размытый свет целиком прячется за её непрозрачной заливкой. */
+  content:'';position:absolute;inset:-7px;z-index:-1;border-radius:inherit;
+  background:rgba(var(--glow),.6);filter:blur(18px);pointer-events:none;
+  animation:cta-glow 4.5s ease-in-out infinite;
+}
+@keyframes cta-glow{
+  0%,100%{opacity:.36}
+  50%{opacity:.7}
+}
+/* На наведении свет замирает на максимуме: мигание под курсором раздражает */
+.btn-glow:hover::after,
+.btn-glow:focus-visible::after{animation:none;opacity:.8}
+.btn:focus-visible{outline:2px solid rgba(var(--brand-rgb),.5);outline-offset:2px}
+.btn-primary{background:var(--brand);color:var(--on-dark);border-color:var(--brand)}
+.btn-primary:hover{background:var(--dark);border-color:var(--dark);color:var(--on-dark)}
+.btn-ghost{background:transparent;border-color:var(--brand);color:var(--ink)}
+.btn-ghost:hover{background:var(--dark);border-color:var(--dark);color:var(--on-dark)}
+/* Надпись на светлой заливке — чёрная, а не зелёная: зелёный по
+   светлому читается слабее и спорит с зелёными кнопками рядом. */
+.btn-light{background:var(--on-dark);color:var(--dark);border-color:var(--on-dark)}
+.btn-light:hover{background:var(--brand);border-color:var(--brand);color:var(--on-dark)}
+/* Контурная кнопка поверх тёмного кадра: обычная .btn-ghost рассчитана
+   на светлый фон и там была бы почти невидимой. */
+.btn-on-dark{border-color:rgba(var(--on-dark-rgb),.45);color:var(--on-dark)}
+.btn-on-dark:hover{background:var(--on-dark);border-color:var(--on-dark);color:var(--dark)}
 /* Мессенджеры: фирменный цвет остаётся только в иконке — три насыщенные
-   чужие заливки подряд ломали шалфейно-терракотовую палитру.
+   чужие заливки подряд ломали бежево-терракотовую палитру.
    Заливка и рамка самих кнопок задаются по месту (.contacts-row). */
 .btn-wa svg{color:var(--wa)}
 .btn-tg svg{color:var(--tg)}
 .btn-max svg{color:var(--max)}
+
+/* Микро-подписи капслоком — тоже моноширинные */
+.svc-facts span,
+.contacts-list span,
+.footer-services > span,
+.reviews-awards > span,
+.fr-stars small{
+  font-family:var(--font-mono),ui-monospace,monospace;font-weight:400;
+}
 
 /* Scroll-reveal animation.
    The hidden initial state only applies once JS marks the page ready
@@ -118,6 +237,9 @@ h1 em,h1 i{font-style:italic;color:var(--brand)}
 .reveal-ready .reveal.in{opacity:1;transform:none}
 
 @media (prefers-reduced-motion:reduce){
-  *{animation:none !important;transition:none !important}
+  /* Псевдоэлементы обязательно перечислять отдельно: селектор * их не
+     покрывает, и анимация на ::after (кольцо у главной кнопки) продолжала
+     крутиться у тех, кто просил меньше движения. */
+  *,*::before,*::after{animation:none !important;transition:none !important}
   .reveal{opacity:1;transform:none}
 }

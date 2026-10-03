@@ -3,6 +3,7 @@ import { sections } from './lib/sections.js';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracingRoot: import.meta.dirname,
 
   // Сайт был одностраничником. Старые адреса без якоря переводим на
   // соответствующие разделы; адреса с якорем (/#faq) сервер не видит —

@@ -238,7 +238,7 @@ export default function ColonoscopyPage() {
                   </div>
                   <h3>{item.title}</h3>
                   <p>{item.text}</p>
-                  <BookButton className="colono-card-action">
+                  <BookButton intent="question" source="procedure-formats" className="colono-card-action">
                     Уточнить возможность
                     <Icon name="arrowRight" width="17" height="17" />
                   </BookButton>
@@ -260,14 +260,19 @@ export default function ColonoscopyPage() {
                 <Icon name="info" width="22" height="22" />
                 <p>Не отменяйте назначенные препараты самостоятельно. Сообщите врачу, что принимаете постоянно, и планируется ли седация.</p>
               </div>
+              <ul className="preparation-list">
+                <li><Icon name="check" width="18" height="18" /><span>Уточните время исследования, чтобы согласовать схему подготовки.</span></li>
+                <li><Icon name="check" width="18" height="18" /><span>Подготовьте список постоянных лекарств и прежние заключения.</span></li>
+                <li><Icon name="check" width="18" height="18" /><span>Заранее обсудите седацию и организацию возвращения домой.</span></li>
+              </ul>
             </Reveal>
 
             <Reveal className="colono-prep-card">
               <span className="colono-prep-number">01</span>
-              <h3>Получите персональную памятку</h3>
+              <h3>Подготовьтесь по своей схеме</h3>
               <p>После уточнения деталей врач подскажет, как подготовиться именно к вашему варианту исследования.</p>
-              <BookButton className="btn btn-primary">
-                Запросить памятку
+              <BookButton intent="preparation" source="preparation" className="btn btn-primary">
+                Уточнить подготовку
                 <Icon name="arrowRight" width="18" height="18" />
               </BookButton>
             </Reveal>
@@ -334,7 +339,7 @@ export default function ColonoscopyPage() {
               <p>Стоимость зависит от седации и дополнительных манипуляций. Итоговую сумму называют до начала исследования, без скрытых доплат.</p>
             </Reveal>
             <Reveal className="colono-price-actions">
-              <BookButton className="btn btn-primary btn-lg">Уточнить стоимость</BookButton>
+              <BookButton intent="cost" source="procedure-cost" className="btn btn-primary btn-lg">Уточнить стоимость</BookButton>
               <TrackedLink goal={GOALS.PHONE} href={PHONE_HREF} className="btn btn-ghost btn-lg">Позвонить</TrackedLink>
             </Reveal>
           </div>
@@ -349,7 +354,7 @@ export default function ColonoscopyPage() {
                 <p className="eyebrow">Вопросы</p>
                 <h2>Что обычно спрашивают перед колоноскопией</h2>
                 <p className="section-sub">Организационные вопросы можно уточнить до записи.</p>
-                <BookButton className="btn btn-ghost">Задать свой вопрос</BookButton>
+                <BookButton intent="question" source="procedure-faq" className="btn btn-ghost">Задать свой вопрос</BookButton>
               </Reveal>
               <Reveal><FaqList items={faqItems} /></Reveal>
             </div>

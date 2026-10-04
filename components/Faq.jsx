@@ -15,7 +15,7 @@ export default function Faq({ level = 2, heading = 'То, о чём неловк
           <p className="eyebrow">Вопросы</p>
           <H>{heading}</H>
           <p className="section-sub">Честные ответы на самые частые тревоги пациентов.</p>
-          <BookButton className="btn btn-ghost">Задать свой вопрос</BookButton>
+          <BookButton intent="question" className="btn btn-ghost">Задать свой вопрос</BookButton>
         </Reveal>
 
         <Reveal>

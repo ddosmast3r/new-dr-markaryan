@@ -2,41 +2,12 @@ import Image from "next/image";
 import HeroMedia from "./HeroMedia";
 import BookButton from "./BookButton";
 import Icon from "./Icon";
-import { conditions, heroStats } from "@/lib/content";
+import { heroStats } from "@/lib/content";
 
 export default function Hero() {
   return (
-    <section className="hero">
+    <section className="hero hero--home">
       <div className="hero-stage">
-        <svg className="liquid-glass-filters" width="0" height="0" aria-hidden="true" focusable="false">
-          <defs>
-            <filter
-              id="liquid-glass-distortion"
-              x="-20%"
-              y="-60%"
-              width="140%"
-              height="220%"
-              colorInterpolationFilters="sRGB"
-            >
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency="0.009 0.045"
-                numOctaves="2"
-                seed="8"
-                result="noise"
-              />
-              <feGaussianBlur in="noise" stdDeviation="1.4" result="softNoise" />
-              <feDisplacementMap
-                in="SourceGraphic"
-                in2="softNoise"
-                scale="16"
-                xChannelSelector="R"
-                yChannelSelector="G"
-              />
-            </filter>
-          </defs>
-        </svg>
-
         {/* Фон на всю ширину — размытое видео, см. components/HeroMedia.jsx.
             Декоративный слой: alt пустой, из дерева доступности исключён. */}
         <div className="hero-bg">
@@ -51,21 +22,50 @@ export default function Hero() {
                 вложенным элементом, и в textContent слова склеились бы
                 («колопроктологв») — это видят парсеры и соцсети. */}
             <h1>
-              Хирург-колопроктолог{' '}
+              Хирург-колопроктолог{" "}
               <span className="hero-where">в Пятигорске и Ессентуках</span>
             </h1>
+            {/* Полное имя — на карточке врача справа; здесь дублировало его. */}
             <p className="hero-tagline">
-              Без лишних операций и <em>лишних анализов</em>
+              Помогаю разобраться в проблеме и подобрать{" "}
+              <em>подходящее лечение</em>
             </p>
 
+            <ul className="hero-assurances" aria-label="Возможности лечения">
+              <li>
+                <Icon name="check" width="16" height="16" />
+                Диагностика на приёме
+              </li>
+              <li>
+                <Icon name="check" width="16" height="16" />
+                Индивидуальный план лечения
+              </li>
+              <li>
+                <Icon name="check" width="16" height="16" />
+                Проведение операций
+              </li>
+            </ul>
+
             <div className="hero-actions">
-              <BookButton className="btn btn-light btn-xl btn-glow hero-cta">
-                <span>Записаться на приём</span>
-                <span className="hero-cta-icon" aria-hidden="true">
+              <BookButton source="home-hero" className="btn btn-light btn-xl btn-glow hero-cta">
+                <span className="hero-cta-copy">
+                  <strong>Записаться к врачу</strong>
+                  <small>Выбрать удобный способ связи</small>
+                </span>
+                <span className="hero-cta-arrow" aria-hidden="true">
                   <Icon name="arrowRight" width="22" height="22" />
                 </span>
               </BookButton>
             </div>
+
+            {/* Методы — одна строка тегов под кнопкой, а не отдельная панель:
+                панель была шестым слоем колонки и спорила с кнопкой записи. */}
+            <ul className="hero-methods" aria-label="Методы лечения, подбираются по показаниям">
+              <li>Лазерные</li>
+              <li>Радиоволновые</li>
+              <li>Малоинвазивные</li>
+              <li>Консервативные</li>
+            </ul>
           </div>
 
           <div className="hero-doctor">
@@ -78,46 +78,30 @@ export default function Hero() {
                 sizes="(max-width: 960px) 88vw, 34vw"
                 style={{ objectFit: "cover", objectPosition: "center 18%" }}
               />
-              <div className="hero-method">
-                <span className="hero-method-dot" aria-hidden="true" />
-                <span>
-                  <strong>Лазерные методики</strong>
-                  <small>по показаниям</small>
-                </span>
-              </div>
             </div>
+            <p className="hero-doctor-name">Маркарян Эдуард Жорикович</p>
 
-            {/* Цифры: только подтверждённые данные, см. heroStats */}
-            <ul className="hero-stats">
-              {heroStats.map((stat) => (
-                <li key={stat.value}>
-                  <strong>{stat.value}</strong>
-                  <span>
-                    {stat.label.split("\n").map((line, i) => (
-                      <span key={i} className="ht-line">
-                        {line}
-                      </span>
-                    ))}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="marquee" id="conditions" aria-hidden="true">
-          <div className="marquee-track">
-            {/* Две идентичные группы дают точный бесшовный цикл. Вторая группа
-                скрыта от дерева доступности вместе со всей декоративной строкой. */}
-            {[0, 1].map((copy) => (
-              <div className="marquee-group" key={copy}>
-                {conditions.map((condition) => (
-                  <span key={`${copy}-${condition}`}>{condition}</span>
-                ))}
+            {/* Достижения идут после портрета и подписи, не перекрывая врача. */}
+            <div className="hero-proof">
+              <div className="hero-proof-main">
+                <strong>{heroStats[0].value}</strong>
+                <span>{heroStats[0].label}</span>
               </div>
-            ))}
+              <ul>
+                {heroStats.slice(1).map((stat) => (
+                  <li key={stat.label}>
+                    <span className="hero-proof-check" aria-hidden="true">
+                      <Icon name="check" width="12" height="12" />
+                    </span>
+                    {stat.href ? <a href={stat.href}>{stat.label}</a> : <span>{stat.label}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
+
+
       </div>
     </section>
   );

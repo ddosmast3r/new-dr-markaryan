@@ -61,10 +61,10 @@ export default function About({ level = 2, heading = 'Коротко о себе
           )}
 
           {teaser ? (
-            <Link className="btn btn-ghost" href="/o-vrache">
-              Подробнее о враче
-              <Icon name="arrowRight" width="18" height="18" />
-            </Link>
+            <div className="about-links">
+              <Link className="btn btn-ghost" href="/o-vrache">Подробнее о враче<Icon name="arrowRight" width="18" height="18" /></Link>
+              <Link className="research-teaser" href="/o-vrache#research"><Icon name="doc" width="20" height="20" /><span>Научная публикация<small>ANZ Journal of Surgery · 2024</small></span><Icon name="arrowRight" width="18" height="18" /></Link>
+            </div>
           ) : (
             <BookButton className="btn btn-primary">Записаться на приём</BookButton>
           )}

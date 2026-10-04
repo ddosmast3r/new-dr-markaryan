@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import BookButton from './BookButton';
@@ -27,20 +27,71 @@ function Brand({ light = false }) {
 
 /**
  * transparent — шапка ложится поверх первого экрана стеклянной панелью
- * (главная). Как только тёмный кадр уехал вверх, она становится обычной
- * непрозрачной: на бежевом фоне светлые ссылки были бы нечитаемы.
+ * На телефоне шапка становится непрозрачной в начале прокрутки,
+ * на большом экране — когда первый экран уехал вверх.
  */
 export default function Header({ transparent = false }) {
   const [open, setOpen] = useState(false);
   const [past, setPast] = useState(false);
+  const headerRef = useRef(null);
+  const burgerRef = useRef(null);
 
   useEffect(() => {
     if (!transparent) return undefined;
-    const onScroll = () => setPast(window.scrollY > window.innerHeight * 0.82);
+    const hero = document.querySelector('.hero-stage');
+    const header = headerRef.current;
+    if (!hero || !header) return undefined;
+    const mobile = window.matchMedia('(max-width: 1180px)');
+    const onScroll = () => {
+      // A queued observer callback can arrive while a route is unmounting.
+      if (!hero.isConnected || !header.isConnected) return;
+      setPast(
+        (mobile.matches && window.scrollY > 24) ||
+        hero.getBoundingClientRect().bottom <= header.getBoundingClientRect().bottom
+      );
+    };
+    const observer = new ResizeObserver(onScroll);
+    observer.observe(hero);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
   }, [transparent]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    headerRef.current?.querySelector('.main-nav a')?.focus({ preventScroll: true });
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        burgerRef.current?.focus();
+      }
+    };
+    const onPointerDown = (event) => {
+      if (!headerRef.current?.contains(event.target)) setOpen(false);
+    };
+    const onFocusIn = (event) => {
+      if (!headerRef.current?.contains(event.target)) setOpen(false);
+    };
+    const desktop = window.matchMedia('(min-width: 1181px)');
+    const onResize = () => {
+      if (desktop.matches) setOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('focusin', onFocusIn);
+    desktop.addEventListener('change', onResize);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('focusin', onFocusIn);
+      desktop.removeEventListener('change', onResize);
+    };
+  }, [open]);
 
   // Открытое мобильное меню всегда на непрозрачной подложке: выпадающий
   // список поверх фотографии не читается.
@@ -48,6 +99,7 @@ export default function Header({ transparent = false }) {
 
   return (
     <header
+      ref={headerRef}
       className={`site-header${transparent ? ' site-header--over' : ''} ${light ? 'is-light' : 'is-solid'}`}
       id="top"
     >
@@ -55,7 +107,7 @@ export default function Header({ transparent = false }) {
         <div className="header-nav">
           <Brand light={light} />
 
-          <nav className={`main-nav${open ? ' open' : ''}`} aria-label="Основная навигация">
+          <nav id="main-navigation" className={`main-nav${open ? ' open' : ''}`} aria-label="Основная навигация">
             {nav.map((item) =>
               item.children.length ? (
                 // Раздел со своими страницами: сам пункт ведёт на хаб,
@@ -88,8 +140,11 @@ export default function Header({ transparent = false }) {
           <BookButton className="btn btn-primary header-cta">Записаться</BookButton>
 
           <button
+            ref={burgerRef}
+            type="button"
             className={`burger${open ? ' open' : ''}`}
-            aria-label="Меню"
+            aria-label={open ? 'Закрыть меню' : 'Открыть меню'}
+            aria-controls="main-navigation"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >

@@ -44,9 +44,13 @@ const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } })
 await ctx.addInitScript(TMR_SPY);
 // Видео, картинки и шрифты для проверки согласия не нужны, а лишние
 // параллельные запросы упираются в лимиты боевого сервера.
-await ctx.route('**/*', (route) =>
-  ['media', 'image', 'font'].includes(route.request().resourceType()) ? route.abort() : route.continue()
-);
+await ctx.route('**/*', (route) => {
+  // Проверяем запросы и очереди, не отправляя тестовые визиты в боевые счётчики.
+  if (/mc\.yandex\.ru|top-fwz1\.mail\.ru/.test(route.request().url())) {
+    return route.fulfill({ status: 200, contentType: 'application/javascript', body: '' });
+  }
+  return ['media', 'image', 'font'].includes(route.request().resourceType()) ? route.abort() : route.continue();
+});
 
 // Запросы к обоим аналитическим сервисам за текущую фазу.
 const hits = { ym: [], vk: [] };
@@ -64,6 +68,7 @@ const page = await ctx.newPage();
 
 const tagJs = () => hits.ym.filter((u) => u.includes('/metrika/tag.js')).length;
 const codeJs = () => hits.vk.filter((u) => u.includes('/js/code.js')).length;
+const ymCalls = (method) => page.evaluate(method => [...(window.ym?.a || [])].filter(args => args[1] === method).map(args => Array.from(args)), method);
 
 const vkPageViews = () =>
   page.evaluate(
@@ -119,7 +124,7 @@ await open(BASE); // первая загрузка, чтобы появился 
   check(state.tmr === 'undefined', `до выбора: window._tmr не создан (${state.tmr})`);
 
   // Переход по сайту без выбора тоже ничего не должен отправлять.
-  await page.click('a[href="/gemorroy"]');
+  await page.locator('a[href="/gemorroy"]:visible').first().click();
   await page.waitForURL('**/gemorroy');
   await page.waitForTimeout(1000);
   check(
@@ -148,7 +153,7 @@ await open(BASE); // первая загрузка, чтобы появился 
   await page.locator('#booking.open').waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
 
   // Переход между страницами и полная перезагрузка.
-  await page.click('a[href="/kolonoskopiya"]');
+  await page.locator('a[href="/kolonoskopiya"]:visible').first().click();
   await page.waitForURL('**/kolonoskopiya');
   await page.waitForTimeout(800);
   await open(`${BASE}/kolonoskopiya`);
@@ -172,6 +177,14 @@ await open(BASE); // первая загрузка, чтобы появился 
   check(tagJs() === 1, `после согласия: tag.js Метрики загружен один раз (${tagJs()})`);
   check(codeJs() === 1, `после согласия: code.js VK загружен один раз (${codeJs()})`);
   check((await vkPageViews()) === 1, `после согласия: один pageView VK (${await vkPageViews()})`);
+  check((await ymCalls('init')).length === 1, 'после согласия: одна инициализация Метрики');
+  check((await ymCalls('init'))[0]?.[2]?.defer === true, 'Метрика: автоматический просмотр отключён для SPA');
+  check((await ymCalls('hit')).length === 1, 'после согласия: один просмотр Метрики');
+  for (let i = 0; i < 2; i++) {
+    await page.locator('.hero-cta').click();
+    await page.keyboard.press('Escape');
+  }
+  check((await ymCalls('init')).length === 1, 'повторные обращения до загрузки SDK не инициализируют Метрику заново');
   check(
     await page.evaluate((id) => (window.__vkPushes || []).some((e) => e && e.id === id), VK_ID),
     `после согласия: в очередь window._tmr ушло событие с ID ${VK_ID}`
@@ -201,13 +214,15 @@ await open(BASE); // первая загрузка, чтобы появился 
   // --- Клиентские переходы ---
   let expected = 1;
   for (const href of ['/gemorroy', '/kolonoskopiya', '/privacy', '/']) {
-    await page.click(`a[href="${href}"]`);
+    await page.locator(`a[href="${href}"]:visible`).first().click();
     await page.waitForURL(`**${href}`);
     await page.waitForTimeout(800);
     expected += 1;
     check(await page.evaluate(() => window.__spa === true), `переход на ${href} без полной перезагрузки`);
     const count = await vkPageViews();
     check(count === expected, `переход на ${href}: pageView VK = ${count}, ожидалось ${expected}`);
+    const views = await ymCalls('hit');
+    check(views.length === expected && new URL(views.at(-1)[2]).pathname === href, `переход на ${href}: один новый просмотр Метрики`);
   }
 
   check(codeJs() === 1, `переходы: code.js не перезагружается (${codeJs()})`);
@@ -217,10 +232,12 @@ await open(BASE); // первая загрузка, чтобы появился 
 
   // Смена только query-параметров не считается новым просмотром.
   const before = await vkPageViews();
+  const ymBefore = (await ymCalls('hit')).length;
   await page.evaluate(() => window.history.pushState({}, '', '/?utm_source=test'));
   await page.waitForTimeout(600);
   const after = await vkPageViews();
   check(after === before, `смена только query не даёт новый pageView (${before} -> ${after})`);
+  check((await ymCalls('hit')).length === ymBefore, 'смена только query не даёт новый просмотр Метрики');
 }
 
 // --- Фаза 4: повторный визит с сохранённым согласием ---
@@ -233,6 +250,7 @@ await open(BASE); // первая загрузка, чтобы появился 
   check(tagJs() === 1, `повторный визит: tag.js загружен один раз (${tagJs()})`);
   check(codeJs() === 1, `повторный визит: code.js загружен один раз (${codeJs()})`);
   check((await vkPageViews()) === 1, `повторный визит: один pageView VK (${await vkPageViews()})`);
+  check((await ymCalls('hit')).length === 1, 'повторный визит: один просмотр Метрики');
   const tags = await scriptCounts();
   check(tags.ym === 1 && tags.vk === 1, `повторный визит: по одному тегу (ym=${tags.ym}, vk=${tags.vk})`);
 }

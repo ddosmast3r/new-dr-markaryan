@@ -15,7 +15,7 @@ export default function Works({ level = 2, heading = 'Рабочие момен�
           <p className="eyebrow">Видео</p>
           <H>{heading}</H>
           <p className="section-sub">
-            Обследования, ответы на частые вопросы и будни клиники.
+            Обследования, рабочие моменты и обработка оборудования.
           </p>
         </Reveal>
 

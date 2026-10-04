@@ -25,36 +25,57 @@ export default function HeroMedia() {
   const [started, setStarted] = useState(false);
   const [slots, setSlots] = useState([0, 1 % heroClips.length]);
   const [active, setActive] = useState(0);
+  const [inView, setInView] = useState(false);
+  const [tabVisible, setTabVisible] = useState(true);
+  const containerRef = useRef(null);
   const els = useRef([]);
+  const canPlay = enabled && inView && tabVisible;
 
   useEffect(() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mobile = window.matchMedia('(max-width: 560px)');
     const decide = () =>
-      setEnabled(!motion.matches && navigator.connection?.saveData !== true);
+      setEnabled(!motion.matches && !mobile.matches && navigator.connection?.saveData !== true);
 
     decide();
     motion.addEventListener('change', decide);
-    return () => motion.removeEventListener('change', decide);
+    mobile.addEventListener('change', decide);
+    navigator.connection?.addEventListener('change', decide);
+    return () => {
+      motion.removeEventListener('change', decide);
+      mobile.removeEventListener('change', decide);
+      navigator.connection?.removeEventListener('change', decide);
+    };
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
+    observer.observe(containerRef.current);
+    const onVisibility = () => setTabVisible(!document.hidden);
+    onVisibility();
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
   }, []);
 
   // Первый запуск. play() отклоняется, если автозапуск запрещён политикой
   // браузера, — это не ошибка, просто остаёмся на кадре.
   useEffect(() => {
-    if (!enabled) {
-      setStarted(false);
+    if (!canPlay) {
+      els.current.forEach((el) => el?.pause());
       return undefined;
     }
     els.current[active]?.play().catch(() => {});
     return undefined;
-    // active намеренно не в зависимостях: это именно первый запуск,
-    // дальше переключением занимается таймер ниже.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled]);
+  }, [canPlay, active]);
 
   // Смена ролика. Следующий стартуем ДО переключения: иначе кадр успел бы
   // проявиться пустым, пока видео буферизуется.
   useEffect(() => {
-    if (!enabled || !started || heroClips.length < 2) return undefined;
+    if (!canPlay || !started || heroClips.length < 2) return undefined;
+    let cancelled = false;
 
     const id = setTimeout(async () => {
       const next = 1 - active;
@@ -67,16 +88,17 @@ export default function HeroMedia() {
           // не удалось — всё равно переключаемся, под низом кадр
         }
       }
+      if (cancelled) { el?.pause(); return; }
       setActive(next);
     }, SLIDE_MS);
 
-    return () => clearTimeout(id);
-  }, [active, enabled, started]);
+    return () => { cancelled = true; clearTimeout(id); };
+  }, [active, canPlay, started]);
 
   // Переход закончился: останавливаем уехавший ролик и заряжаем в
   // освободившийся слот следующий по кругу.
   useEffect(() => {
-    if (!enabled || !started || heroClips.length < 2) return undefined;
+    if (!canPlay || !started || heroClips.length < 2) return undefined;
 
     const id = setTimeout(() => {
       const free = 1 - active;
@@ -89,10 +111,10 @@ export default function HeroMedia() {
     }, FADE_MS);
 
     return () => clearTimeout(id);
-  }, [active, enabled, started]);
+  }, [active, canPlay, started]);
 
   return (
-    <>
+    <div ref={containerRef} className="hero-media" aria-hidden="true">
       <Image
         src={heroClips[0].poster}
         alt=""
@@ -124,12 +146,15 @@ export default function HeroMedia() {
               poster={clip.poster}
               aria-hidden="true"
               tabIndex={-1}
-              onPlaying={() => setStarted(true)}
+              onPlaying={(event) => {
+                if (canPlay) setStarted(true);
+                else event.currentTarget.pause();
+              }}
             >
               <source src={clip.src} type="video/mp4" />
             </video>
           );
         })}
-    </>
+    </div>
   );
 }

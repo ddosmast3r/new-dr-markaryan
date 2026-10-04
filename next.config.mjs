@@ -3,6 +3,9 @@ import { sections } from './lib/sections.js';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Проверочный build из pre-push пишет в отдельную папку и не ломает
+  // запущенный рядом `next dev`, который продолжает использовать .next.
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   outputFileTracingRoot: import.meta.dirname,
 
   // Сайт был одностраничником. Старые адреса без якоря переводим на

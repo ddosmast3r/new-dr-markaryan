@@ -7,19 +7,33 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "check": "npm run lint",
+    "check:build": "NEXT_DIST_DIR=.next-check next build",
     "start": "next start",
     "lint": "eslint .",
-    "check:analytics": "node scripts/check-analytics-consent.mjs"
+    "check:analytics": "node scripts/check-analytics-consent.mjs",
+    "check:journeys": "node scripts/check-patient-journeys.mjs",
+    "check:site": "node scripts/check-site.mjs",
+    "check:mobile": "node scripts/check-mobile.mjs",
+    "check:mobile:gate": "node scripts/check-mobile-gate.mjs",
+    "prepare": "husky"
   },
   "dependencies": {
-    "next": "^15.1.6",
+    "next": "^15.5.27",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
+    "axe-core": "^4.13.0",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^15.5.20",
+    "eslint-config-next": "^15.5.27",
+    "husky": "^9.1.7",
     "playwright": "^1.61.1"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "^8.5.28"
+    }
   }
 }

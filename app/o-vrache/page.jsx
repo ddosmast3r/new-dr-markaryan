@@ -1,5 +1,6 @@
 import PageShell from '@/components/PageShell';
 import About from '@/components/About';
+import Research from '@/components/Research';
 import Contacts from '@/components/Contacts';
 import { sectionMetadata } from '@/lib/sections';
 
@@ -11,6 +12,7 @@ export default function Page() {
   return (
     <PageShell slug={SLUG}>
       <About />
+      <Research />
       <Contacts intro="Если остались вопросы — напишите в мессенджер, отвечу сам. Или выберите время на ПроДокторов." />
     </PageShell>
   );

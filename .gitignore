@@ -3,6 +3,10 @@
 
 # next.js
 /.next
+/.next-check
+/.next-design-review
+/.next-mobile-*
+/artifacts/mobile
 /out
 
 # production

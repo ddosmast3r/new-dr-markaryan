@@ -58,15 +58,15 @@
   50%{filter:drop-shadow(0 0 9px rgba(var(--logo-glow),.58))}
 }
 .brand-text{display:flex;flex-direction:column;line-height:1.15}
-.brand-text strong{font-size:1.02rem}
-.brand-text small{color:var(--ink-soft);font-size:.78rem}
+.brand-text strong{font-size:1.02rem;white-space:nowrap}
+.brand-text small{color:var(--ink-soft);font-size:.78rem;white-space:nowrap}
 /* На стеклянной шапке логотип белый поверх тёмного кадра — зелёный ореол
    там не виден, берём светлый изумруд из палитры. */
 .is-light .brand-mark{--logo-glow:43,168,74}
 .is-light .brand-text strong{color:var(--on-dark)}
 .is-light .brand-text small{color:rgba(var(--on-dark-rgb),.72)}
 
-.main-nav{display:flex;gap:1.6rem;margin-inline:auto;font-weight:500;font-size:.95rem}
+.main-nav{display:flex;gap:clamp(.9rem,1.65vw,1.6rem);margin-inline:auto;font-weight:500;font-size:.95rem;white-space:nowrap}
 .main-nav a{color:var(--ink-soft);position:relative;padding:.2rem 0;transition:color .2s}
 .main-nav a:hover{color:var(--brand)}
 .is-light .main-nav a{color:rgba(var(--on-dark-rgb),.88)}
@@ -127,6 +127,14 @@
 .burger.open span:nth-child(2){opacity:0}
 .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
+@media (max-width:360px){
+  .site-header.is-light .header-nav{gap:.75rem;padding-inline:.75rem}
+  .brand{gap:.5rem}
+  .brand-mark{width:44px}
+  .brand-text strong{font-size:.88rem}
+  .brand-text small{font-size:.68rem}
+}
+
 /* ---------- Hero ----------
    Полноэкранный кадр, тёмная виньетка из нижнего левого угла,
    текст лежит на виньетке. Контент в потоке (margin-top:auto),
@@ -151,7 +159,7 @@
   /* brightness — не вкусовщина: ролики разной яркости, и без общего
      притемнения текст на светлых (операционная, гастроскопия) терял
      контраст. Множитель сжимает разброс, градиент ниже добирает остаток. */
-  filter:blur(17px) saturate(.95) brightness(.56);
+  filter:blur(17px) saturate(.9) brightness(.46);
   transform:scale(1.1);
   will-change:transform;
 }
@@ -182,7 +190,7 @@
       color-mix(in srgb,var(--dark) 46%,transparent) 40%,
       color-mix(in srgb,var(--dark) 18%,transparent) 64%,
       transparent 82%),
-    color-mix(in srgb,#000 14%,transparent);
+    color-mix(in srgb,#000 24%,transparent);
 }
 /* На телефоне текст занимает почти весь кадр — затемняем сильнее */
 @media (max-width:760px){
@@ -198,6 +206,7 @@
 }
 .hero-content{
   --hero-shadow:0 .125rem .5rem rgba(0,0,0,.2),0 .5rem 1rem rgba(0,0,0,.16);
+  --hero-panel-radius:1.5rem;
   position:relative;z-index:2;margin-block:auto clamp(1.75rem,4vh,3rem);
   width:min(100% - var(--gutter) * 2,var(--maxw));margin-inline:auto;
   display:grid;grid-template-columns:minmax(0,1.05fr) minmax(18rem,.72fr);
@@ -217,6 +226,7 @@
    промежутки превращали три блока в невнятную лесенку. */
 .hero-text{grid-area:copy;display:flex;flex-direction:column;align-items:flex-start;max-width:42rem}
 .hero-text h1{color:var(--on-dark);text-shadow:var(--hero-shadow);line-height:1.02;text-wrap:balance}
+.hero--home .hero-text h1{font-size:clamp(2.1rem,4.2vw,3.5rem);line-height:1.08}
 /* География — отдельный слой заголовка: мельче, легче и акцентным цветом.
    Двумя равными строками специальность и города конкурировали между собой. */
 .hero-where{
@@ -231,80 +241,156 @@
 .hero-text .hero-tagline{
   font-family:var(--font-sans),system-ui,sans-serif;font-weight:400;
   font-size:clamp(1.05rem,.5vw + .92rem,1.3rem);line-height:1.45;
-  margin:1.5rem 0 0;color:rgba(var(--on-dark-rgb),.8);text-shadow:var(--hero-shadow);
-  text-wrap:balance;max-width:42ch;
+  margin:1.35rem 0 0;color:rgba(var(--on-dark-rgb),.84);text-shadow:var(--hero-shadow);
+  text-wrap:balance;max-width:34ch;
 }
-.hero-text .hero-tagline em{font-style:normal;color:var(--brand-on-dark)}
+.hero-text .hero-tagline em{
+  font-style:normal;color:#6ac782;
+  animation:hero-treatment-glow 5.5s ease-in-out 1.2s infinite;
+}
+@keyframes hero-treatment-glow{
+  0%,32%,100%{text-shadow:0 0 0 rgba(var(--brand-rgb),0)}
+  48%,62%{text-shadow:0 0 14px rgba(var(--brand-rgb),.3)}
+}
+.hero-assurances{
+  list-style:none;display:flex;flex-direction:column;align-items:flex-start;
+  gap:.65rem;margin-top:1.4rem;
+  color:rgba(var(--on-dark-rgb),.84);font-size:.9rem;line-height:1.35;
+  text-shadow:var(--hero-shadow);
+}
+.hero-assurances li{display:flex;align-items:center;gap:.6rem}
+.hero-assurances svg{
+  width:1.05rem;height:1.05rem;flex:none;color:var(--brand-on-dark);stroke-width:2.4;
+}
 .hero-sub{
   color:rgba(var(--on-dark-rgb),.82);max-width:54ch;
   font-size:clamp(1rem,.38vw + .9rem,1.15rem);line-height:1.5;
   text-shadow:var(--hero-shadow);text-wrap:pretty;
 }
-.hero-actions{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:.9rem;margin-top:1.9rem}
+.hero-actions{
+  display:flex;flex-wrap:wrap;justify-content:flex-start;gap:.9rem;
+  width:min(100%,34rem);margin-top:1.6rem;
+}
 .hero-actions .btn{box-shadow:0 2px 12px rgba(0,0,0,.14)}
 .hero-cta{
-  width:min(100%,28rem);min-height:5.5rem;justify-content:space-between;
-  padding:.5rem .55rem .5rem 2rem;font-size:1.28rem;
-  border-radius:1.35rem;
-  background:rgba(var(--on-dark-rgb),.94);border-color:rgba(var(--on-dark-rgb),.76);
+  position:relative;width:100%;min-height:4.75rem;justify-content:space-between;
+  padding:.9rem 1.25rem .9rem 1.4rem;text-align:left;
+  border-radius:1.15rem;
+  background:rgba(var(--on-dark-rgb),.94);border-color:rgba(var(--on-dark-rgb),.7);
   -webkit-backdrop-filter:blur(14px) saturate(130%);
   backdrop-filter:blur(14px) saturate(130%);
   box-shadow:0 14px 36px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.76) !important;
 }
 .hero-cta:hover{background:var(--on-dark);border-color:var(--on-dark);color:var(--dark)}
-.hero-cta-icon{
-  width:4.05rem;height:4.05rem;flex:none;display:grid;place-items:center;
-  color:var(--on-dark);background:var(--brand);border-radius:50%;
-  box-shadow:inset 0 1px rgba(255,255,255,.2),0 6px 16px rgba(var(--brand-rgb),.3);
-  transition:transform .25s var(--ease),background-color .2s ease;
+.hero-cta.btn-glow::after{inset:-3px;filter:blur(14px);opacity:.3;animation:none}
+.hero-cta-copy{display:flex;flex-direction:column;align-items:flex-start;gap:.12rem;line-height:1.2}
+.hero-cta-copy strong{font-size:1.22rem;font-weight:700;letter-spacing:-.01em}
+.hero-cta-copy small{font-size:.78rem;font-weight:500;color:var(--ink-soft)}
+.hero-cta-arrow{
+  position:relative;width:3rem;height:2.6rem;flex:none;display:grid;place-items:center;
+  color:var(--brand);border-left:1px solid rgba(var(--dark-rgb),.14);
+  transition:transform .25s var(--ease),color .2s ease;
 }
-.hero-cta:hover .hero-cta-icon{transform:translateX(2px);background:var(--dark)}
-.hero-cta:hover .hero-cta-icon svg{transform:none}
+.hero-cta-arrow::after{
+  content:'';position:absolute;right:.15rem;bottom:.2rem;width:1.9rem;height:1px;
+  background:currentColor;opacity:.2;transition:width .25s var(--ease),opacity .25s ease;
+}
+.hero-cta:hover .hero-cta-arrow{transform:translateX(3px);color:var(--brand-600)}
+.hero-cta:hover .hero-cta-arrow::after{width:2.35rem;opacity:.45}
+.hero-cta:hover .hero-cta-arrow svg{transform:none}
 
 .hero-doctor{
-  grid-area:doctor;justify-self:start;width:min(100%,24rem);
-  display:flex;flex-direction:column;gap:0;padding:.75rem;
+  grid-area:doctor;justify-self:start;width:min(100%,25rem);
+  display:flex;flex-direction:column;padding:.65rem;
   color:var(--on-dark);background:rgba(0,0,0,.14);
   border:1px solid rgba(var(--on-dark-rgb),.22);
-  border-radius:calc(var(--radius-xl) + .45rem);
+  border-radius:var(--hero-panel-radius);
   -webkit-backdrop-filter:blur(20px) saturate(120%);
   backdrop-filter:blur(20px) saturate(120%);
   box-shadow:0 28px 70px rgba(0,0,0,.28),inset 0 1px rgba(var(--on-dark-rgb),.16);
 }
 .hero-portrait{
-  position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;
-  border-radius:var(--radius-xl);background:var(--brand-100);
+  position:relative;width:100%;aspect-ratio:1;overflow:hidden;
+  border-radius:calc(var(--hero-panel-radius) - .5rem);background:var(--brand-100);
 }
 .hero-portrait::after{
   content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(to top,rgba(var(--dark-rgb),.28),transparent 34%);
+  background:linear-gradient(to top,rgba(var(--dark-rgb),.6),transparent 48%);
 }
-.hero-method{
-  position:absolute;z-index:2;left:.85rem;bottom:.85rem;
-  display:flex;align-items:center;gap:.55rem;padding:.6rem .75rem;
-  color:var(--ink);background:rgba(var(--bg-rgb),.86);
-  border:1px solid rgba(var(--bg-rgb),.72);border-radius:.9rem;
-  -webkit-backdrop-filter:blur(14px) saturate(135%);
-  backdrop-filter:blur(14px) saturate(135%);
-  box-shadow:0 8px 24px rgba(0,0,0,.12);
+.hero-methods{
+  list-style:none;display:flex;flex-wrap:wrap;gap:.4rem;
+  width:min(100%,34rem);margin:1rem 0 0;padding:0;
 }
-.hero-method-dot{width:.5rem;height:.5rem;flex:none;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(var(--brand-rgb),.12)}
-.hero-method span:last-child{display:flex;flex-direction:column;line-height:1.15}
-.hero-method strong{font-size:.78rem;font-weight:700}
-.hero-method small{margin-top:.15rem;color:var(--ink-soft);font-size:.66rem}
+.hero-methods li{
+  padding:.34rem .7rem;border-radius:999px;font-size:.78rem;line-height:1.2;
+  color:rgba(var(--on-dark-rgb),.86);background:rgba(var(--on-dark-rgb),.08);
+  border:1px solid rgba(var(--on-dark-rgb),.16);
+}
 
-.hero-stats{
-  width:100%;list-style:none;display:flex;align-items:flex-start;justify-content:center;
-  gap:0;padding:.95rem .15rem .25rem;color:var(--on-dark);text-shadow:var(--hero-shadow);
+.hero-doctor-name{
+  margin:.85rem 1rem .25rem;font-family:var(--font-display);font-size:1rem;
+  font-weight:var(--display-weight);line-height:1.2;color:var(--on-dark);
+  text-shadow:var(--hero-shadow);
 }
-.hero-stats li{display:flex;flex-direction:column;align-items:center;gap:.25rem;flex:1 1 0;min-width:0;padding-inline:.35rem}
-.hero-stats li + li{border-left:1px solid rgba(var(--on-dark-rgb),.22)}
-.hero-stats strong{
-  font-family:var(--font-display);font-weight:var(--display-weight);line-height:1;
-  font-size:clamp(1.65rem,1vw + 1.4rem,2rem);
+
+.hero-proof{
+  display:flex;flex-direction:column;align-items:flex-start;gap:.82rem;
+  margin:.45rem;padding:.75rem .6rem .5rem;color:var(--on-dark);text-shadow:var(--hero-shadow);
 }
-.hero-stats span{font-size:.84rem;line-height:1.3;opacity:.8;text-wrap:balance}
-.hero-stats .ht-line{display:block}
+.hero-proof-main{display:flex;align-items:baseline;gap:.65rem;width:100%}
+.hero-proof-main strong{
+  font-family:var(--font-display);font-size:2.35rem;font-weight:var(--display-weight);
+  line-height:.95;letter-spacing:-.02em;
+}
+.hero-proof-main span{font-size:.78rem;line-height:1.35;color:rgba(var(--on-dark-rgb),.78)}
+.hero-proof ul{list-style:none;display:flex;flex-direction:column;gap:.5rem;width:100%}
+.hero-proof li{
+  display:grid;grid-template-columns:1rem minmax(0,1fr);align-items:start;gap:.5rem;
+  font-size:.78rem;line-height:1.45;color:rgba(var(--on-dark-rgb),.8);
+}
+.hero-proof-check{
+  display:grid;place-items:center;width:1rem;height:1rem;margin-top:.02rem;border-radius:50%;
+  color:var(--brand-on-dark);background:rgba(var(--brand-rgb),.16);
+}
+.hero-proof-check svg{width:.68rem;height:.68rem;stroke-width:2.5}
+
+/* Десктоп: колонка оффера центрируется по высоте карточки врача.
+   Раньше колонка была длиннее (панель методов прижималась к низу) и
+   выравнивалась по верху; после сокращения до заголовка, списка, кнопки
+   и тегов верхнее выравнивание оставляло пустоту под ними. */
+@media (min-width:961px){
+  .hero:not(.page-hero) .hero-stage{min-height:min(100svh,56rem)}
+  .hero:not(.page-hero) .hero-content{
+    align-items:start;margin-top:0;margin-bottom:clamp(1.5rem,3vh,2.5rem);
+    padding-top:calc(var(--nav-h) + var(--s4) * 2 + clamp(1.75rem,3vw,2.75rem));
+    padding-bottom:1rem;
+  }
+  .hero-text{width:100%;padding-top:0;align-self:center}
+  .hero-doctor{justify-self:end}
+  /* Специальность — одной строкой: перенос после дефиса
+     («Хирург- / колопроктолог») на десктопе ломал заголовок. */
+  .hero-text{max-width:46rem}
+  .hero--home .hero-text h1{font-size:clamp(2.4rem,4.1vw,3.7rem);white-space:nowrap}
+}
+/* Ноутбуки 1280×720 и 1366×768: первый экран с бегущей строкой должен
+   помещаться целиком. Кадр врача ниже квадрата, отступы плотнее. */
+@media (min-width:961px) and (max-height:820px){
+  .hero:not(.page-hero) .hero-content{
+    padding-top:calc(var(--nav-h) + var(--s4) * 2 + 1.25rem);
+    margin-bottom:1rem;
+  }
+  .hero:not(.page-hero) .hero-portrait{aspect-ratio:5/4}
+  .hero:not(.page-hero) .hero-doctor-name{margin-top:.6rem}
+  .hero:not(.page-hero) .hero-proof{gap:.55rem;padding-top:.5rem}
+  .hero--home .hero-text h1{font-size:clamp(2.4rem,3.9vw,3.4rem)}
+  .hero-text .hero-tagline{margin-top:1rem}
+  .hero-assurances{margin-top:1rem;gap:.5rem}
+  .hero-actions{margin-top:1.25rem}
+}
+@media (min-width:961px) and (max-height:700px){
+  .hero:not(.page-hero) .hero-portrait{aspect-ratio:16/10}
+  .hero-assurances{display:none}
+}
 
 /* На узком экране цифры превращаются в бежевую полосу во всю ширину
    у нижнего края кадра — так же, как в оригинале. */
@@ -317,27 +403,21 @@
     margin-block:0;padding-top:clamp(7.5rem,28vw,9rem);padding-bottom:0;gap:1.4rem;
   }
   .hero-text{align-items:center;max-width:none}
+  .hero-assurances{font-size:.86rem}
   .hero-actions{justify-content:center}
   .hero-doctor{width:min(88vw,22rem);gap:0;padding:.55rem}
-  .hero-portrait{width:100%;aspect-ratio:5/4;border-radius:var(--radius-xl)}
-  .hero-stats{
-    align-self:stretch;margin:0;gap:0;background:transparent;color:var(--on-dark);text-shadow:var(--hero-shadow);
-    border-radius:0;overflow:visible;
-  }
-  .hero-stats li{flex:1 1 0;min-width:0;padding:.85rem .7rem}
-  .hero-stats li + li{border-left:1px solid rgba(var(--on-dark-rgb),.22);padding-left:1rem}
-  .hero-stats strong{font-family:var(--font-sans);font-weight:600;font-size:.95rem}
-  .hero-stats span{font-size:.72rem;opacity:.7}
+  .hero-portrait{width:100%;aspect-ratio:5/4;border-radius:calc(var(--hero-panel-radius) - .5rem)}
 }
 
-/* На телефоне порядок первого экрана отдельный: сначала оффер, затем врач
-   и только после него главное действие. display:contents позволяет менять
+/* На телефоне запись идёт сразу после вводного текста, перед карточкой врача.
+   display:contents позволяет менять
    порядок без дублирования кнопки и разметки в компоненте. */
 @media (max-width:560px){
   .hero:not(.page-hero) .hero-stage{min-height:100svh}
   .hero:not(.page-hero) .hero-content{
     display:grid;grid-template-columns:minmax(0,1fr);align-items:stretch;
-    grid-template-areas:none;text-align:left;gap:0;
+    grid-template-areas:none;width:100%;margin-inline:0;padding-inline:var(--gutter);
+    text-align:left;gap:0;
   }
   .hero:not(.page-hero) .hero-text{display:contents;grid-area:auto}
   .hero:not(.page-hero) .hero-text h1{
@@ -346,14 +426,34 @@
   .hero:not(.page-hero) .hero-tagline{
     grid-column:1;grid-row:2;justify-self:stretch;text-align:left;
   }
-  .hero:not(.page-hero) .hero-doctor{
-    grid-area:auto;grid-column:1;grid-row:3;justify-self:stretch;width:100%;margin-top:1.7rem;
+  .hero:not(.page-hero) .hero-assurances{
+    display:none;
   }
+  .hero:not(.page-hero) .hero-doctor{
+    grid-area:auto;grid-column:1;grid-row:4;justify-self:stretch;width:100%;margin-top:1.25rem;
+  }
+  /* Низкий кадр: карточка врача целиком помещается в первый экран
+     под кнопкой записи, лицо остаётся в кадре за счёт objectPosition. */
+  .hero:not(.page-hero) .hero-portrait{aspect-ratio:2/1}
+  .hero:not(.page-hero) .hero-doctor-name{margin:.7rem .85rem .15rem;font-size:.95rem}
+  .hero:not(.page-hero) .hero-proof{gap:.55rem;margin:.3rem;padding:.55rem .5rem .45rem}
+  .hero:not(.page-hero) .hero-proof-main strong{font-size:2.1rem}
+  .hero:not(.page-hero) .hero-proof ul{gap:.35rem}
+  .hero:not(.page-hero) .hero-proof li{font-size:.76rem}
   .hero:not(.page-hero) .hero-actions{
-    grid-column:1;grid-row:4;width:100%;margin-top:1rem;justify-content:stretch;
+    grid-column:1;grid-row:3;width:100%;margin-top:1.25rem;justify-content:stretch;
+  }
+  .hero:not(.page-hero) .hero-methods{
+    grid-column:1;grid-row:5;justify-self:stretch;width:100%;margin-top:.9rem;
   }
   .hero:not(.page-hero) .hero-cta{width:100%}
-  .hero:not(.page-hero) .marquee{margin-top:auto}
+}
+
+@media (max-width:360px){
+  .hero--home .hero-cta{gap:.5rem;padding:.9rem 1rem}
+  .hero--home .hero-cta-copy strong{font-size:1.08rem}
+  .hero--home .hero-cta-copy small{font-size:.7rem}
+  .hero--home .hero-cta-arrow{width:2rem}
 }
 
 /* Кадр в текстовых блоках (About, карточка врача) */
@@ -390,12 +490,21 @@
     transparent);
 }
 .page-hero .hero-content{
+  display:flex;flex-direction:column;grid-template-areas:none;
   align-items:flex-start;text-align:left;
+  margin-block:0;
   gap:clamp(1rem,2vw,1.6rem);
-  padding-block:clamp(4.5rem,9vw,7rem) clamp(2.5rem,4vw,3.5rem);
+  padding-block:calc(var(--nav-h) + var(--s4) * 2 + clamp(1.5rem,3vw,2.75rem)) clamp(2.5rem,4vw,3.5rem);
 }
-.page-hero .hero-text{align-items:flex-start;max-width:54rem}
+.page-hero .hero-sub{margin-top:1.25rem;max-width:60ch}
+.page-hero .hero-text{align-self:flex-start;align-items:flex-start;width:100%;min-width:0;max-width:54rem}
 .page-hero h1{font-size:clamp(2.1rem,4vw,3.4rem)}
+.page-hero .hero-text h1{
+  max-width:100%;line-height:1.14;letter-spacing:-.012em;
+  text-wrap:wrap;text-wrap:pretty;
+}
+.page-hero .svc-note{color:rgba(var(--on-dark-rgb),.78)}
+@media (max-width:360px){.page-hero h1{font-size:1.8rem}}
 /* Крошки лежат на кадре — им нужен светлый вариант */
 .page-hero .crumbs{margin:0}
 .page-hero .crumbs li{color:rgba(var(--on-dark-rgb),.66)}
@@ -405,53 +514,6 @@
 .page-hero .crumbs [aria-current]{color:rgba(var(--on-dark-rgb),.66)}
 /* Первая светлая секция идёт сразу под кадром, без двойного отступа */
 .page-hero + .section{padding-top:clamp(2.5rem,4vw,4rem)}
-
-/* Marquee */
-.marquee{
-  --marquee-gap:clamp(2rem,4vw,4.5rem);
-  --marquee-half-gap:clamp(1rem,2vw,2.25rem);
-  position:relative;z-index:3;isolation:isolate;overflow:hidden;
-  width:min(calc(100% - var(--gutter) * 2),var(--maxw));margin:0 auto clamp(1rem,2vw,1.5rem);
-  padding:.92rem 0;border:1px solid rgba(var(--on-dark-rgb),.2);border-radius:999px;
-  background:rgba(var(--on-dark-rgb),.1);
-  -webkit-backdrop-filter:blur(24px) saturate(145%);
-  backdrop-filter:blur(24px) saturate(145%);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(255,255,255,.04),
-    0 12px 36px rgba(0,0,0,.14);
-  transition:background .25s ease,border-color .25s ease,box-shadow .25s ease;
-}
-.marquee::after{
-  content:'';position:absolute;z-index:0;inset:0;pointer-events:none;border-radius:inherit;
-  background:linear-gradient(110deg,rgba(255,255,255,.16),transparent 26% 72%,rgba(255,255,255,.07));
-  mix-blend-mode:screen;
-}
-.marquee-track{position:relative;z-index:1}
-@supports (backdrop-filter:url("#liquid-glass-distortion")){
-  .marquee{backdrop-filter:url("#liquid-glass-distortion") blur(16px) saturate(150%)}
-}
-@media (hover:hover){
-  .marquee:hover{
-    background:rgba(var(--on-dark-rgb),.13);border-color:rgba(var(--on-dark-rgb),.28);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 0 rgba(255,255,255,.06),0 16px 42px rgba(0,0,0,.17);
-  }
-}
-.marquee-track{
-  display:flex;align-items:center;gap:var(--marquee-gap);width:max-content;
-  animation:marquee-scroll 58s linear infinite;will-change:transform;
-}
-.marquee-group{display:flex;align-items:center;gap:var(--marquee-gap);flex:none}
-.marquee-track span{
-  display:inline-flex;align-items:center;gap:.8rem;white-space:nowrap;
-  font-family:var(--font-display),system-ui,sans-serif;font-size:clamp(1.05rem,.45vw + .94rem,1.22rem);
-  font-weight:400;letter-spacing:0;color:rgba(var(--on-dark-rgb),.82);
-}
-@media (hover:hover){.marquee:hover .marquee-track{animation-play-state:paused}}
-@media (max-width:640px){
-  .marquee{width:calc(100% - 1.5rem);margin-bottom:.75rem;padding:.78rem 0}
-}
-@keyframes marquee-scroll{to{transform:translate3d(calc(-50% - var(--marquee-half-gap)),0,0)}}
 
 /* ---------- Section framing ---------- */
 .section{padding:clamp(3rem,4.8vw + 1.87rem,6.2rem) 0}
@@ -511,8 +573,7 @@
   .footer-address{white-space:nowrap}
 }
 
-/* Дисклеймер — по смыслу сноска: слева, вместе с юридическим блоком,
-   и контрастом не выше копирайта. Требование закона выполняется и так. */
+/* Предупреждение, копирайт и ссылки на документы. */
 .footer-bottom{display:flex;flex-direction:row;align-items:flex-end;justify-content:space-between;text-align:left;gap:1.5rem;flex-wrap:wrap;padding-top:2.2rem}
 .footer-final{display:flex;flex-direction:column;align-items:flex-start;gap:.7rem}
 /* Размер и контраст трогать нельзя: для медицинской рекламы закон задаёт
@@ -534,6 +595,19 @@
 @media (max-width:760px){
   .footer-bottom{flex-direction:column;align-items:center;text-align:center}
   .footer-final{align-items:center}
+  .footer-disclaimer{margin-inline:auto}
+  .footer-links{justify-content:center}
+}
+
+/* На десктопе все уровни подвала собраны на одной центральной оси. */
+@media (min-width:761px){
+  .footer-top{flex-direction:column;justify-content:center;gap:1.25rem}
+  .footer-nav{margin-left:0;justify-content:center}
+  .site-footer .footer-services{flex-direction:column;align-items:center;gap:.75rem;text-align:center}
+  .site-footer .footer-services ul{justify-content:center}
+  .footer-legal{align-items:center;text-align:center}
+  .footer-bottom{flex-direction:column;align-items:center;text-align:center;gap:1.25rem}
+  .footer-final{width:100%;align-items:center;gap:1.15rem}
   .footer-disclaimer{margin-inline:auto}
   .footer-links{justify-content:center}
 }

@@ -16,7 +16,7 @@ export default function BeforeVisit() {
             Коротко о том, как проходит приём у колопроктолога, нужна ли
             подготовка и чего ожидать после осмотра.
           </p>
-          <BookButton className="btn btn-ghost">Задать вопрос врачу</BookButton>
+          <BookButton intent="question" className="btn btn-ghost">Задать вопрос врачу</BookButton>
         </Reveal>
 
         <Reveal>

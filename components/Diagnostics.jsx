@@ -46,7 +46,7 @@ export default function Diagnostics({ level = 2, heading = 'Сначала то�
                 <span className="probe-glow" aria-hidden="true" />
                 <span className="probe-ico"><Icon name={d.icon} /></span>
               </div>
-              <p className="probe-label">{d.title}</p>
+              <h3 className="probe-label">{d.title}</h3>
               <span className="probe-rule" aria-hidden="true" />
               <p className="probe-text">{d.text}</p>
               {d.href && (

@@ -15,7 +15,7 @@ const eslintConfig = [
     files: ["**/*.{js,jsx,mjs,cjs}"],
   })),
   {
-    ignores: [".next/**", "node_modules/**", "public/**"],
+    ignores: [".next/**", ".next-check/**", ".next-design-review/**", ".next-mobile-*/**", "artifacts/**", "node_modules/**", "public/**"],
   },
 ];
 

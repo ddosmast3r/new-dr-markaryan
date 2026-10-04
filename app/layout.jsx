@@ -2,6 +2,7 @@ import { Golos_Text, Rubik, JetBrains_Mono } from 'next/font/google';
 import { BookingProvider } from '@/components/BookingProvider';
 import CookieConsent from '@/components/CookieConsent';
 import VkAdsPixel from '@/components/VkAdsPixel';
+import MetrikaPageViews from '@/components/MetrikaPageViews';
 import { SITE, OG_IMAGE, OG_IMAGE_ALT } from '@/lib/content';
 
 import '@/styles/base.css';
@@ -9,6 +10,7 @@ import '@/styles/layout.css';
 import '@/styles/components.css';
 import '@/styles/service.css';
 import '@/styles/responsive.css';
+import '@/styles/patient.css';
 
 // Тройка под кириллицу: Golos Text (Паратайп) для текста, Rubik —
 // скруглённый гротеск для заголовков, JetBrains Mono — для капслочных
@@ -79,6 +81,7 @@ export default function RootLayout({ children }) {
       <body>
         <BookingProvider>{children}</BookingProvider>
         <CookieConsent />
+        <MetrikaPageViews />
         <VkAdsPixel />
       </body>
     </html>

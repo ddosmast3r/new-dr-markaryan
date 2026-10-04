@@ -85,6 +85,9 @@
 @media (max-width:760px){
   :root{--nav-h:60px}
 }
+@media (max-width:560px){
+  :root{--gutter:16px}
+}
 
 *{box-sizing:border-box;margin:0;padding:0}
 /* scroll-padding-top: при переходе по якорям цель останавливается
@@ -241,5 +244,6 @@ h1 em,h1 i{font-style:normal;color:var(--brand)}
      покрывает, и анимация на ::after (кольцо у главной кнопки) продолжала
      крутиться у тех, кто просил меньше движения. */
   *,*::before,*::after{animation:none !important;transition:none !important}
-  .reveal{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+  .reveal-ready .reveal{opacity:1;transform:none}
 }

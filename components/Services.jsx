@@ -42,6 +42,7 @@ export default function Services({ level = 2, heading = 'С чем обраща�
               <Reveal
                 as="article"
                 className={`card${s.href ? ' card-linked' : ''}`}
+                id={s.id}
                 key={s.title}
                 style={{ transitionDelay: `${(i % 2) * 70}ms` }}
               >

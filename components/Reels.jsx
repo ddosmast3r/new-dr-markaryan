@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Reveal from './Reveal';
 import Icon from './Icon';
 
@@ -8,15 +8,19 @@ import Icon from './Icon';
 // only when a tile is clicked — nothing heavy loads on initial page render.
 export default function Reels({ items }) {
   const [active, setActive] = useState(null);
+  const dialogRef = useRef(null);
+  const triggerRef = useRef(null);
 
   useEffect(() => {
     if (active === null) return;
+    const dialog = dialogRef.current;
+    const trigger = triggerRef.current;
+    dialog.showModal();
     document.body.classList.add('modal-open');
-    const onKey = (e) => e.key === 'Escape' && setActive(null);
-    document.addEventListener('keydown', onKey);
     return () => {
+      dialog.close();
+      if (trigger?.isConnected) trigger.focus({ preventScroll: true });
       document.body.classList.remove('modal-open');
-      document.removeEventListener('keydown', onKey);
     };
   }, [active]);
 
@@ -31,19 +35,26 @@ export default function Reels({ items }) {
             type="button"
             className="post"
             key={i}
-            onClick={() => setActive(i)}
+            onClick={(event) => { triggerRef.current = event.currentTarget; setActive(i); }}
             aria-label={`Смотреть видео: ${it.alt}`}
             style={{ transitionDelay: `${(i % 3) * 70}ms` }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={it.poster} alt={it.alt} width={it.width} height={it.height} loading="lazy" decoding="async" />
+            <img src={it.poster} alt="" width={it.width} height={it.height} loading="lazy" decoding="async" />
             <span className="post-play"><Icon name="play" /></span>
+            <span className="post-caption">{it.alt}</span>
           </Reveal>
         ))}
       </div>
 
       {active !== null && (
-        <div className="reel-modal" onClick={() => setActive(null)}>
+        <dialog
+          ref={dialogRef}
+          className="reel-modal"
+          aria-label={items[active].alt}
+          onCancel={(event) => { event.preventDefault(); setActive(null); }}
+          onClick={(event) => { if (event.target === event.currentTarget) setActive(null); }}
+        >
           <button type="button" className="reel-close" aria-label="Закрыть" onClick={() => setActive(null)}>
             <Icon name="close" />
           </button>
@@ -57,7 +68,7 @@ export default function Reels({ items }) {
             preload="auto"
             onClick={(e) => e.stopPropagation()}
           />
-        </div>
+        </dialog>
       )}
     </>
   );

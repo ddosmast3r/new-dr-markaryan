@@ -1,64 +1,85 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Icon from './Icon';
-import { MAX, TELEGRAM, WHATSAPP, PHONE, PHONE_HREF, PRODOCTOROV } from '@/lib/content';
+import { MAX, TELEGRAM, WHATSAPP, PHONE, PHONE_HREF, PRODOCTOROV, HOURS_TEXT } from '@/lib/content';
 import { reachGoal, GOALS } from '@/lib/metrika';
 
-const messengers = [
-  { key: 'max', cls: 'msg-max', icon: 'max', href: MAX, name: 'MAX', note: 'Российский мессенджер', badge: 'Работает без VPN', goal: GOALS.MAX },
-  { key: 'tg', cls: 'msg-tg', icon: 'telegram', href: TELEGRAM, name: 'Telegram', note: 'Быстрый ответ в чате', goal: GOALS.TELEGRAM },
-  { key: 'wa', cls: 'msg-wa', icon: 'whatsapp', href: WHATSAPP, name: 'WhatsApp', note: 'Если удобнее здесь', goal: GOALS.WHATSAPP },
-  { key: 'pdr', cls: 'msg-pdr', icon: 'calendar', href: PRODOCTOROV, name: 'Запись через ПроДокторов', note: 'Выбрать время онлайн', goal: GOALS.PRODOCTOROV },
-  { key: 'call', cls: 'msg-call', icon: 'phone', href: PHONE_HREF, name: 'Позвонить', note: PHONE, internal: true, goal: GOALS.PHONE },
-];
-
-export default function BookingModal({ isOpen, onClose }) {
-  const firstLinkRef = useRef(null);
+export default function BookingModal({ context, onClose }) {
+  const dialogRef = useRef(null);
+  const messageRef = useRef(null);
+  const [copyStatus, setCopyStatus] = useState('');
+  const isAppointment = context.intent === 'appointment';
+  const whatsappHref = `${WHATSAPP}?text=${encodeURIComponent(context.message)}`;
+  const track = (goal) => reachGoal(goal, {
+    page: context.pathname, service: context.service, intent: context.intent, source: context.source,
+  });
 
   useEffect(() => {
-    if (isOpen) firstLinkRef.current?.focus();
-  }, [isOpen]);
+    const dialog = dialogRef.current;
+    const trigger = document.activeElement;
+    dialog.showModal();
+    return () => {
+      dialog.close();
+      if (trigger?.isConnected) trigger.focus({ preventScroll: true });
+    };
+  }, []);
 
-  if (!isOpen) return null;
+  async function copyMessage() {
+    try {
+      await navigator.clipboard.writeText(context.message);
+      if (messageRef.current?.isConnected) setCopyStatus('Сообщение скопировано');
+    } catch {
+      // Permission may be denied after the user has already closed the dialog.
+      const message = messageRef.current;
+      if (!message?.isConnected) return;
+      const selection = window.getSelection();
+      if (!selection) {
+        setCopyStatus('Скопируйте сообщение вручную');
+        return;
+      }
+      const range = document.createRange();
+      range.selectNodeContents(message);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      setCopyStatus('Выделили сообщение — скопируйте его вручную');
+    }
+  }
 
   return (
-    <div className="modal open" id="booking">
+    <dialog ref={dialogRef} className="modal open" id="booking" aria-labelledby="booking-title" aria-describedby="booking-description" onCancel={(event) => { event.preventDefault(); onClose(); }}>
       <div className="modal-overlay" onClick={onClose} />
-      <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="booking-title">
-        <button type="button" className="modal-close" onClick={onClose} aria-label="Закрыть">
-          <Icon name="close" />
-        </button>
-        <p className="eyebrow">Запись на приём</p>
-        <h3 id="booking-title">Выберите удобный мессенджер</h3>
-        <p className="modal-sub">Отвечаю лично, обычно в течение рабочего дня. Всё конфиденциально.</p>
-
-        <div className="msg-list">
-          {messengers.map((m, i) => (
-            <a
-              key={m.key}
-              ref={i === 0 ? firstLinkRef : null}
-              href={m.href}
-              className={`msg ${m.cls}`}
-              onClick={() => reachGoal(m.goal)}
-              {...(m.internal ? {} : { target: '_blank', rel: 'noopener' })}
-            >
-              <span className="msg-ico"><Icon name={m.icon} /></span>
-              <span className="msg-body">
-                <strong>{m.name}</strong>
-                <small>{m.note}</small>
-              </span>
-              {m.badge ? (
-                <span className="msg-badge">{m.badge}</span>
-              ) : (
-                <span className="msg-arrow"><Icon name="chevronRight" /></span>
-              )}
-            </a>
-          ))}
+      <div className="modal-sheet">
+        <div className="modal-topline">
+          <p className="eyebrow">{context.eyebrow}</p>
+          <button type="button" className="modal-close" onClick={onClose} aria-label="Закрыть"><Icon name="close" /></button>
         </div>
-
-        <p className="modal-foot">Пн–Пт, 9:00–18:00 · Имеются противопоказания, необходима консультация специалиста.</p>
+        <div className="modal-card">
+          <h2 id="booking-title">{context.title}</h2>
+          <p className="booking-subject"><Icon name={context.intent === 'preparation' ? 'doc' : 'calendar'} width="18" height="18" />{context.service}</p>
+          <p className="modal-sub" id="booking-description">
+            {isAppointment ? 'Запишитесь через ПроДокторов, позвоните или напишите мне напрямую.' : 'Напишите мне: уточним детали именно вашего посещения. Обычно отвечаю в течение рабочего дня.'}
+          </p>
+          <a className="msg booking-primary" href={isAppointment ? PRODOCTOROV : whatsappHref} target="_blank" rel="noopener" onClick={() => track(isAppointment ? GOALS.PRODOCTOROV : GOALS.WHATSAPP)}>
+            <span className="msg-ico"><Icon name={isAppointment ? 'calendar' : 'whatsapp'} /></span>
+            <span className="msg-body"><strong>{isAppointment ? 'Запись на ПроДокторов' : 'Написать в WhatsApp'}</strong><small>{isAppointment ? 'Открыть профиль и варианты записи' : 'Сообщение уже подготовлено'}</small></span>
+            <span className="msg-arrow"><Icon name="arrowRight" /></span>
+          </a>
+          <div className="booking-channels" aria-label="Мессенджеры">
+            <a className="booking-channel" href={MAX} target="_blank" rel="noopener" onClick={() => track(GOALS.MAX)}><Icon name="max" />MAX</a>
+            <a className="booking-channel" href={TELEGRAM} target="_blank" rel="noopener" onClick={() => track(GOALS.TELEGRAM)}><Icon name="telegram" />Telegram</a>
+            {isAppointment && <a className="booking-channel" href={whatsappHref} target="_blank" rel="noopener" onClick={() => track(GOALS.WHATSAPP)}><Icon name="whatsapp" />WhatsApp</a>}
+          </div>
+          <a className="booking-call" href={PHONE_HREF} onClick={() => track(GOALS.PHONE)}><Icon name="phone" width="18" height="18" /><span>Позвонить<strong>{PHONE}</strong></span><Icon name="chevronRight" width="18" height="18" /></a>
+          <details className="booking-message">
+            <summary>Готовое сообщение для врача</summary>
+            <p ref={messageRef}>{context.message}</p>
+            <button type="button" onClick={copyMessage}>Скопировать сообщение</button>
+            <span role="status">{copyStatus}</span>
+          </details>
+          <p className="modal-foot">{HOURS_TEXT} · Всё конфиденциально.<br />Имеются противопоказания, необходима консультация специалиста.</p>
+        </div>
       </div>
-    </div>
+    </dialog>
   );
 }

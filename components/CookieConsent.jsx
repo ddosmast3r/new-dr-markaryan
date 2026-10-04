@@ -17,7 +17,7 @@ export default function CookieConsent() {
     if (!visible || !bannerRef.current) return;
     const root = document.documentElement;
     const ro = new ResizeObserver(([entry]) => {
-      root.style.setProperty('--cookie-offset', `${Math.ceil(entry.contentRect.height) + 12}px`);
+      root.style.setProperty('--cookie-offset', `${Math.ceil(entry.target.getBoundingClientRect().height) + 12}px`);
     });
     ro.observe(bannerRef.current);
     return () => {

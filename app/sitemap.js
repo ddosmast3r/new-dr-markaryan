@@ -1,4 +1,5 @@
 import { SITE } from '@/lib/content';
+import { sectionSlugs } from '@/lib/sections';
 import { servicePageSlugs } from '@/lib/pages';
 
 // В карту сайта попадают только реально индексируемые страницы.
@@ -9,6 +10,15 @@ export default function sitemap() {
   return [
     { url: `${SITE}/`, lastModified, changeFrequency: 'monthly', priority: 1 },
 
+    // Разделы сайта: о враче, лечение, диагностика и далее по меню.
+    ...sectionSlugs.map((slug) => ({
+      url: `${SITE}/${slug}`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    })),
+
+    // Страницы отдельных направлений и исследований.
     ...servicePageSlugs.map((slug) => ({
       url: `${SITE}/${slug}`,
       lastModified,

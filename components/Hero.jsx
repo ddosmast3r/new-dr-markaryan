@@ -1,100 +1,107 @@
-import Image from 'next/image';
-import BookButton from './BookButton';
-import Icon from './Icon';
-import { conditions, heroStats, awards, RATING } from '@/lib/content';
+import Image from "next/image";
+import HeroMedia from "./HeroMedia";
+import BookButton from "./BookButton";
+import Icon from "./Icon";
+import { heroStats } from "@/lib/content";
 
 export default function Hero() {
   return (
-    <section className="hero">
-      <div className="container hero-grid">
-        <div className="hero-copy">
-          <div className="badge-row">
-            <span className="pill"><span className="dot" />Приём проктолога в Пятигорске</span>
-          </div>
-          {/* Обычный дефис намеренно: на узком экране строка может перенестись
-              после него, слово не вылезет за пределы контейнера. */}
-          {/* Пробел перед <br /> обязателен: без него в textContent слова
-              склеиваются («колопроктологв»), и это видят парсеры и соцсети. */}
-          <h1>Проктолог и хирург-колопроктолог{' '}<br />в Пятигорске</h1>
-          <p className="hero-tagline">Без лишних операций и <em>лишних анализов</em></p>
-          <p className="lead">
-            Меня зовут Эдуард Жорикович Маркарян, я&nbsp;врач&#8209;проктолог,
-            хирург&#8209;колопроктолог. Веду приём взрослых пациентов в Пятигорске
-            с геморроем, анальными трещинами, свищами и другими заболеваниями
-            этой области. Без стыда и с вниманием к вашему комфорту.
-          </p>
+    <section className="hero hero--home">
+      <div className="hero-stage">
+        {/* Фон на всю ширину — размытое видео, см. components/HeroMedia.jsx.
+            Декоративный слой: alt пустой, из дерева доступности исключён. */}
+        <div className="hero-bg">
+          <HeroMedia />
+        </div>
 
-          <div className="hero-actions">
-            <BookButton className="btn btn-primary btn-xl">
-              Записаться на приём
-              <Icon name="arrowRight" width="22" height="22" />
-            </BookButton>
-          </div>
+        <div className="hero-content">
+          <div className="hero-text">
+            {/* Обычный дефис намеренно: на узком экране строка может перенестись
+                после него, слово не вылезет за пределы контейнера. */}
+            {/* {' '} перед span обязателен: JSX съедает перевод строки перед
+                вложенным элементом, и в textContent слова склеились бы
+                («колопроктологв») — это видят парсеры и соцсети. */}
+            <h1>
+              Хирург-колопроктолог{" "}
+              <span className="hero-where">в Пятигорске и Ессентуках</span>
+            </h1>
+            {/* Полное имя — на карточке врача справа; здесь дублировало его. */}
+            <p className="hero-tagline">
+              Помогаю разобраться в проблеме и подобрать{" "}
+              <em>подходящее лечение</em>
+            </p>
 
-          {/* Цифры под кнопкой: только подтверждённые данные, см. heroStats */}
-          <ul className="hero-trust">
-            {heroStats.map((stat) => (
-              <li key={stat.value}>
-                <strong>{stat.value}</strong>
-                <span>
-                  {stat.label.split('\n').map((line, i) => (
-                    <span key={i} className="ht-line">{line}</span>
-                  ))}
-                </span>
+            <ul className="hero-assurances" aria-label="Возможности лечения">
+              <li>
+                <Icon name="check" width="16" height="16" />
+                Диагностика на приёме
               </li>
-            ))}
-          </ul>
-        </div>
+              <li>
+                <Icon name="check" width="16" height="16" />
+                Индивидуальный план лечения
+              </li>
+              <li>
+                <Icon name="check" width="16" height="16" />
+                Проведение операций
+              </li>
+            </ul>
 
-        <div className="hero-card">
-          {/* Плашка на фотокарточке. Пока с ПроДокторов не взята оценка
-              (RATING === null), показываем премию — её годы у нас есть. */}
-          {RATING ? (
-            <div className="hero-float float-rating">
-              <span className="fr-num">{RATING.value}</span>
-              <span className="fr-stars">
-                ★★★★★
-                <small>{RATING.count} отзывов</small>
-              </span>
+            <div className="hero-actions">
+              <BookButton source="home-hero" className="btn btn-light btn-xl btn-glow hero-cta">
+                <span className="hero-cta-copy">
+                  <strong>Записаться к врачу</strong>
+                  <small>Выбрать удобный способ связи</small>
+                </span>
+                <span className="hero-cta-arrow" aria-hidden="true">
+                  <Icon name="arrowRight" width="22" height="22" />
+                </span>
+              </BookButton>
             </div>
-          ) : (
-            <div className="hero-float float-award">
-              <span className="fa-ico"><Icon name="trophy" width="20" height="20" /></span>
-              <span className="fa-text">
-                Премия ПроДокторов
-                <small>{awards[0].year}–{awards[awards.length - 1].year}</small>
-              </span>
-            </div>
-          )}
 
-          <div className="hero-photo">
-            <Image
-              src="/img/doctor.png"
-              alt="Эдуард Жорикович Маркарян, врач-проктолог и хирург-колопроктолог"
-              fill
-              priority
-              sizes="(max-width: 960px) 380px, 460px"
-              style={{ objectFit: 'cover', objectPosition: 'center top' }}
-            />
-          </div>
-          <div className="hero-card-meta">
-            <div>
-              <strong>Эдуард Жорикович</strong>
-              <small>Сеченовский университет · колопроктология</small>
-            </div>
-            <Image src="/img/logo.png" className="hero-card-logo" alt="Логотип Эдуарда Маркаряна" width="48" height="35" />
+            {/* Методы — одна строка тегов под кнопкой, а не отдельная панель:
+                панель была шестым слоем колонки и спорила с кнопкой записи. */}
+            <ul className="hero-methods" aria-label="Методы лечения, подбираются по показаниям">
+              <li>Лазерные</li>
+              <li>Радиоволновые</li>
+              <li>Малоинвазивные</li>
+              <li>Консервативные</li>
+            </ul>
           </div>
 
-        </div>
-      </div>
+          <div className="hero-doctor">
+            <div className="hero-portrait">
+              <Image
+                src="/img/doctor.png"
+                alt="Эдуард Маркарян, хирург-колопроктолог"
+                fill
+                priority
+                sizes="(max-width: 960px) 88vw, 34vw"
+                style={{ objectFit: "cover", objectPosition: "center 18%" }}
+              />
+            </div>
+            <p className="hero-doctor-name">Маркарян Эдуард Жорикович</p>
 
-      <div className="marquee" aria-hidden="true">
-        <div className="marquee-track">
-          {/* 6 копий = две одинаковые половины по 3, для бесшовного цикла на любой ширине */}
-          {Array.from({ length: 6 }).flatMap(() => conditions).map((c, i) => (
-            <span key={i}>{c}</span>
-          ))}
+            {/* Достижения идут после портрета и подписи, не перекрывая врача. */}
+            <div className="hero-proof">
+              <div className="hero-proof-main">
+                <strong>{heroStats[0].value}</strong>
+                <span>{heroStats[0].label}</span>
+              </div>
+              <ul>
+                {heroStats.slice(1).map((stat) => (
+                  <li key={stat.label}>
+                    <span className="hero-proof-check" aria-hidden="true">
+                      <Icon name="check" width="12" height="12" />
+                    </span>
+                    {stat.href ? <a href={stat.href}>{stat.label}</a> : <span>{stat.label}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
+
+
       </div>
     </section>
   );

@@ -1,11 +1,8 @@
 import Link from 'next/link';
 import { Brand } from './Header';
-import { nav, ADDRESS, CLINIC } from '@/lib/content';
+import { ADDRESS, CLINIC } from '@/lib/content';
+import { footerNav } from '@/lib/nav';
 import { servicePages } from '@/lib/pages';
-
-const footerNav = nav.filter((n) =>
-  ['/#about', '/#services', '/#diagnostics', '/#faq', '/#contacts'].includes(n.href)
-);
 
 export default function Footer() {
   return (

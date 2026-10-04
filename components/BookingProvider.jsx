@@ -7,8 +7,12 @@ const BookingContext = createContext(null);
 
 export function BookingProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [context, setContext] = useState({});
 
-  const open = useCallback(() => setIsOpen(true), []);
+  const open = useCallback((nextContext = {}) => {
+    setContext(nextContext);
+    setIsOpen(true);
+  }, []);
   const close = useCallback(() => setIsOpen(false), []);
 
   // Lock body scroll and close on Escape while the modal is open.
@@ -26,7 +30,7 @@ export function BookingProvider({ children }) {
   return (
     <BookingContext.Provider value={{ open, close }}>
       {children}
-      <BookingModal isOpen={isOpen} onClose={close} />
+      {isOpen && <BookingModal context={context} onClose={close} />}
     </BookingContext.Provider>
   );
 }

@@ -1,25 +1,23 @@
 import Reveal from './Reveal';
 import Icon from './Icon';
-import Medal from './Medal';
 import { awards, reviewQuotes, RATING, PRODOCTOROV_REVIEWS } from '@/lib/content';
 
 // Оценка и цитаты берутся только с ПроДокторов (lib/content.js).
-// Пока их там нет, секция показывает премии — как и раньше.
+// Если оценка и цитаты не заполнены, ведём к оригинальным отзывам.
 export default function Reviews() {
   const hasQuotes = reviewQuotes.length > 0;
 
   return (
-    <section className="section" id="reviews">
+    <section className="section" id="reviews" aria-labelledby="reviews-title">
       <div className="container">
         <Reveal className="reviews-panel">
-          <div className="reviews-copy">
-            <p className="eyebrow">Независимая площадка</p>
-            <h2>Отзывы на ПроДокторов</h2>
-            <p>
-              Актуальные оценки и отзывы пациентов собраны в профиле врача
-              на независимой площадке.
-            </p>
+          <div className="reviews-heading">
+            <p className="eyebrow"><span aria-hidden="true" />Отзывы пациентов</p>
+            <h2 id="reviews-title">О приёме —<br /><span>из первых рук</span></h2>
+          </div>
 
+          <div className="reviews-copy">
+            <p>Выбрать врача бывает непросто. Опыт других пациентов поможет лучше представить, как проходит приём.</p>
             {RATING && (
               <div className="rating-block">
                 <strong className="rating-num">{RATING.value}</strong>
@@ -30,27 +28,23 @@ export default function Reviews() {
               </div>
             )}
 
-            <a href={PRODOCTOROV_REVIEWS} className="btn btn-primary" target="_blank" rel="noopener">
-              {hasQuotes ? 'Читать все отзывы' : 'Открыть отзывы'}
-              <Icon name="arrowRight" width="18" height="18" />
+            <a href={PRODOCTOROV_REVIEWS} className="btn btn-primary reviews-link" target="_blank" rel="noopener">
+              <span>Читать отзывы на ПроДокторов</span>
+              <Icon name="arrowRight" width="20" height="20" />
             </a>
           </div>
 
-          {/* С появлением оценки премии уходят на второй план: строкой под ней */}
-          <div
-            className={`reviews-awards${RATING ? ' reviews-awards--compact' : ''}`}
-            aria-label="Награды ПроДокторов"
-          >
-            <span>Премия ПроДокторов</span>
-            <p className="awards-note">
-              {awards.length} года подряд, {awards[0].year}–{awards[awards.length - 1].year}
-            </p>
-            <div className="awards-medals">
-              {awards.map((award) => (
-                <Medal key={award.year} year={award.year} />
-              ))}
+          {awards.length > 0 && (
+            <div className="reviews-awards" aria-label="Награды ПроДокторов">
+              <div className="reviews-awards-heading">
+                <span className="reviews-award-icon"><Icon name="trophy" width="25" height="25" /></span>
+                <span>Премия <strong>ПроДокторов</strong></span>
+              </div>
+              <ul className="reviews-award-years" aria-label="Годы получения премии">
+                {awards.map((award) => <li key={award.year}>{award.year}</li>)}
+              </ul>
             </div>
-          </div>
+          )}
         </Reveal>
 
         {hasQuotes && (

@@ -1,10 +1,10 @@
-import { Golos_Text, Rubik, JetBrains_Mono } from 'next/font/google';
 import { BookingProvider } from '@/components/BookingProvider';
 import CookieConsent from '@/components/CookieConsent';
 import VkAdsPixel from '@/components/VkAdsPixel';
 import MetrikaPageViews from '@/components/MetrikaPageViews';
 import { SITE, OG_IMAGE, OG_IMAGE_ALT } from '@/lib/content';
 
+import '@/styles/fonts.css';
 import '@/styles/base.css';
 import '@/styles/layout.css';
 import '@/styles/components.css';
@@ -12,38 +12,9 @@ import '@/styles/service.css';
 import '@/styles/responsive.css';
 import '@/styles/patient.css';
 
-// Тройка под кириллицу: Golos Text (Паратайп) для текста, Rubik —
-// скруглённый гротеск для заголовков, JetBrains Mono — для капслочных
-// надзаголовков и микро-подписей.
-//
-// --font-display держит именно гротеск, не сериф: у Rubik скруглены углы
-// штрихов, поэтому тяжёлые заголовки читаются мягко, а не агрессивно.
-// Акцент в слогане сделан цветом, а не наклоном: курсив у жирного
-// гротеска выглядит инородно (см. h1 em в styles/base.css).
-const sans = Golos_Text({
-  subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-sans',
-  display: 'swap',
-});
-
-const display = Rubik({
-  subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600'],
-  variable: '--font-display',
-  display: 'swap',
-});
-
-const mono = JetBrains_Mono({
-  subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500'],
-  variable: '--font-mono',
-  display: 'swap',
-});
-
-const TITLE = 'Проктолог и колопроктолог в Пятигорске — Эдуард Маркарян';
+const TITLE = 'Врач-проктолог, эндоскопист в Пятигорске: Эдуард Маркарян';
 const DESCRIPTION =
-  'Приём проктолога и хирурга-колопроктолога Эдуарда Маркаряна в Пятигорске. Диагностика и лечение заболеваний прямой кишки и анального канала. Запись на приём.';
+  'Приём врача-проктолога, эндоскописта Эдуарда Маркаряна в Пятигорске. Диагностика и лечение заболеваний прямой кишки и анального канала. Запись на приём.';
 
 export const metadata = {
   metadataBase: new URL(SITE),
@@ -77,7 +48,13 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ru" className={`${sans.variable} ${display.variable} ${mono.variable}`}>
+    <html lang="ru">
+      <head>
+        {/* Preload the Russian text and heading subsets. Other glyphs and the
+            label font load through CSS. Font bytes and fallbacks are unchanged. */}
+        <link rel="preload" href="/fonts/ffe0837c71e69159-s.p.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/c1b11e140b58cf5a-s.p.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      </head>
       <body>
         <BookingProvider>{children}</BookingProvider>
         <CookieConsent />

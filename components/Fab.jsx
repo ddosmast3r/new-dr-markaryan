@@ -6,7 +6,7 @@ import BookButton from './BookButton';
 // Плавающая кнопка «Записаться» на мобильном (видимость — в CSS).
 // Пока на экране есть своя кнопка записи (первый экран, блок контактов),
 // кнопка прячется: иначе она висит поверх ссылок в карточках услуг.
-const ANCHORS = '.hero-actions, .svc-actions, #contacts, .diag-cta';
+const ANCHORS = '.hero-actions, .svc-actions, #contacts, .diag-cta, button.btn';
 
 export default function Fab() {
   // На первом кадре скрываем сразу, без вспышки дублирующей кнопки до того,
@@ -29,7 +29,9 @@ export default function Fab() {
         });
         setHidden(visible.size > 0);
       },
-      { rootMargin: '-10% 0px -10% 0px' }
+      // Hide before a regular booking button enters the bottom 64px occupied
+      // by the floating action, including FAQ and long mobile hero sections.
+      { rootMargin: '0px 0px 64px 0px' }
     );
 
     targets.forEach((target) => observer.observe(target));

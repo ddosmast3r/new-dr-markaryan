@@ -5,15 +5,15 @@ import { servicePageSlugs } from '@/lib/pages';
 // В карту сайта попадают только реально индексируемые страницы.
 // Служебных, API- и noindex-адресов на сайте нет.
 export default function sitemap() {
-  const lastModified = new Date();
+  // lastModified is optional. A build timestamp is not a content update;
+  // add per-page dates only when those dates are tracked editorially.
 
   return [
-    { url: `${SITE}/`, lastModified, changeFrequency: 'monthly', priority: 1 },
+    { url: `${SITE}/`, changeFrequency: 'monthly', priority: 1 },
 
     // Разделы сайта: о враче, лечение, диагностика и далее по меню.
     ...sectionSlugs.map((slug) => ({
       url: `${SITE}/${slug}`,
-      lastModified,
       changeFrequency: 'monthly',
       priority: 0.9,
     })),
@@ -21,12 +21,11 @@ export default function sitemap() {
     // Страницы отдельных направлений и исследований.
     ...servicePageSlugs.map((slug) => ({
       url: `${SITE}/${slug}`,
-      lastModified,
       changeFrequency: 'monthly',
       priority: 0.8,
     })),
 
-    { url: `${SITE}/license`, lastModified, changeFrequency: 'yearly', priority: 0.4 },
-    { url: `${SITE}/privacy`, lastModified, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${SITE}/license`, changeFrequency: 'yearly', priority: 0.4 },
+    { url: `${SITE}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
   ];
 }

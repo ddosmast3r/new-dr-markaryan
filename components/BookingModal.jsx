@@ -42,7 +42,7 @@ export default function BookingModal({ context, onClose }) {
       range.selectNodeContents(message);
       selection.removeAllRanges();
       selection.addRange(range);
-      setCopyStatus('Выделили сообщение — скопируйте его вручную');
+      setCopyStatus('Выделили сообщение. Скопируйте его вручную');
     }
   }
 

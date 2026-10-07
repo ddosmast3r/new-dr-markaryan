@@ -3,6 +3,8 @@ import HeroMedia from "./HeroMedia";
 import BookButton from "./BookButton";
 import Icon from "./Icon";
 import { heroStats } from "@/lib/content";
+import { DOCTOR_ROLE } from '@/lib/doctor';
+import DoctorRole from './DoctorRole';
 
 export default function Hero() {
   return (
@@ -16,13 +18,10 @@ export default function Hero() {
 
         <div className="hero-content">
           <div className="hero-text">
-            {/* Обычный дефис намеренно: на узком экране строка может перенестись
-                после него, слово не вылезет за пределы контейнера. */}
-            {/* {' '} перед span обязателен: JSX съедает перевод строки перед
-                вложенным элементом, и в textContent слова склеились бы
-                («колопроктологв») — это видят парсеры и соцсети. */}
+            {/* Пробелы сохраняют цельный текст заголовка для парсеров,
+                а строки специализации и географии задаются стилями. */}
             <h1>
-              Хирург-колопроктолог{" "}
+              <DoctorRole capitalized />{" "}
               <span className="hero-where">в Пятигорске и Ессентуках</span>
             </h1>
             {/* Полное имя — на карточке врача справа; здесь дублировало его. */}
@@ -72,9 +71,10 @@ export default function Hero() {
             <div className="hero-portrait">
               <Image
                 src="/img/doctor.png"
-                alt="Эдуард Маркарян, хирург-колопроктолог"
+                alt={`Эдуард Маркарян, ${DOCTOR_ROLE}`}
                 fill
                 priority
+                fetchPriority="high"
                 sizes="(max-width: 960px) 88vw, 34vw"
                 style={{ objectFit: "cover", objectPosition: "center 18%" }}
               />

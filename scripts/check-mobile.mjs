@@ -64,9 +64,18 @@ for (const [engine, browserType, device] of [
       // These are for human review of typography and composition, not only tests.
       for (const width of [320, device.viewport.width]) {
         await page.setViewportSize({ width, height: width === 320 ? 568 : device.viewport.height });
-        await page.waitForTimeout(200);
+        await page.waitForTimeout(350);
         check(await page.locator('main h1').evaluate(el => el.scrollWidth <= el.clientWidth), `${engine} ${route}: heading fits ${width}px`);
         check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${engine} ${route}: page fits ${width}px`);
+        check(await page.evaluate(() => {
+          const fab = document.querySelector('.fab');
+          if (!fab || fab.getAttribute('aria-hidden') === 'true') return true;
+          const a = fab.getBoundingClientRect();
+          return [...document.querySelectorAll('button.btn')].every(button => {
+            const b = button.getBoundingClientRect();
+            return !b.width || !b.height || a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom;
+          });
+        }), `${engine} ${route}: floating action does not cover a booking button at ${width}px`);
         await screenshot(`${route === '/' ? 'home' : route.slice(1)}-${width}-top`);
       }
       check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${engine} ${route}: no horizontal overflow`);

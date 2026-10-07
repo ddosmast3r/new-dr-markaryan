@@ -4,6 +4,7 @@ import Reveal from './Reveal';
 import Icon from './Icon';
 import BookButton from './BookButton';
 import { education } from '@/lib/content';
+import { DOCTOR_ROLE } from '@/lib/doctor';
 
 // level=1 — секция открывает отдельную страницу и её заголовок должен быть H1.
 // teaser — короткая версия для главной: первый абзац и ссылка на /o-vrache,
@@ -35,7 +36,7 @@ export default function About({ level = 2, heading = 'Коротко о себе
           <p className="eyebrow">О враче</p>
           <H>{heading}</H>
           <p>
-            Я хирург-колопроктолог. Закончил ординатуру по колопроктологии в
+            Я {DOCTOR_ROLE}. Закончил ординатуру по колопроктологии в
             Сеченове, потом прошёл переподготовку по хирургии. В основном работаю
             с заболеваниями прямой кишки и анального канала.
           </p>

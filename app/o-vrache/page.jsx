@@ -13,7 +13,7 @@ export default function Page() {
     <PageShell slug={SLUG}>
       <About />
       <Research />
-      <Contacts intro="Если остались вопросы — напишите в мессенджер, отвечу сам. Или выберите время на ПроДокторов." />
+      <Contacts intro="Если остались вопросы, напишите в мессенджер, отвечу сам. Или выберите время на ПроДокторов." />
     </PageShell>
   );
 }

@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { SITE, OG_IMAGE, OG_IMAGE_ALT } from '@/lib/content';
+import DoctorRole from '@/components/DoctorRole';
 
-const TITLE = 'Сведения о лицензии — Доктор Маркарян';
+const TITLE = 'Сведения о лицензии: Доктор Маркарян';
 const DESCRIPTION = 'Сведения о медицинской организации и лицензии на осуществление медицинской деятельности ООО «ЛПУ-Гармония».';
 
 export const metadata = {
@@ -53,7 +54,7 @@ export default function LicensePage() {
             <Image src="/img/logo.png" className="brand-mark" alt="Логотип Эдуарда Маркаряна" width={52} height={38} />
             <span className="brand-text">
               <strong>Эдуард Маркарян</strong>
-              <small>хирург-колопроктолог</small>
+              <small><DoctorRole /></small>
             </span>
           </Link>
           <Link href="/" className="btn btn-ghost">На главную</Link>

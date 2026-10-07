@@ -329,8 +329,7 @@
 .contacts-list a[target]{text-decoration:underline;text-underline-offset:3px}
 
 /* ---------- Первый экран главной ---------- */
-/* H1 стал длиннее, поэтому кегль чуть меньше глобального — иначе
-   «хирург-колопроктолог» не помещается в колонку первого экрана. */
+/* Размер длинного названия специализации учитывает ширину первого экрана. */
 .hero--home h1{font-size:clamp(2.1rem,4.6vw,3.7rem)}
 .hero h1{overflow-wrap:break-word}
 .hero-tagline{

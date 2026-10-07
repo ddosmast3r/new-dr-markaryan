@@ -59,7 +59,8 @@
 }
 .brand-text{display:flex;flex-direction:column;line-height:1.15}
 .brand-text strong{font-size:1.02rem;white-space:nowrap}
-.brand-text small{color:var(--ink-soft);font-size:.78rem;white-space:nowrap}
+.brand-text small{color:var(--ink-soft);font-size:.78rem;white-space:normal}
+.doctor-specialty{display:inline-block;white-space:nowrap}
 /* На стеклянной шапке логотип белый поверх тёмного кадра — зелёный ореол
    там не виден, берём светлый изумруд из палитры. */
 .is-light .brand-mark{--logo-glow:43,168,74}
@@ -226,7 +227,8 @@
    промежутки превращали три блока в невнятную лесенку. */
 .hero-text{grid-area:copy;display:flex;flex-direction:column;align-items:flex-start;max-width:42rem}
 .hero-text h1{color:var(--on-dark);text-shadow:var(--hero-shadow);line-height:1.02;text-wrap:balance}
-.hero--home .hero-text h1{font-size:clamp(2.1rem,4.2vw,3.5rem);line-height:1.08}
+.hero--home .hero-text h1{font-size:clamp(2.1rem,4.2vw,3.5rem);line-height:1.08;max-width:100%;white-space:normal}
+.hero--home h1 .doctor-specialty{display:block}
 /* География — отдельный слой заголовка: мельче, легче и акцентным цветом.
    Двумя равными строками специальность и города конкурировали между собой. */
 .hero-where{
@@ -367,10 +369,9 @@
   }
   .hero-text{width:100%;padding-top:0;align-self:center}
   .hero-doctor{justify-self:end}
-  /* Специальность — одной строкой: перенос после дефиса
-     («Хирург- / колопроктолог») на десктопе ломал заголовок. */
+  /* Каждая специальность занимает свою строку и остаётся в колонке текста. */
   .hero-text{max-width:46rem}
-  .hero--home .hero-text h1{font-size:clamp(2.4rem,4.1vw,3.7rem);white-space:nowrap}
+  .hero--home .hero-text h1{font-size:clamp(2.4rem,4.1vw,3.7rem)}
 }
 /* Ноутбуки 1280×720 и 1366×768: первый экран с бегущей строкой должен
    помещаться целиком. Кадр врача ниже квадрата, отступы плотнее. */

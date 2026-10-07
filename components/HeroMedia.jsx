@@ -22,6 +22,7 @@ const FADE_MS = 1100;   // длительность перехода, совпа
 // или браузер сообщает про экономию трафика.
 export default function HeroMedia() {
   const [enabled, setEnabled] = useState(false);
+  const [ready, setReady] = useState(false);
   const [started, setStarted] = useState(false);
   const [slots, setSlots] = useState([0, 1 % heroClips.length]);
   const [active, setActive] = useState(0);
@@ -29,7 +30,28 @@ export default function HeroMedia() {
   const [tabVisible, setTabVisible] = useState(true);
   const containerRef = useRef(null);
   const els = useRef([]);
-  const canPlay = enabled && inView && tabVisible;
+  const canPlay = enabled && ready && inView && tabVisible;
+
+  // Keep the poster immediately visible; start video only after the page's
+  // critical resources have loaded and the browser has an idle opportunity.
+  useEffect(() => {
+    let idle;
+    let timer;
+    const schedule = () => {
+      if ('requestIdleCallback' in window) {
+        idle = window.requestIdleCallback(() => setReady(true), { timeout: 1500 });
+      } else {
+        timer = window.setTimeout(() => setReady(true), 0);
+      }
+    };
+    if (document.readyState === 'complete') schedule();
+    else window.addEventListener('load', schedule, { once: true });
+    return () => {
+      window.removeEventListener('load', schedule);
+      if (idle !== undefined) window.cancelIdleCallback(idle);
+      window.clearTimeout(timer);
+    };
+  }, []);
 
   useEffect(() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -121,11 +143,13 @@ export default function HeroMedia() {
         aria-hidden="true"
         fill
         priority
-        sizes="100vw"
+        fetchPriority="low"
+        quality={50}
+        sizes="(max-width: 560px) 50vw, 640px"
         style={{ objectFit: 'cover', objectPosition: 'center' }}
       />
 
-      {enabled &&
+      {enabled && ready &&
         slots.map((clipIndex, slot) => {
           const clip = heroClips[clipIndex];
           return (
@@ -142,8 +166,9 @@ export default function HeroMedia() {
               muted
               loop
               playsInline
-              preload="auto"
-              poster={clip.poster}
+              // play() loads the selected clip. The inactive slot downloads
+              // nothing until the next transition; the Image stays underneath.
+              preload="none"
               aria-hidden="true"
               tabIndex={-1}
               onPlaying={(event) => {

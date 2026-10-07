@@ -292,7 +292,7 @@ export default function ServicePage({ slug }) {
                 <p className="eyebrow">Вопросы</p>
                 <h2>Частые вопросы</h2>
                 <p className="section-sub">
-                  Не нашли свой вопрос — напишите в мессенджер, отвечу сам.
+                  Если не нашли свой вопрос, напишите в мессенджер, отвечу сам.
                 </p>
                 <BookButton intent="question" source="service-faq" className="btn btn-ghost">Задать свой вопрос</BookButton>
               </Reveal>
@@ -305,7 +305,7 @@ export default function ServicePage({ slug }) {
 
         <Contacts
           heading={`Приём в ${ADDRESS.city}е`}
-          intro={`${page.crumb} — одно из направлений приёма. Напишите в мессенджер, отвечу сам, или выберите время на ПроДокторов.`}
+          intro={`Направление приёма: ${page.crumb}. Напишите в мессенджер, отвечу сам, или выберите время на ПроДокторов.`}
         />
 
         <section className="section svc-related">
@@ -326,7 +326,7 @@ export default function ServicePage({ slug }) {
               })}
               <li>
                 <Link href="/">
-                  Проктолог в Пятигорске — главная
+                  Проктолог в Пятигорске: главная
                   <Icon name="arrowRight" width="16" height="16" />
                 </Link>
               </li>

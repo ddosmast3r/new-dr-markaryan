@@ -9,7 +9,7 @@ const questions = beforeVisit.filter(({ id }) => ['prepare', 'exam-pain', 'surge
 const visitSteps = [
   { title: 'Расскажите, что беспокоит', text: 'Обсудим жалобы, прошлые обследования и лечение. Готовый диагноз для записи не нужен.' },
   { title: 'Разберёмся на осмотре', text: 'Объясню каждый этап. Дополнительные исследования обсудим, если они нужны.' },
-  { title: 'Договоримся о следующем шаге', text: 'Вы получите объяснение результатов и рекомендации. Если есть варианты лечения — разберём их вместе.' },
+  { title: 'Договоримся о следующем шаге', text: 'Вы получите объяснение результатов и рекомендации. Если есть варианты лечения, разберём их вместе.' },
 ];
 
 export default function FirstVisit() {
@@ -24,7 +24,7 @@ export default function FirstVisit() {
         </Reveal>
         <div className="visit-grid">
           <Reveal className="visit-story">
-            <span className="visit-mark"><Icon name="shield" width="28" height="28" />На каждом этапе — с объяснением</span>
+            <span className="visit-mark"><Icon name="shield" width="28" height="28" />Объясняю каждый этап</span>
             <ol className="visit-steps">
               {visitSteps.map((step, index) => <li key={step.title}><span>0{index + 1}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></li>)}
             </ol>

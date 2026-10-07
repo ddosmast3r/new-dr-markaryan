@@ -10,7 +10,7 @@ export const metadata = sectionMetadata(SLUG);
 export default function Page() {
   return (
     <PageShell slug={SLUG}>
-      <Contacts />
+      <Contacts heading="Выберите удобный способ записи" />
       <Reviews />
     </PageShell>
   );

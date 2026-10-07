@@ -28,7 +28,7 @@ export default function Home() {
         <TrustStrip />
         <FirstVisit />
         <About teaser />
-        <Reviews />
+        <Reviews showTestimonials />
         <Contacts />
       </main>
       <Footer />

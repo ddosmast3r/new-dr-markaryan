@@ -65,7 +65,7 @@ export default function CookieConsent() {
           эффективность рекламы.
         </span>{' '}
         <span>
-          Подробнее — в <a href="/privacy">политике конфиденциальности</a>.
+          Подробнее в <a href="/privacy">политике конфиденциальности</a>.
         </span>
       </p>
       <div className="cookie-actions">

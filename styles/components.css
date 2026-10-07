@@ -243,6 +243,8 @@
   background:radial-gradient(ellipse at top left,rgba(var(--brand-rgb),.055),transparent 65%),var(--surface);
   color:var(--ink);overflow:hidden;box-shadow:var(--shadow-sm)
 }
+.reviews-intro{display:contents}
+.reviews-panel--with-quotes{align-items:start;column-gap:clamp(1.5rem,3vw,3rem)}
 .reviews-heading .eyebrow{display:flex;align-items:center;gap:.7rem;margin-bottom:1.25rem}
 .reviews-heading .eyebrow>span{width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 5px var(--brand-100);flex:none}
 .reviews-heading h2{font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.1;letter-spacing:-.035em}
@@ -254,8 +256,8 @@
 .reviews-link svg{flex:none;transform:rotate(-40deg);transition:transform .2s var(--ease)}
 .reviews-link:hover svg{transform:rotate(-40deg) translateX(3px)}
 .reviews-awards{
-  grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;
-  gap:1.5rem;padding-top:1.6rem;border-top:1px solid var(--line)
+  grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;
+  gap:.75rem 1rem;padding-top:1.6rem;border-top:1px solid var(--line)
 }
 .reviews-awards-heading{display:flex;align-items:center;gap:.9rem;color:var(--ink-soft);font-size:.9rem}
 .reviews-awards-heading strong{font-weight:600;color:var(--ink)}
@@ -287,20 +289,23 @@
 .rating-meta small{color:var(--ink-soft);font-size:.85rem}
 
 /* Цитаты пациентов */
-.reviews-quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+.reviews-quotes{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;min-width:0}
 .quote{
-  display:flex;flex-direction:column;gap:1rem;margin:0;
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-  padding:clamp(1.8rem,2.2vw,2.4rem)
+  display:flex;flex-direction:column;gap:1.5rem;margin:0;min-width:0;
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);
+  padding:clamp(1.25rem,2.2vw,2rem)
 }
-.quote blockquote{margin:0;color:var(--ink);line-height:1.6;font-size:1.05rem}
-.quote blockquote::before{content:'«'}
-.quote blockquote::after{content:'»'}
-.quote figcaption{display:flex;align-items:baseline;gap:.6rem;margin-top:auto;color:var(--ink-soft)}
+.quote blockquote{margin:0;color:var(--ink);line-height:1.7;font-size:1rem;overflow-wrap:break-word}
+.quote blockquote p{margin:0}
+.quote blockquote p+p{margin-top:1rem}
+.quote blockquote p:first-child::before{content:'«'}
+.quote blockquote p:last-child::after{content:'»'}
+.quote figcaption{display:flex;flex-direction:column;align-items:flex-start;gap:.25rem;margin-top:auto;padding-top:1.15rem;border-top:1px solid var(--line);color:var(--ink-soft)}
 .quote figcaption strong{color:var(--ink);font-size:.95rem}
 .quote figcaption small{font-size:.82rem}
-@media (max-width:960px){.reviews-quotes{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.reviews-quotes{grid-template-columns:1fr}}
+.quote--placeholder{justify-content:center;align-items:center;min-height:12rem;gap:1rem;text-align:center;border-style:dashed;background:transparent}
+.quote-slot-label{font-family:var(--font-mono);font-size:.85rem;color:var(--brand)}
+.quote--placeholder p{margin:0;max-width:24ch;color:var(--ink-soft);font-size:1rem;line-height:1.6}
 
 /* ---------- Instagram feed preview ---------- */
 .posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}

@@ -27,7 +27,8 @@ export default function PageHero({ crumbs, title, lead, media, children }) {
               aria-hidden="true"
               fill
               priority
-              sizes="100vw"
+              quality={50}
+              sizes="(max-width: 560px) 50vw, 640px"
               style={{ objectFit: 'cover', objectPosition: media.position }}
             />
           ) : (

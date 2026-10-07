@@ -3,6 +3,7 @@
 
 # next.js
 /.next
+/.next-dev
 /.next-check
 /.next-design-review
 /.next-mobile-*

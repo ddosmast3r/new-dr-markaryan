@@ -315,6 +315,9 @@
   position:relative;width:100%;aspect-ratio:1;overflow:hidden;
   border-radius:calc(var(--hero-panel-radius) - .5rem);background:var(--brand-100);
 }
+/* Кадр по плечи: точка кадрирования задаётся здесь, а не в style,
+   чтобы на телефоне с низким кадром её можно было сместить к лицу. */
+.hero-portrait img{object-position:center 20%}
 .hero-portrait::after{
   content:'';position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(to top,rgba(var(--dark-rgb),.6),transparent 48%);
@@ -433,9 +436,10 @@
   .hero:not(.page-hero) .hero-doctor{
     grid-area:auto;grid-column:1;grid-row:4;justify-self:stretch;width:100%;margin-top:1.25rem;
   }
-  /* Низкий кадр: карточка врача целиком помещается в первый экран
-     под кнопкой записи, лицо остаётся в кадре за счёт objectPosition. */
-  .hero:not(.page-hero) .hero-portrait{aspect-ratio:2/1}
+  /* Портрет крупный, по плечи: в кадре 2:1 срезались макушка и подбородок.
+     4:3 с точкой у верха показывает голову целиком и ворот. */
+  .hero:not(.page-hero) .hero-portrait{aspect-ratio:4/3}
+  .hero:not(.page-hero) .hero-portrait img{object-position:center 4%}
   .hero:not(.page-hero) .hero-doctor-name{margin:.7rem .85rem .15rem;font-size:.95rem}
   .hero:not(.page-hero) .hero-proof{gap:.55rem;margin:.3rem;padding:.55rem .5rem .45rem}
   .hero:not(.page-hero) .hero-proof-main strong{font-size:2.1rem}

@@ -70,13 +70,13 @@ export default function Hero() {
           <div className="hero-doctor">
             <div className="hero-portrait">
               <Image
-                src="/img/doctor.png"
+                src="/img/doctor-portrait.jpg"
                 alt={`Эдуард Маркарян, ${DOCTOR_ROLE}`}
                 fill
                 priority
                 fetchPriority="high"
                 sizes="(max-width: 960px) 88vw, 34vw"
-                style={{ objectFit: "cover", objectPosition: "center 18%" }}
+                style={{ objectFit: "cover" }}
               />
             </div>
             <p className="hero-doctor-name">Маркарян Эдуард Жорикович</p>

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { chromium } from 'playwright';
+import { PERSONAL_DATA_ENABLED } from '../lib/features.js';
 
 const base = process.env.BASE_URL || 'http://127.0.0.1:3111';
 const output = process.env.REVIEW_DIR || '/private/tmp/edjo-patient-review';
@@ -124,13 +125,19 @@ try {
   // Exercise the delayed analytics queue without contacting Yandex.
   await page.evaluate(() => localStorage.setItem('cookie-consent', 'accepted'));
   await page.locator('#preparation button').click();
-  await page.evaluate(() => {
-    const script = [...document.scripts].find(el => el.src.includes('/metrika/tag.js'));
-    const id = new URL(script.src).searchParams.get('id');
-    document.dispatchEvent(new Event(`yacounter${id}inited`));
-  });
-  const goal = await page.evaluate(() => window.__goals.find(args => args[1] === 'reachGoal' && args[2] === 'booking_open'));
-  check(goal?.[3]?.intent === 'preparation' && goal[3].service === 'Гастроскопия' && goal[3].source === 'preparation', 'queued analytics preserves intent, service and placement');
+  if (PERSONAL_DATA_ENABLED) {
+    await page.evaluate(() => {
+      const script = [...document.scripts].find(el => el.src.includes('/metrika/tag.js'));
+      const id = new URL(script.src).searchParams.get('id');
+      document.dispatchEvent(new Event(`yacounter${id}inited`));
+    });
+    const goal = await page.evaluate(() => window.__goals.find(args => args[1] === 'reachGoal' && args[2] === 'booking_open'));
+    check(goal?.[3]?.intent === 'preparation' && goal[3].service === 'Гастроскопия' && goal[3].source === 'preparation', 'queued analytics preserves intent, service and placement');
+  } else {
+    // Сохранённое «Принять» не должно запускать счётчик, пока обработка данных выключена.
+    check(!(await page.evaluate(() => [...document.scripts].some(el => el.src.includes('/metrika/tag.js')))), 'no Metrika script while personal data is off');
+    check(!(await page.evaluate(() => window.__goals.some(args => args[1] === 'reachGoal'))), 'no analytics goals while personal data is off');
+  }
   await page.keyboard.press('Escape');
   const mediaContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const mediaPage = await mediaContext.newPage();

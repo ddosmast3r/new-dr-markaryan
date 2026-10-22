@@ -1,12 +1,14 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { chromium, webkit, devices } from 'playwright';
+import { PERSONAL_DATA_ENABLED, HIDDEN_ROUTES } from '../lib/features.js';
 
 const base = process.env.BASE_URL || 'http://127.0.0.1:3111';
 const output = process.env.REVIEW_DIR || path.resolve('artifacts/mobile/manual');
 const routes = ['/'];
 for (const entry of await fs.readdir('app', { withFileTypes: true })) {
   if (!entry.isDirectory()) continue;
+  if (HIDDEN_ROUTES.includes(`/${entry.name}`)) continue;
   try { await fs.access(`app/${entry.name}/page.jsx`); routes.push(`/${entry.name}`); } catch {}
 }
 await fs.mkdir(output, { recursive: true });
@@ -49,13 +51,18 @@ for (const [engine, browserType, device] of [
     }
 
     await visit('/');
-    await page.locator('.cookie-banner').waitFor();
-    await screenshot('first-visit');
-    check(await page.locator('.cookie-banner').evaluate(el => {
-      const r = el.getBoundingClientRect();
-      return r.left >= 0 && r.right <= innerWidth && r.bottom <= innerHeight;
-    }), `${engine}: cookie choices fit the viewport`);
-    await page.getByRole('button', { name: 'Отклонить', exact: true }).tap();
+    if (PERSONAL_DATA_ENABLED) {
+      await page.locator('.cookie-banner').waitFor();
+      await screenshot('first-visit');
+      check(await page.locator('.cookie-banner').evaluate(el => {
+        const r = el.getBoundingClientRect();
+        return r.left >= 0 && r.right <= innerWidth && r.bottom <= innerHeight;
+      }), `${engine}: cookie choices fit the viewport`);
+      await page.getByRole('button', { name: 'Отклонить', exact: true }).tap();
+    } else {
+      await screenshot('first-visit');
+      check(await page.locator('.cookie-banner').count() === 0, `${engine}: no cookie banner while personal data is off`);
+    }
 
     for (const route of routes) {
       const response = await visit(route);

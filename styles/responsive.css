@@ -49,6 +49,8 @@
   .reviews-panel{grid-template-columns:1fr;row-gap:1.8rem}
   .reviews-copy{justify-self:start;max-width:560px}
   .fab{display:inline-flex}
+  /* Внизу страницы плавающая кнопка закрывала последнюю ссылку подвала. */
+  .site-footer{padding-bottom:calc(2rem + 4.5rem)}
 }
 
 @media (max-width:560px){

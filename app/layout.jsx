@@ -3,6 +3,7 @@ import CookieConsent from '@/components/CookieConsent';
 import VkAdsPixel from '@/components/VkAdsPixel';
 import MetrikaPageViews from '@/components/MetrikaPageViews';
 import { SITE, OG_IMAGE, OG_IMAGE_ALT } from '@/lib/content';
+import { PERSONAL_DATA_ENABLED } from '@/lib/features';
 
 import '@/styles/fonts.css';
 import '@/styles/base.css';
@@ -57,9 +58,13 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <BookingProvider>{children}</BookingProvider>
-        <CookieConsent />
-        <MetrikaPageViews />
-        <VkAdsPixel />
+        {PERSONAL_DATA_ENABLED && (
+          <>
+            <CookieConsent />
+            <MetrikaPageViews />
+            <VkAdsPixel />
+          </>
+        )}
       </body>
     </html>
   );

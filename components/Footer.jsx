@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Brand } from './Header';
 import { ADDRESS, CLINIC } from '@/lib/content';
+import { PERSONAL_DATA_ENABLED } from '@/lib/features';
 import { footerNav } from '@/lib/nav';
 import { servicePages } from '@/lib/pages';
 
@@ -59,7 +60,7 @@ export default function Footer() {
 
           <div className="footer-links">
             <Link href="/license">Сведения о лицензии</Link>
-            <Link href="/privacy">Политика конфиденциальности</Link>
+            {PERSONAL_DATA_ENABLED && <Link href="/privacy">Политика конфиденциальности</Link>}
           </div>
         </div>
       </div>

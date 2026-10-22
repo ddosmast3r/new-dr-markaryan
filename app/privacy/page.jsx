@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import { SITE, OG_IMAGE, OG_IMAGE_ALT } from '@/lib/content';
+import { PERSONAL_DATA_ENABLED } from '@/lib/features';
 import DoctorRole from '@/components/DoctorRole';
 
 const TITLE = 'Политика конфиденциальности: Доктор Маркарян';
@@ -67,6 +69,9 @@ const sections = [
 ];
 
 export default function PrivacyPage() {
+  // Скрыта, пока обработка персональных данных выключена (lib/features.js).
+  if (!PERSONAL_DATA_ENABLED) notFound();
+
   return (
     <div className="legal-page">
       <header className="legal-header">

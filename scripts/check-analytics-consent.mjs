@@ -9,6 +9,7 @@
 // статику заново. «Чистый посетитель» между фазами достигается очисткой cookie
 // и localStorage с последующей полной перезагрузкой.
 import { chromium } from 'playwright';
+import { PERSONAL_DATA_ENABLED } from '../lib/features.js';
 
 const BASE = (process.argv[2] || process.env.CHECK_URL || 'http://127.0.0.1:3000').replace(/\/$/, '');
 const VK_ID = '3789429';
@@ -107,6 +108,24 @@ async function freshVisit(path = '/') {
 }
 
 await open(BASE); // первая загрузка, чтобы появился origin для очистки хранилища
+
+// Обработка персональных данных выключена (lib/features.js): баннера нет,
+// счётчики не грузятся даже у посетителя с сохранённым «Принять»,
+// политика конфиденциальности скрыта. Фазы согласия ниже не применимы.
+if (!PERSONAL_DATA_ENABLED) {
+  await freshVisit();
+  check(await page.locator('.cookie-banner').count() === 0, 'выключено: баннера нет');
+  await page.evaluate(() => localStorage.setItem('cookie-consent', 'accepted'));
+  resetHits();
+  await open(BASE);
+  await page.waitForTimeout(1500);
+  check(hits.ym.length === 0, `выключено: нет запросов к mc.yandex.ru даже после прежнего «Принять» (${hits.ym.length})`);
+  check(hits.vk.length === 0, `выключено: нет запросов к top-fwz1.mail.ru даже после прежнего «Принять» (${hits.vk.length})`);
+  check(await page.locator('footer a[href="/privacy"]').count() === 0, 'выключено: в подвале нет ссылки на политику');
+  const privacy = await page.goto(`${BASE}/privacy`, { waitUntil: 'domcontentloaded' });
+  check(privacy.status() === 404, `выключено: /privacy отвечает 404 (${privacy.status()})`);
+  await finish();
+}
 
 // --- Фаза 1: до выбора в баннере ---
 {
@@ -286,14 +305,18 @@ await open(BASE); // первая загрузка, чтобы появился 
   }
 }
 
-await browser.close();
+await finish();
 
-console.log(`\nПроверка: ${BASE}`);
-console.log('\n=== PASS ===');
-ok.forEach((l) => console.log('  ✓', l));
-if (fail.length) {
-  console.log('\n=== FAIL ===');
-  fail.forEach((l) => console.log('  ✗', l));
+async function finish() {
+  await browser.close();
+
+  console.log(`\nПроверка: ${BASE}`);
+  console.log('\n=== PASS ===');
+  ok.forEach((l) => console.log('  ✓', l));
+  if (fail.length) {
+    console.log('\n=== FAIL ===');
+    fail.forEach((l) => console.log('  ✗', l));
+  }
+  console.log(`\n${ok.length} passed, ${fail.length} failed`);
+  process.exit(fail.length ? 1 : 0);
 }
-console.log(`\n${ok.length} passed, ${fail.length} failed`);
-process.exit(fail.length ? 1 : 0);

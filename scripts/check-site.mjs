@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { chromium, webkit } from 'playwright';
+import { HIDDEN_ROUTES } from '../lib/features.js';
 
 const base = process.env.BASE_URL || 'http://127.0.0.1:3111';
 const engine = process.env.BROWSER || 'chromium';
@@ -8,7 +9,7 @@ const output = process.env.REVIEW_DIR || `/private/tmp/edjo-full-review-${engine
 const widths = [320, 390, 768, 1024, 1440];
 const routes = ['/'];
 for (const entry of await fs.readdir('app', { withFileTypes: true })) {
-  if (entry.isDirectory()) {
+  if (entry.isDirectory() && !HIDDEN_ROUTES.includes(`/${entry.name}`)) {
     try { await fs.access(`app/${entry.name}/page.jsx`); routes.push(`/${entry.name}`); } catch {}
   }
 }

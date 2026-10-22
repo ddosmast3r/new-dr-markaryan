@@ -1,4 +1,5 @@
 import { SITE } from '@/lib/content';
+import { PERSONAL_DATA_ENABLED } from '@/lib/features';
 import { sectionSlugs } from '@/lib/sections';
 import { servicePageSlugs } from '@/lib/pages';
 
@@ -26,6 +27,8 @@ export default function sitemap() {
     })),
 
     { url: `${SITE}/license`, changeFrequency: 'yearly', priority: 0.4 },
-    { url: `${SITE}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
+    ...(PERSONAL_DATA_ENABLED
+      ? [{ url: `${SITE}/privacy`, changeFrequency: 'yearly', priority: 0.3 }]
+      : []),
   ];
 }

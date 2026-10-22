@@ -5,6 +5,7 @@ import fs from 'node:fs/promises';
 import http from 'node:http';
 import https from 'node:https';
 import { chromium } from 'playwright';
+import { HIDDEN_ROUTES } from '../lib/features.js';
 
 const base = process.env.BASE_URL || 'http://127.0.0.1:3112';
 const origin = 'https://dr-markaryan.ru';
@@ -57,7 +58,7 @@ try {
   const urls = [...sitemap.body.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]);
   const routes = ['/'];
   for (const entry of await fs.readdir('app', { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
+    if (!entry.isDirectory() || HIDDEN_ROUTES.includes(`/${entry.name}`)) continue;
     try { await fs.access(`app/${entry.name}/page.jsx`); routes.push(`/${entry.name}`); } catch { /* not a page */ }
   }
   check(urls.length === new Set(urls).size, 'sitemap has no duplicate URLs');

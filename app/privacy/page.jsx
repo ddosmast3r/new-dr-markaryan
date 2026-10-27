@@ -90,7 +90,7 @@ export default function PrivacyPage() {
       <main className="container legal-main">
         <p className="eyebrow">Документы</p>
         <h1>Политика конфиденциальности</h1>
-        <p className="legal-intro">Дата публикации: 15 мая 2026 г. Дата обновления: 25 августа 2026 года.</p>
+        <p className="legal-intro">Дата публикации: 15 мая 2026 г. Дата обновления: 21 октября 2026 года.</p>
 
         {sections.map((s) => (
           <section className="legal-block" key={s.h}>

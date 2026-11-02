@@ -40,30 +40,16 @@
 .site-header.is-solid .header-nav{padding-inline:0;background:none;border-radius:0}
 
 .brand{display:flex;align-items:center;gap:.7rem}
-/* Монограмма слегка светится и медленно «дышит».
-   drop-shadow, а не box-shadow: он строит ореол по альфа-каналу картинки,
-   то есть повторяет форму букв, а не рисует прямоугольник вокруг.
-   Анимировать filter дороже, чем opacity, — браузер перерисовывает слой
-   каждый кадр. Для картинки 52px это незаметно, но на крупных элементах
-   так делать не стоит.
-   --logo-glow переопределяется там, где логотип белый (см. ниже). */
+/* Монограмма — плоский знак. Пульсирующий ореол был самым заметным
+   «сгенерированным» местом шапки: светящийся логотип ничего не сообщает,
+   а взгляд забирает на себя постоянно. Знак держится формой и размером. */
 .brand-mark{
   width:52px;height:auto;flex:none;object-fit:contain;
-  --logo-glow:var(--brand-rgb);
-  filter:drop-shadow(0 0 4px rgba(var(--logo-glow),.35));
-  animation:logo-glow 4.5s ease-in-out infinite;
-}
-@keyframes logo-glow{
-  0%,100%{filter:drop-shadow(0 0 3px rgba(var(--logo-glow),.28))}
-  50%{filter:drop-shadow(0 0 9px rgba(var(--logo-glow),.58))}
 }
 .brand-text{display:flex;flex-direction:column;line-height:1.15}
 .brand-text strong{font-size:1.02rem;white-space:nowrap}
 .brand-text small{color:var(--ink-soft);font-size:.78rem;white-space:normal}
 .doctor-specialty{display:inline-block;white-space:nowrap}
-/* На стеклянной шапке логотип белый поверх тёмного кадра — зелёный ореол
-   там не виден, берём светлый изумруд из палитры. */
-.is-light .brand-mark{--logo-glow:43,168,74}
 .is-light .brand-text strong{color:var(--on-dark)}
 .is-light .brand-text small{color:rgba(var(--on-dark-rgb),.72)}
 
@@ -243,20 +229,17 @@
 .hero-text .hero-tagline{
   font-family:var(--font-sans),system-ui,sans-serif;font-weight:400;
   font-size:clamp(1.05rem,.5vw + .92rem,1.3rem);line-height:1.45;
-  margin:1.35rem 0 0;color:rgba(var(--on-dark-rgb),.84);text-shadow:var(--hero-shadow);
+  margin:1.5rem 0 0;color:rgba(var(--on-dark-rgb),.84);text-shadow:var(--hero-shadow);
   text-wrap:balance;max-width:34ch;
 }
 .hero-text .hero-tagline em{
+  /* Акцент держим цветом. Пульсирующее свечение на одном словосочетании
+     читалось как баннер, а не как смысловое выделение. */
   font-style:normal;color:#6ac782;
-  animation:hero-treatment-glow 5.5s ease-in-out 1.2s infinite;
-}
-@keyframes hero-treatment-glow{
-  0%,32%,100%{text-shadow:0 0 0 rgba(var(--brand-rgb),0)}
-  48%,62%{text-shadow:0 0 14px rgba(var(--brand-rgb),.3)}
 }
 .hero-assurances{
   list-style:none;display:flex;flex-direction:column;align-items:flex-start;
-  gap:.65rem;margin-top:1.4rem;
+  gap:.75rem;margin-top:1.5rem;
   color:rgba(var(--on-dark-rgb),.84);font-size:.9rem;line-height:1.35;
   text-shadow:var(--hero-shadow);
 }
@@ -271,7 +254,7 @@
 }
 .hero-actions{
   display:flex;flex-wrap:wrap;justify-content:flex-start;gap:.9rem;
-  width:min(100%,34rem);margin-top:1.6rem;
+  width:min(100%,34rem);margin-top:2rem;
 }
 .hero-actions .btn{box-shadow:0 2px 12px rgba(0,0,0,.14)}
 .hero-cta{
@@ -281,12 +264,12 @@
   background:rgba(var(--on-dark-rgb),.94);border-color:rgba(var(--on-dark-rgb),.7);
   -webkit-backdrop-filter:blur(14px) saturate(130%);
   backdrop-filter:blur(14px) saturate(130%);
-  box-shadow:0 14px 36px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.76) !important;
+  box-shadow:0 14px 36px rgba(0,0,0,.2) !important;
 }
 .hero-cta:hover{background:var(--on-dark);border-color:var(--on-dark);color:var(--dark)}
-.hero-cta.btn-glow::after{inset:-3px;filter:blur(14px);opacity:.3;animation:none}
+.hero-cta.btn-glow::after{inset:-3px;filter:blur(14px);opacity:.3}
 .hero-cta-copy{display:flex;flex-direction:column;align-items:flex-start;gap:.12rem;line-height:1.2}
-.hero-cta-copy strong{font-size:1.22rem;font-weight:700;letter-spacing:-.01em}
+.hero-cta-copy strong{font-size:1.22rem;font-weight:600;letter-spacing:-.01em}
 .hero-cta-copy small{font-size:.78rem;font-weight:500;color:var(--ink-soft)}
 .hero-cta-arrow{
   position:relative;width:3rem;height:2.6rem;flex:none;display:grid;place-items:center;
@@ -322,15 +305,20 @@
   content:'';position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(to top,rgba(var(--dark-rgb),.6),transparent 48%);
 }
+/* Методы — одна тихая строка, а не ряд таблеток. Четыре подсвеченные
+   плашки сразу под кнопкой записи спорили с ней за внимание и делали из
+   первого экрана набор кнопок. Текст через разделитель сообщает то же
+   самое и оставляет действие единственным ярким элементом. */
 .hero-methods{
-  list-style:none;display:flex;flex-wrap:wrap;gap:.4rem;
-  width:min(100%,34rem);margin:1rem 0 0;padding:0;
+  list-style:none;display:flex;flex-wrap:wrap;align-items:baseline;
+  gap:0 .5rem;width:min(100%,34rem);margin:1rem 0 0;padding:0;
+  font-size:.82rem;line-height:1.5;color:rgba(var(--on-dark-rgb),.7);
+  text-shadow:var(--hero-shadow);
 }
-.hero-methods li{
-  padding:.34rem .7rem;border-radius:999px;font-size:.78rem;line-height:1.2;
-  color:rgba(var(--on-dark-rgb),.86);background:rgba(var(--on-dark-rgb),.08);
-  border:1px solid rgba(var(--on-dark-rgb),.16);
-}
+.hero-methods li{display:flex;align-items:baseline;gap:.5rem}
+/* Разделитель висит на предыдущем слове, а не на следующем: при переносе
+   строки точка иначе начинала новую строку сама по себе. */
+.hero-methods li:not(:last-child)::after{content:'·';color:rgba(var(--on-dark-rgb),.4)}
 
 .hero-doctor-name{
   margin:.85rem 1rem .25rem;font-family:var(--font-display);font-size:1rem;
@@ -553,8 +541,6 @@
 
 /* ---------- Footer ---------- */
 .site-footer{background:var(--dark);color:#cdd8cf;padding:clamp(3rem,5vw,4.5rem) 0 2rem}
-/* В подвале логотип белый на тёмно-зелёном — тот же светлый ореол */
-.site-footer .brand-mark{--logo-glow:43,168,74}
 .site-footer .brand-text strong{color:#fff}
 .site-footer .brand-text small{color:#8b9a90}
 .footer-top{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;padding-bottom:1.8rem;border-bottom:1px solid rgba(255,255,255,.1)}
@@ -624,11 +610,13 @@
   position:fixed;bottom:calc(18px + var(--cookie-offset, 0px));right:18px;z-index:60;display:none;
   transition:bottom .3s ease;
   font-family:inherit;border:none;cursor:pointer;
-  background:var(--brand);color:#fff;font-weight:800;
-  padding:1rem 1.6rem;border-radius:999px;box-shadow:0 6px 14px -6px rgba(var(--brand-rgb),.6);
-  animation:pulse 2.4s infinite;
+  background:var(--brand);color:#fff;font-weight:600;
+  padding:1rem 1.6rem;border-radius:999px;
+  /* Тень нейтральная и неподвижная: пульсация анимировала box-shadow —
+     самое дорогое для слабых телефонов свойство — и мигала всё время,
+     пока человек читает страницу. */
+  box-shadow:0 10px 24px -12px rgba(var(--dark-rgb),.55);
 }
-@keyframes pulse{0%,100%{box-shadow:0 6px 14px -6px rgba(var(--brand-rgb),.6)}50%{box-shadow:0 6px 20px -5px rgba(var(--brand-rgb),.8)}}
 /* Своя кнопка записи на экране — плавающая уходит, чтобы не перекрывать
    ссылки в карточках. */
 .fab-hidden{opacity:0;pointer-events:none;transform:translateY(12px);animation:none}

@@ -240,7 +240,10 @@
   display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
   align-items:center;column-gap:clamp(2rem,6vw,5rem);row-gap:2.8rem;
   padding:clamp(2rem,4vw,3.5rem);border:1px solid var(--line);border-radius:var(--radius-xl);
-  background:radial-gradient(ellipse at top left,rgba(var(--brand-rgb),.055),transparent 65%),var(--surface);
+  /* Ровная поверхность: цветная радиальная подсветка в углу панели не
+     несла смысла, а цвет в этом блоке должен держать только фотография
+     и зелёная строка заголовка. */
+  background:var(--surface);
   color:var(--ink);overflow:hidden;box-shadow:var(--shadow-sm)
 }
 .reviews-intro{display:contents}

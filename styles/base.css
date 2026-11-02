@@ -183,10 +183,10 @@ h1 em,h1 i{font-style:normal;color:var(--brand)}
 .btn-xl svg{transition:transform .25s var(--ease)}
 .btn-xl:hover svg{transform:translateX(5px)}
 
-/* Мягкое свечение вокруг главной кнопки.
-   Свет даёт размытый слой под кнопкой, а не тень на ней самой: анимируется
-   только opacity, его браузер считает на видеокарте. Размытие
-   рассчитывается один раз и на каждом кадре не пересчитывается.
+/* Мягкий ореол под главной кнопкой — отрыв от фотографии, а не украшение.
+   Свет даёт размытый слой под кнопкой, а не тень на ней самой. Слой
+   неподвижен: пульсация тянула взгляд к себе, а не к действию, и читалась
+   как «эффект ради эффекта».
    --glow задаётся в rgb-компонентах: цвет подбирается под фон, на котором
    стоит кнопка (на первом экране это светлый бежевый поверх тёмного кадра). */
 .btn-glow{position:relative;isolation:isolate;--glow:var(--on-dark-rgb)}
@@ -195,15 +195,11 @@ h1 em,h1 i{font-style:normal;color:var(--brand)}
      размытый свет целиком прячется за её непрозрачной заливкой. */
   content:'';position:absolute;inset:-7px;z-index:-1;border-radius:inherit;
   background:rgba(var(--glow),.6);filter:blur(18px);pointer-events:none;
-  animation:cta-glow 4.5s ease-in-out infinite;
+  opacity:.4;transition:opacity .2s ease;
 }
-@keyframes cta-glow{
-  0%,100%{opacity:.36}
-  50%{opacity:.7}
-}
-/* На наведении свет замирает на максимуме: мигание под курсором раздражает */
+/* На наведении свет чуть сильнее — это обратная связь, а не анимация */
 .btn-glow:hover::after,
-.btn-glow:focus-visible::after{animation:none;opacity:.8}
+.btn-glow:focus-visible::after{opacity:.62}
 .btn:focus-visible{outline:2px solid rgba(var(--brand-rgb),.5);outline-offset:2px}
 .btn-primary{background:var(--brand);color:var(--on-dark);border-color:var(--brand)}
 .btn-primary:hover{background:var(--dark);border-color:var(--dark);color:var(--on-dark)}

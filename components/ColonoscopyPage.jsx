@@ -10,6 +10,7 @@ import Contacts from './Contacts';
 import DoctorCard from './DoctorCard';
 import FaqList from './FaqList';
 import Procedures from './Procedures';
+import RelatedPublications from './RelatedPublications';
 import JsonLd from './JsonLd';
 import TrackedLink from './TrackedLink';
 import { GOALS } from '@/lib/metrika';
@@ -278,6 +279,8 @@ export default function ColonoscopyPage() {
             </Reveal>
           </div>
         </section>
+
+        <RelatedPublications topic="endoscopy" />
 
         <section className="section svc-block" id="exam-steps">
           <div className="container">

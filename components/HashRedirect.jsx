@@ -16,7 +16,7 @@ export default function HashRedirect() {
 
   useEffect(() => {
     const target = byHash[window.location.hash.slice(1)];
-    if (!target) return;
+    if (!target || document.getElementById(window.location.hash.slice(1))) return;
     // replace, а не push: кнопка «назад» не должна возвращать на якорь,
     // с которого нас только что увело.
     router.replace(target);

@@ -2,9 +2,11 @@ import Image from "next/image";
 import HeroMedia from "./HeroMedia";
 import BookButton from "./BookButton";
 import Icon from "./Icon";
-import { heroStats } from "@/lib/content";
+import { heroStats, awards, PRODOCTOROV } from "@/lib/content";
 import { DOCTOR_ROLE } from '@/lib/doctor';
 import DoctorRole from './DoctorRole';
+import HeroAwards from './HeroAwards';
+import { awardImages } from '@/lib/award-images';
 
 export default function Hero() {
   return (
@@ -80,6 +82,8 @@ export default function Hero() {
               />
             </div>
             <p className="hero-doctor-name">Маркарян Эдуард Жорикович</p>
+
+            <HeroAwards items={[...awards].reverse().map(award => ({ ...award, image: awardImages[award.year] }))} profileHref={PRODOCTOROV} />
 
             {/* Достижения идут после портрета и подписи, не перекрывая врача. */}
             <div className="hero-proof">

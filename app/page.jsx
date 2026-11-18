@@ -10,6 +10,8 @@ import Footer from '@/components/Footer';
 import Fab from '@/components/Fab';
 import JsonLd from '@/components/JsonLd';
 import HashRedirect from '@/components/HashRedirect';
+import InstagramFeed from '@/components/InstagramFeed';
+import instagramPosts from '@/lib/instagram-feed.json';
 import { graph, physicianSchema, clinicSchema } from '@/lib/schema';
 
 // Главная помогает выбрать направление и подготовиться к первому визиту.
@@ -28,6 +30,7 @@ export default function Home() {
         <TrustStrip />
         <FirstVisit />
         <About teaser />
+        <InstagramFeed items={instagramPosts} />
         <Reviews showTestimonials />
         <Contacts />
       </main>

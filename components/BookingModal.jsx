@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Icon from './Icon';
+import Image from 'next/image';
 import { MAX, TELEGRAM, WHATSAPP, PHONE, PHONE_HREF, PRODOCTOROV, HOURS_TEXT } from '@/lib/content';
 import { reachGoal, GOALS } from '@/lib/metrika';
 
@@ -24,6 +25,13 @@ export default function BookingModal({ context, onClose }) {
       if (trigger?.isConnected) trigger.focus({ preventScroll: true });
     };
   }, []);
+
+  // Автоматически очищать статус копирования через 3 сек
+  useEffect(() => {
+    if (!copyStatus) return;
+    const timer = setTimeout(() => setCopyStatus(''), 3000);
+    return () => clearTimeout(timer);
+  }, [copyStatus]);
 
   async function copyMessage() {
     try {
@@ -66,7 +74,7 @@ export default function BookingModal({ context, onClose }) {
             <span className="msg-arrow"><Icon name="arrowRight" /></span>
           </a>
           <div className="booking-channels" aria-label="Мессенджеры">
-            <a className="booking-channel" href={MAX} target="_blank" rel="noopener" onClick={() => track(GOALS.MAX)}><Icon name="max" />MAX</a>
+            <a className="booking-channel" href={MAX} target="_blank" rel="noopener" onClick={() => track(GOALS.MAX)}><Image src="/img/max-icon.png" alt="" width={18} height={18} />MAX</a>
             <a className="booking-channel" href={TELEGRAM} target="_blank" rel="noopener" onClick={() => track(GOALS.TELEGRAM)}><Icon name="telegram" />Telegram</a>
             {isAppointment && <a className="booking-channel" href={whatsappHref} target="_blank" rel="noopener" onClick={() => track(GOALS.WHATSAPP)}><Icon name="whatsapp" />WhatsApp</a>}
           </div>
@@ -75,7 +83,7 @@ export default function BookingModal({ context, onClose }) {
             <summary>Готовое сообщение для врача</summary>
             <p ref={messageRef}>{context.message}</p>
             <button type="button" onClick={copyMessage}>Скопировать сообщение</button>
-            <span role="status">{copyStatus}</span>
+            <span role="status" aria-live="polite" aria-atomic="true">{copyStatus}</span>
           </details>
           <p className="modal-foot">{HOURS_TEXT} · Всё конфиденциально.<br />Имеются противопоказания, необходима консультация специалиста.</p>
         </div>

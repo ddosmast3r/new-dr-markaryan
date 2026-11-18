@@ -1,5 +1,6 @@
 import PageShell from '@/components/PageShell';
 import Steps from '@/components/Steps';
+import RelatedPublications from '@/components/RelatedPublications';
 import BeforeVisit from '@/components/BeforeVisit';
 import Contacts from '@/components/Contacts';
 import { sectionMetadata } from '@/lib/sections';
@@ -16,6 +17,7 @@ export default function Page() {
     // поэтому FAQPage-разметка соответствует видимому контенту.
     <PageShell slug={SLUG} extraSchema={[faqSchema(beforeVisit)]}>
       <Steps />
+      <RelatedPublications topic="consultation" />
       <BeforeVisit />
       <Contacts intro="Остались вопросы про сам приём? Напишите в мессенджер, отвечу сам." />
     </PageShell>

@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { Fragment } from 'react';
+import RelatedPublications from './RelatedPublications';
 import Header from './Header';
 import PageHero from './PageHero';
 import Footer from './Footer';
@@ -94,6 +96,32 @@ function GuideSection({ section, tint }) {
               ))}
             </ul>
           </Reveal>
+        </div>
+      </section>
+    );
+  }
+
+  // Разбор расхожих советов. Вердикт показан значком и подписью, а не
+  // одним цветом: иначе смысл теряется при чёрно-белой печати и у тех,
+  // кто не различает зелёный и серый.
+  if (section.type === 'verdicts') {
+    return (
+      <section className={cls} id={section.id}>
+        <div className="container">
+          <Reveal className="section-head">{head}</Reveal>
+          <ul className="svc-verdicts">
+            {section.items.map((item) => (
+              <Reveal as="li" className={`svc-verdict is-${item.verdict}`} key={item.title}>
+                <span className="svc-verdict-mark">
+                  <Icon name={item.verdict === 'yes' ? 'check' : 'close'} width="20" height="20" />
+                  {item.verdict === 'yes' ? 'Помогает' : 'Не помогает'}
+                </span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </Reveal>
+            ))}
+          </ul>
+          {section.note && <p className="colono-med-note">{section.note}</p>}
         </div>
       </section>
     );
@@ -223,7 +251,10 @@ export default function ServicePage({ slug }) {
 
         {/* Секции чередуют фон (бежевый / белый) — как на главной */}
         {guide.slice(0, 2).map((section, i) => (
-          <GuideSection section={section} tint={i % 2 === 0} key={section.id} />
+          <Fragment key={section.id}>
+            <GuideSection section={section} tint={i % 2 === 0} />
+            {slug === 'gastroskopiya' && section.id === 'preparation' && <RelatedPublications topic="endoscopy" />}
+          </Fragment>
         ))}
 
         {mainBlocks.map((block, i) => (
@@ -265,7 +296,10 @@ export default function ServicePage({ slug }) {
         ))}
 
         {guide.slice(2).map((section, i) => (
-          <GuideSection section={section} tint={(i + mainBlocks.length) % 2 === 0} key={section.id} />
+          <Fragment key={section.id}>
+            <GuideSection section={section} tint={(i + mainBlocks.length) % 2 === 0} />
+            {slug === 'gemorroy' && section.type === 'verdicts' && <RelatedPublications topic="hemorrhoids" />}
+          </Fragment>
         ))}
 
         {page.video && (

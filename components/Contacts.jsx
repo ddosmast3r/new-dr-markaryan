@@ -32,7 +32,7 @@ export default function Contacts({
             </TrackedLink>
             <div className="contacts-row">
               <TrackedLink goal={GOALS.MAX} href={MAX} className="btn btn-max" target="_blank" rel="noopener">
-                <Icon name="max" width="18" height="18" />MAX
+                <Image src="/img/max-icon.png" alt="" width={18} height={18} className="max-icon" />MAX
               </TrackedLink>
               <TrackedLink goal={GOALS.WHATSAPP} href={WHATSAPP} className="btn btn-wa" target="_blank" rel="noopener">
                 <Icon name="whatsapp" width="18" height="18" />WhatsApp

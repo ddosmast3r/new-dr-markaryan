@@ -8,6 +8,7 @@
     "dev": "next dev --hostname 127.0.0.1 --port 3010",
     "build": "next build",
     "check": "npm run lint",
+    "check:all": "node scripts/check-all.mjs",
     "check:build": "NEXT_DIST_DIR=.next-check next build",
     "start": "next start",
     "lint": "eslint .",
@@ -17,10 +18,12 @@
     "check:seo": "node scripts/check-seo.mjs",
     "check:mobile": "node scripts/check-mobile.mjs",
     "check:mobile:gate": "node scripts/check-mobile-gate.mjs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "node scripts/patch-next.mjs",
+    "instagram:import": "node scripts/import-instagram.mjs"
   },
   "dependencies": {
-    "next": "^15.5.27",
+    "next": "^15.5.29",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -28,7 +31,7 @@
     "@eslint/eslintrc": "^3.3.5",
     "axe-core": "^4.13.0",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^15.5.27",
+    "eslint-config-next": "^15.5.29",
     "husky": "^9.1.7",
     "playwright": "^1.61.1"
   },

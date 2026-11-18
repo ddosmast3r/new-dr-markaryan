@@ -12,6 +12,7 @@ import '@/styles/components.css';
 import '@/styles/service.css';
 import '@/styles/responsive.css';
 import '@/styles/patient.css';
+import '@/styles/instagram.css';
 
 const TITLE = 'Врач-проктолог, эндоскопист в Пятигорске: Эдуард Маркарян';
 const DESCRIPTION =
@@ -55,6 +56,15 @@ export default function RootLayout({ children }) {
             label font load through CSS. Font bytes and fallbacks are unchanged. */}
         <link rel="preload" href="/fonts/ffe0837c71e69159-s.p.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/c1b11e140b58cf5a-s.p.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+
+        {/* DNS prefetch для внешних сервисов */}
+        {PERSONAL_DATA_ENABLED && (
+          <>
+            <link rel="dns-prefetch" href="https://mc.yandex.ru" />
+            <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+            <link rel="dns-prefetch" href="https://pixel.rbtq.media" />
+          </>
+        )}
       </head>
       <body>
         <BookingProvider>{children}</BookingProvider>

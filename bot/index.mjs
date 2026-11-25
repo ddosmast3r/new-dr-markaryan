@@ -46,7 +46,7 @@ async function main() {
     for (const video of store.list()) {
       if (video.status === 'processing') store.update(video.id, { status: 'queued' });
     }
-    console.log(`Video bot started; authorized participants: ${config.allowedUsers.size}.`);
+    console.log('Video bot started. Access is restricted to configured IDs and redeemed invitations.');
     const worker = (async () => {
       while (!stopped) {
         try { if (!await processNext({ store, telegram, config })) await delay(1000); }

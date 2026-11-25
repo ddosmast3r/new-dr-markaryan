@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto';
 import path from 'node:path';
 import { videoPages, validVideoPages } from '../lib/video-pages.js';
 import { videoIdIsValid } from '../lib/video-store.mjs';
+import { hasAccess, redeemInvite } from './access.mjs';
 
 const fields = (video) => ({ title: video.title, summary: video.summary, pages: [...video.pages], sensitive: video.sensitive });
 const button = (text, callback_data) => ({ text, callback_data });
@@ -31,7 +32,13 @@ export class VideoBot {
     const chatId = message.chat.id;
     const userId = String(user.id);
     if (message.text === '/id' && !callback) return this.send(chatId, `Ваш Telegram ID: ${userId}`);
-    if (!this.config.allowedUsers.has(userId)) {
+    const invitation = !callback && message.text?.trim().match(/^\/start(?:@\w+)?\s+join_([A-Za-z0-9_-]{32})$/);
+    if (invitation) {
+      return this.send(chatId, redeemInvite(this.store, invitation[1], userId)
+        ? 'Доступ открыт. Отправьте видео документом — скрепка → Файл.\n\n/new — новое видео\n/videos — видео команды\n/help — инструкция'
+        : 'Приглашение недействительно, истекло или уже использовано. Попросите владельца дать новую ссылку.');
+    }
+    if (!hasAccess(this.store, this.config, userId)) {
       if (callback) await this.telegram.call('answerCallbackQuery', { callback_query_id: callback.id, text: 'Доступ закрыт' });
       else await this.send(chatId, 'Доступ к управлению видео закрыт. Попросите владельца добавить ваш Telegram ID. Узнать его: /id');
       return;

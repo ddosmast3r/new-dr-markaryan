@@ -38,7 +38,7 @@ export async function encodeVideo(source, directory) {
 }
 
 export async function downloadVideo(video, destination, telegram, config) {
-  const file = await telegram.call('getFile', { file_id: video.fileId });
+  const file = await telegram.call('getFile', { file_id: video.fileId }, { timeout: 30 * 60_000 });
   let source;
   if (config.cloud) {
     if (!file.file_path || file.file_path.includes('..') || !/^[\w/.-]+$/.test(file.file_path)) throw new Error('INVALID_FILE_PATH');

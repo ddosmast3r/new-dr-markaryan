@@ -1,0 +1,38 @@
+{
+  "source": "IMG_9898.MOV",
+  "sourceSha": "a55c2e0a01e51b081ad4fd4031f0b86a4408d86189e648dba7345f0459e2b3b9",
+  "sourceSize": 189833158,
+  "outputSize": 2331089,
+  "compressionFactor": 81.43539693250665,
+  "metadata": {
+    "id": "a55c2e0a01e51b08",
+    "status": "published",
+    "title": "Что такое аноскопия",
+    "summary": "Эдуард Маркарян рассказывает об аноскопии и показывает инструмент, которым выполняют осмотр.",
+    "pages": [
+      "diagnostika"
+    ],
+    "sensitive": false,
+    "width": 720,
+    "height": 1280,
+    "duration": 20.3,
+    "createdBy": "0",
+    "updatedBy": "0",
+    "createdAt": "2026-11-25T17:39:07.515Z",
+    "updatedAt": "2026-11-25T17:39:07.515Z",
+    "publishedAt": "2026-11-25T17:39:07.515Z",
+    "editVersion": 1
+  },
+  "urls": [
+    "https://dr-markaryan.ru/video#video-a55c2e0a01e51b08",
+    "https://dr-markaryan.ru/diagnostika#video-a55c2e0a01e51b08"
+  ],
+  "published": true,
+  "verified": [
+    "video page",
+    "diagnostics page",
+    "media checksum",
+    "byte ranges",
+    "poster"
+  ]
+}

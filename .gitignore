@@ -19,3 +19,6 @@
 .env*.local
 /private/video-library/
 /bot/__pycache__/
+
+# Keep the camera original local; the optimized publication is in ref/.
+/IMG_9898.MOV

@@ -11,6 +11,7 @@ import DoctorCard from './DoctorCard';
 import FaqList from './FaqList';
 import Procedures from './Procedures';
 import RelatedPublications from './RelatedPublications';
+import UploadedVideos from './UploadedVideos';
 import JsonLd from './JsonLd';
 import TrackedLink from './TrackedLink';
 import { GOALS } from '@/lib/metrika';
@@ -364,6 +365,7 @@ export default function ColonoscopyPage() {
           </section>
         )}
 
+        <UploadedVideos slug="kolonoskopiya" />
         <Contacts
           heading={`Запись на колоноскопию в ${ADDRESS.city}е`}
           intro="Напишите в мессенджер: уточним формат исследования и подберём время."

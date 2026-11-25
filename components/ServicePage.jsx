@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Fragment } from 'react';
 import RelatedPublications from './RelatedPublications';
+import UploadedVideos from './UploadedVideos';
 import Header from './Header';
 import PageHero from './PageHero';
 import Footer from './Footer';
@@ -337,6 +338,7 @@ export default function ServicePage({ slug }) {
           </section>
         )}
 
+        <UploadedVideos slug={slug} />
         <Contacts
           heading={`Приём в ${ADDRESS.city}е`}
           intro={`Направление приёма: ${page.crumb}. Напишите в мессенджер, отвечу сам, или выберите время на ПроДокторов.`}

@@ -1,0 +1,26 @@
+[Unit]
+Description=Dr Markaryan Telegram video editor
+After=network-online.target telegram-bot-api.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Adjust these paths and the service account to match the existing server.
+User=dr-markaryan
+Group=dr-markaryan
+WorkingDirectory=/var/www/dr-markaryan
+EnvironmentFile=/etc/dr-markaryan/video-bot.env
+ExecStart=/usr/bin/node bot/index.mjs
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=35min
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/dr-markaryan/videos
+ReadOnlyPaths=/var/lib/telegram-bot-api
+
+[Install]
+WantedBy=multi-user.target

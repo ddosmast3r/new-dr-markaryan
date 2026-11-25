@@ -20,12 +20,16 @@
     "check:mobile:gate": "node scripts/check-mobile-gate.mjs",
     "prepare": "husky",
     "postinstall": "node scripts/patch-next.mjs",
-    "instagram:import": "node scripts/import-instagram.mjs"
+    "instagram:import": "node scripts/import-instagram.mjs",
+    "bot:start": "node --env-file-if-exists=.env.bot.local bot/index.mjs",
+    "bot:test": "node --test bot/tests/*.test.mjs",
+    "bot:test:site": "node bot/tests/site.integration.mjs"
   },
   "dependencies": {
     "next": "^15.5.29",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",

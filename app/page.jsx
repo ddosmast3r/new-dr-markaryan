@@ -12,6 +12,7 @@ import JsonLd from '@/components/JsonLd';
 import HashRedirect from '@/components/HashRedirect';
 import InstagramFeed from '@/components/InstagramFeed';
 import instagramPosts from '@/lib/instagram-feed.json';
+import UploadedVideos from '@/components/UploadedVideos';
 import { graph, physicianSchema, clinicSchema } from '@/lib/schema';
 
 // Главная помогает выбрать направление и подготовиться к первому визиту.
@@ -32,6 +33,7 @@ export default function Home() {
         <About teaser />
         <InstagramFeed items={instagramPosts} />
         <Reviews showTestimonials />
+        <UploadedVideos slug="home" />
         <Contacts />
       </main>
       <Footer />

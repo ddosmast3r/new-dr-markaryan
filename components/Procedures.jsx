@@ -44,6 +44,7 @@ function ProcedureCard({ item, index }) {
     <Reveal
       as="article"
       className="proc-card"
+      id={item.id ? `video-${item.id}` : undefined}
       style={{ transitionDelay: `${(index % 3) * 70}ms` }}
     >
       <div className="proc-media">

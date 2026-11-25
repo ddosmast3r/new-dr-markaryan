@@ -2,10 +2,12 @@ import Reveal from './Reveal';
 import Reels from './Reels';
 import Procedures from './Procedures';
 import { reels, procedures } from '@/lib/content';
+import { publishedVideos } from '@/lib/video-library.mjs';
 
 // level=1 — секция открывает отдельную страницу и её заголовок
 // должен быть H1; по умолчанию это обычная секция главной.
-export default function Works({ level = 2, heading = 'Рабочие моменты и полезные материалы' }) {
+export default async function Works({ level = 2, heading = 'Рабочие моменты и полезные материалы' }) {
+  const uploads = await publishedVideos('video');
   const H = level === 1 ? 'h1' : 'h2';
 
   return (
@@ -19,6 +21,7 @@ export default function Works({ level = 2, heading = 'Рабочие момен�
           </p>
         </Reveal>
 
+        {uploads.length > 0 && <Procedures items={uploads} />}
         <Reels items={reels} />
 
         <Reveal className="section-head works-subhead">

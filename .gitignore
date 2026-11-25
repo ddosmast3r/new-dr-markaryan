@@ -17,3 +17,5 @@
 .DS_Store
 *.log
 .env*.local
+/private/video-library/
+/bot/__pycache__/

@@ -258,9 +258,12 @@ test('network outage retries queued responses without replaying wizard input; up
   await acceptUpdate(f.store, bot, update);
   assert.equal(f.store.session(1).step, 'summary');
   assert.equal(f.store.session(1).fields.summary, '');
+  f.store.state('telegram_offset', 0);
+  await acceptUpdate(f.store, bot, { ...update, update_id: 3 });
+  assert.equal(f.store.session(1).step, 'summary', 'migration replay must not apply the title as a description');
   await deliverNext(f.store, f.telegram);
   assert.notEqual(f.store.nextMessage()?.id, queued.id);
-  await assert.rejects(acceptUpdate(f.store, { handle: async () => { f.store.state('partial', 'bad'); throw new Error('failure'); } }, envelope(3, { text: 'x' })));
+  await assert.rejects(acceptUpdate(f.store, { handle: async () => { f.store.state('partial', 'bad'); throw new Error('failure'); } }, envelope(4, { text: 'x' })));
   assert.equal(f.store.state('partial'), undefined);
-  assert.equal(f.store.state('telegram_offset'), '3');
+  assert.equal(f.store.state('telegram_offset'), '4');
 });

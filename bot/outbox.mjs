@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 // Conversation changes and outbound responses commit together. A Telegram
 // outage retries delivery, never feeds the same title into the next wizard step.
 export class QueuedTelegram {
@@ -13,7 +15,16 @@ export async function acceptUpdate(store, bot, update) {
   if (update.update_id < Number(store.state('telegram_offset') || 0)) return;
   store.db.exec('BEGIN IMMEDIATE');
   try {
-    await bot.handle(update);
+    const message = update.message;
+    const identity = update.callback_query ? `callback:${update.callback_query.id}`
+      : message ? `message:${message.chat.id}:${message.message_id}` : `update:${update.update_id}`;
+    const seenKey = `handled:${createHash('sha256').update(identity).digest('hex')}`;
+    // Message identity survives moving from cloud to a local Bot API even if
+    // that server starts its update queue with different numeric update IDs.
+    if (!store.state(seenKey)) {
+      await bot.handle(update);
+      store.state(seenKey, '1');
+    }
     store.state('telegram_offset', update.update_id + 1);
     store.db.exec('COMMIT');
   } catch (error) { store.db.exec('ROLLBACK'); throw error; }

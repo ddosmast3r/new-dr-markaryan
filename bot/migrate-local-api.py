@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.request
 
@@ -21,10 +22,16 @@ def run(*arguments):
     subprocess.run(arguments, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def private_write(filename, text):
-    fd = os.open(filename, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
-    os.fchmod(fd, 0o600)
-    with os.fdopen(fd, 'w') as stream:
-        stream.write(text)
+    fd, temporary = tempfile.mkstemp(prefix='.migration-', dir=filename.parent)
+    try:
+        with os.fdopen(fd, 'w') as stream:
+            os.fchmod(stream.fileno(), 0o600)
+            stream.write(text)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, filename)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
 
 def main():
     assert os.geteuid() == 0
@@ -72,6 +79,9 @@ def main():
         raise RuntimeError('Local API is not ready. Check its private service log, then rerun this migration; the bot remains stopped to avoid two sessions.')
     current.update(TELEGRAM_API_URL=LOCAL, TELEGRAM_API_FILES_DIR='/var/lib/telegram-bot-api', VIDEO_MAX_BYTES='2000000000')
     private_write(BOT_ENV, '\n'.join(key + '=' + value for key, value in current.items()) + '\n')
+    run('runuser', '-u', 'drmarkbot', '--', '/usr/bin/python3', '-c',
+        "import sqlite3,sys; db=sqlite3.connect(sys.argv[1]); db.execute(\"INSERT OR REPLACE INTO state (key,value) VALUES (?,?)\", ('telegram_offset','0')); db.commit(); db.close()",
+        str(Path(current['VIDEO_DATA_DIR']) / 'catalog.sqlite'))
     dropin = Path('/etc/systemd/system/dr-markaryan-video-bot.service.d')
     dropin.mkdir(parents=True, exist_ok=True)
     (dropin / 'local-api.conf').write_text('[Unit]\nAfter=telegram-bot-api.service\nWants=telegram-bot-api.service\n')
